@@ -44,6 +44,6 @@
 ### **_Getting Started_**
 
 used [Trello](https://trello.com/invite/b/685d80c8b14ad784410eef3d/ATTI1e444a2ebbe762f690917fad06b1a504F8598AD9/project-4) to design our User Stories,
-and [draw io] to plan our ERD's and Schemas.
+and [draw io](https://drive.google.com/file/d/1vKpb6r9m6vA8nh_nWRybiDL-Uy4-GcJi/view?usp=sharing) to plan our ERD's and Schemas.
 
 ---
