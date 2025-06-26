@@ -4,6 +4,12 @@
 
 ---
 
+### **_Getting Started_**
+
+used [Trello](https://trello.com/invite/b/685d80c8b14ad784410eef3d/ATTI1e444a2ebbe762f690917fad06b1a504F8598AD9/project-4) to design our User Stories, and [draw io](https://drive.google.com/file/d/1rnH2RRueaEAeGXcpFr12Bflpb9xnEW4A/view?ts=683d7163) to plan our ERD's and Schemas.
+
+---
+
 ## Features
 
 - **Sign Language Recognition and Translation**  
