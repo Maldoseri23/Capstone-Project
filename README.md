@@ -26,7 +26,7 @@
 
 ---
 
-## 🛠️ Built With
+## Built With
 
 - **Backend**: Python (Django / Flask)
 - **Frontend**: HTML, CSS, JavaScript
@@ -43,6 +43,7 @@
 
 ### **_Getting Started_**
 
-used [Trello](https://trello.com/invite/b/685d80c8b14ad784410eef3d/ATTI1e444a2ebbe762f690917fad06b1a504F8598AD9/project-4) to design our User Stories, and [draw io] to plan our ERD's and Schemas.
+used [Trello](https://trello.com/invite/b/685d80c8b14ad784410eef3d/ATTI1e444a2ebbe762f690917fad06b1a504F8598AD9/project-4) to design our User Stories,
+and [draw io] to plan our ERD's and Schemas.
 
 ---
