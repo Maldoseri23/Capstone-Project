@@ -1,0 +1,26 @@
+# Ignore Python virtual environment
+venv/
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+
+# Ignore data files
+_data.csv
+*.csv
+*.json
+*.npy
+*.pkl
+
+# Ignore model/data folders
+main_app/ASL_data/
+
+# Ignore system/IDE files
+.DS_Store
+*.swp
+*.swo
+.vscode/
+*.log
+
+# Ignore environment files
+.env
