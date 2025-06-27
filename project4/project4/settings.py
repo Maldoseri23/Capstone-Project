@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'main_app',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,6 +51,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+ASGI_APPLICATION = 'project4.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+
 ROOT_URLCONF = 'project4.urls'
 
 TEMPLATES = [
@@ -68,6 +81,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'project4.wsgi.application'
+
 
 
 # Database
