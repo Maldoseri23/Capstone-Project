@@ -6,13 +6,14 @@ from .models import CallRoom, CallParticipant
 
 class VideoCallConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        print("WebSocket connect called!")
         self.room_id = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = f'call_{self.room_id}'
         self.user = self.scope['user']
         
-        if self.user.is_anonymous:
-            await self.close()
-            return
+        # if self.user.is_anonymous:
+        #     await self.close()
+        #     return
         
         # Join room group
         await self.channel_layer.group_add(

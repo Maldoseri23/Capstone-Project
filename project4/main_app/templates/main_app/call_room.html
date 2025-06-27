@@ -1,14 +1,177 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>Room: {{ room.name }}</h1>
-  <hr>
-  <p>Room ID: {{ room.room_id }}</p>
-  <p>Participants ({{ participants|length }}/{{ room.max_participants }}):</p>
-  <ul>
-    {% for participant in participants %}
-      <li>{{ participant.user.username }} {% if participant.user == user %}(You){% endif %}</li>
-    {% endfor %}
-  </ul>
-  <!-- Add your video call UI here -->
-  <a href="{% url 'list_rooms' %}">Back to rooms</a>
+<h1>Room: {{ room.name }}</h1>
+<hr>
+<p>Room ID: {{ room.room_id }}</p>
+<p>Participants ({{ participants|length }}/{{ room.max_participants }}):</p>
+<ul>
+  {% for participant in participants %}
+    <li>{{ participant.user.username }} {% if participant.user == user %}(You){% endif %}</li>
+  {% endfor %}
+</ul>
+
+<!-- {% if user == room.created_by %} -->
+  <form id="endCallForm" method="post" action="{% url 'deactivate_room' room.room_id %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" style="background:red;color:white;">End Call</button>
+  </form>
+<!-- {% endif %} -->
+
+<div id="videos" style="display: flex; flex-wrap: wrap; gap: 16px;">
+  <div>
+    <h3>You</h3>
+    <video id="localVideo" autoplay playsinline muted width="320" height="240" style="background:#222;border:1px solid #ccc;"></video>
+  </div>
+  <!-- Remote videos will be added here -->
+</div>
+
+<a href="{% url 'list_rooms' %}">Back to rooms</a>
+
+<script>
+const roomId = "{{ room_id_str }}";
+const userId = "{{ user_id }}";
+const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+const ws = new WebSocket(
+  ws_scheme + '://' + window.location.host + '/ws/call/' + roomId + '/'
+);
+
+let localStream = null;
+let peers = {}; // { peerUserId: RTCPeerConnection }
+let remoteStreams = {}; // { peerUserId: MediaStream }
+
+const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+
+function addRemoteVideo(peerUserId, stream) {
+  if (document.getElementById('video_' + peerUserId)) return;
+  const container = document.getElementById('videos');
+  const div = document.createElement('div');
+  div.innerHTML = `
+    <h3>${peerUserId}</h3>
+    <video id="video_${peerUserId}" autoplay playsinline width="320" height="240" style="background:#222;border:1px solid #ccc;"></video>
+  `;
+  container.appendChild(div);
+  document.getElementById('video_' + peerUserId).srcObject = stream;
+}
+
+function removeRemoteVideo(peerUserId) {
+  const videoElem = document.getElementById('video_' + peerUserId);
+  if (videoElem) videoElem.parentElement.remove();
+}
+
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+  .then(stream => {
+    document.getElementById('localVideo').srcObject = stream;
+    localStream = stream;
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ 'type': 'join', 'user_id': userId }));
+    };
+  })
+  .catch(err => {
+    alert('Could not access camera or microphone: ' + err);
+  });
+
+ws.onmessage = async (event) => {
+  const data = JSON.parse(event.data);
+
+  // Handle new user joined
+  if (data.type === 'users_in_room') {
+    for (const peerUserId of data.users) {
+      if (peerUserId !== userId && !peers[peerUserId]) {
+        await createPeerConnection(peerUserId, true);
+      }
+    }
+  } else if (data.type === 'new_user') {
+    const peerUserId = data.user_id;
+    if (peerUserId !== userId && !peers[peerUserId]) {
+      await createPeerConnection(peerUserId, false);
+    }
+  } else if (data.type === 'offer') {
+    const peerUserId = data.from;
+    await createPeerConnection(peerUserId, false);
+    await peers[peerUserId].setRemoteDescription(new RTCSessionDescription(data.offer));
+    const answer = await peers[peerUserId].createAnswer();
+    await peers[peerUserId].setLocalDescription(answer);
+    ws.send(JSON.stringify({ 'type': 'answer', 'to': peerUserId, 'from': userId, 'answer': answer }));
+  } else if (data.type === 'answer') {
+    const peerUserId = data.from;
+    await peers[peerUserId].setRemoteDescription(new RTCSessionDescription(data.answer));
+  } else if (data.type === 'ice') {
+    const peerUserId = data.from;
+    if (peers[peerUserId]) {
+      try {
+        await peers[peerUserId].addIceCandidate(new RTCIceCandidate(data.ice));
+      } catch (e) {
+        console.error('Error adding received ice candidate', e);
+      }
+    }
+  } else if (data.type === 'user_left') {
+    const peerUserId = data.user_id;
+    if (peers[peerUserId]) {
+      peers[peerUserId].close();
+      delete peers[peerUserId];
+      removeRemoteVideo(peerUserId);
+    }
+  } else if (data.type === 'room_deactivated') {
+    alert("The room has been ended by the creator.");
+    window.location.href = "{% url 'list_rooms' %}";
+  }
+};
+
+async function createPeerConnection(peerUserId, isInitiator) {
+  if (peers[peerUserId]) return;
+  const pc = new RTCPeerConnection(config);
+  peers[peerUserId] = pc;
+
+  localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+
+  pc.onicecandidate = event => {
+    if (event.candidate) {
+      ws.send(JSON.stringify({
+        'type': 'ice',
+        'to': peerUserId,
+        'from': userId,
+        'ice': event.candidate
+      }));
+    }
+  };
+
+  pc.ontrack = event => {
+    if (!remoteStreams[peerUserId]) {
+      remoteStreams[peerUserId] = new MediaStream();
+      addRemoteVideo(peerUserId, remoteStreams[peerUserId]);
+    }
+    remoteStreams[peerUserId].addTrack(event.track);
+  };
+
+  if (isInitiator) {
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    ws.send(JSON.stringify({
+      'type': 'offer',
+      'to': peerUserId,
+      'from': userId,
+      'offer': offer
+    }));
+  }
+}
+
+// Handle page unload (leave room)
+window.addEventListener('beforeunload', () => {
+  ws.send(JSON.stringify({ 'type': 'leave', 'user_id': userId }));
+  ws.close();
+  for (const peerUserId in peers) {
+    peers[peerUserId].close();
+  }
+});
+
+// Optional: prevent form from reloading page on submit
+const endCallForm = document.getElementById('endCallForm');
+if (endCallForm) {
+  endCallForm.addEventListener('submit', function(e) {
+    setTimeout(() => {
+      ws.close();
+    }, 500); // Give time for backend to broadcast deactivation
+  });
+}
+</script>
 {% endblock %}

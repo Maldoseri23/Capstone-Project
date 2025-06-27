@@ -110,7 +110,7 @@ class CallRoom(models.Model):
     """Model to represent a video call room"""
     room_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     name = models.CharField(max_length=100)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_rooms')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     max_participants = models.IntegerField(default=4)

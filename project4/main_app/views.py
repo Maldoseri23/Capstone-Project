@@ -78,3 +78,14 @@ def list_rooms(request):
     }
     
     return render(request, 'main_app/list_rooms.html', context)
+
+# @login_required
+def deactivate_room(request, room_id):
+    room = get_object_or_404(CallRoom, room_id=room_id)
+    if request.user == room.created_by:  # Only creator can deactivate
+        room.is_active = False
+        room.save()
+        messages.success(request, "Room has been deactivated.")
+    else:
+        messages.error(request, "Only the room creator can deactivate this room.")
+    return redirect('list_rooms')
