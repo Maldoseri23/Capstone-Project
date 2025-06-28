@@ -1,4 +1,4 @@
-{% load static %}
+<!-- {% load static %} -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,12 +12,9 @@
   <header class="navbar-fixed">
     <nav>
       <div class="nav-wrapper">
-        <!-- <ul>
-          <li><a href="/" class="left brand-logo">&nbsp;&nbsp;HearMe</a></li>
-        </ul> -->
-        <ul class="right">
-          <li><a href="{% url 'about' %}">About</a></li>
-          <li><a href="{% url 'event_list' %}">events</a></li>
+        <ul class="menuItems">
+           <li><a href="{% url 'home' %}">HOME</a></li>
+          <li><a href="{% url 'event_list' %}">EVENTS</a></li>
         </ul>
       </div>
     </nav>
@@ -27,7 +24,7 @@
     {% endblock %}
   </main>
   <footer class="page-footer">
-    <div class="right">All Rights Reserved, &copy; 2025 Hear ME  &nbsp;</div>
+    <!-- <div class="right">All Rights Reserved, &copy; 2025 Hear ME  &nbsp;</div> -->
   </footer>
 </body>
 </html>
