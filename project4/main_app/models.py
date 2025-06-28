@@ -47,6 +47,8 @@ class Event(models.Model):
     description = models.TextField()
     date = models.DateTimeField() 
     location = models.CharField(max_length=100)
+    is_virtual = models.BooleanField(default=False)
+    link = models.URLField(blank=True, null=True)
 
     # Foreign Key 
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
