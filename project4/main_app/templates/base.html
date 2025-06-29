@@ -7,6 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>HearMe</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
+
+  
+
 </head>
 <body>
   <header class="navbar-fixed">
@@ -15,6 +20,7 @@
         <ul class="menuItems">
            <li><a href="{% url 'home' %}">HOME</a></li>
           <li><a href="{% url 'event_list' %}">EVENTS</a></li>
+          <li><a href="{% url 'calendar' %}">CALENDAR</a></li>
         </ul>
       </div>
     </nav>
@@ -26,5 +32,7 @@
   <footer class="page-footer">
     <!-- <div class="right">All Rights Reserved, &copy; 2025 Hear ME  &nbsp;</div> -->
   </footer>
+   <!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js"></script>
 </body>
 </html>

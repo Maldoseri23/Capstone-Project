@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Event Calendar</h2>
+<div id="calendar"></div>
+
+<!-- ✅ Only the JS that uses FullCalendar -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Wait 300ms to give time for FullCalendar to fully load (optional but safe)
+    setTimeout(function () {
+      console.log("FullCalendar is loaded:", typeof FullCalendar);
+
+      if (typeof FullCalendar === 'undefined') {
+        alert("FullCalendar failed to load.");
+        return;
+      }
+
+      let calendarEl = document.getElementById('calendar');
+      let calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: '/events/json/',
+        eventClick: function (info) {
+          info.jsEvent.preventDefault();
+          if (info.event.url) {
+            window.location.href = info.event.url;
+          }
+        }
+      });
+      calendar.render();
+    }, 300);
+  });
+</script>
+{% endblock %}

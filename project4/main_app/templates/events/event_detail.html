@@ -10,6 +10,9 @@
 {% if object.link %}
   <p><a href="{{ object.link }}">Event Link</a></p>
 {% endif %}
+{% if object %}
+  <p><strong>Created by:</strong> {{ object.created_by.username }}</p>
+{% endif %}
 
 <a href="{% url 'EventEdit' object.pk %}">Edit</a> |
 <a href="{% url 'EventDelete' object.pk %}">Delete</a> |
