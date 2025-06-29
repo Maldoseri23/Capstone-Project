@@ -11,9 +11,9 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'call_{self.room_id}'
         self.user = self.scope['user']
         
-        # if self.user.is_anonymous:
-        #     await self.close()
-        #     return
+        if self.user.is_anonymous:
+            await self.close()
+            return
         
         # Join room group
         await self.channel_layer.group_add(
@@ -26,6 +26,13 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
         
         await self.accept()
         
+        # Send current participants to new user
+        participants = await self.get_room_participants()
+        await self.send(text_data=json.dumps({
+            'type': 'users_in_room',
+            'users': [p['user_id'] for p in participants]
+    }))
+    
         # Notify others that user joined
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -90,12 +97,33 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
                     'target_id': data.get('target_id')
                 }
             )
+        elif message_type == 'chat_message':
+            # Handle chat messages
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': data['message'],
+                    'username': data['username'],
+                    'user_id': self.user.id,
+                }
+            )
         elif message_type == 'get_participants':
             participants = await self.get_room_participants()
             await self.send(text_data=json.dumps({
                 'type': 'participants_list',
                 'participants': participants
             }))
+
+    # Chat message handler
+    async def chat_message(self, event):
+        # Send chat message to all users in the room
+        await self.send(text_data=json.dumps({
+            'type': 'chat_message',
+            'message': event['message'],
+            'username': event['username'],
+            'user_id': event['user_id'],
+        }))
 
     # WebRTC signaling message handlers
     async def webrtc_offer(self, event):

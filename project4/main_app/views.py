@@ -1,14 +1,33 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import CallRoom, CallParticipant
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def home(request):
-    return HttpResponse('<h1>project 4</h1>')
+    return render(request, 'main_app/home.html')
 
-# @login_required
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)  # Define form inside POST block
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            error_message = 'Invalid sign up - try again'
+    else:  # Handle GET requests separately
+        form = UserCreationForm()  # Define form for non-POST requests
+    
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
+
+
+@login_required
 def create_room(request):
     if request.method == 'POST':
         room_name = request.POST.get('room_name', f"{request.user.username}'s Room")
@@ -16,7 +35,7 @@ def create_room(request):
         
         room = CallRoom.objects.create(
             name=room_name,
-            # created_by=request.user,
+            created_by=request.user,
             max_participants=max_participants
         )
         
@@ -25,7 +44,7 @@ def create_room(request):
     
     return render(request, 'main_app/create_room.html')
 
-# @login_required
+@login_required
 def join_room(request, room_id):
     room = get_object_or_404(CallRoom, room_id=room_id, is_active=True)
     
@@ -41,9 +60,19 @@ def join_room(request, room_id):
     
     return redirect('call_room', room_id=room_id)
 
-# @login_required
+@login_required
 def call_room(request, room_id):
     room = get_object_or_404(CallRoom, room_id=room_id, is_active=True)
+    
+    # Ensure the user is added as a participant
+    participant, created = CallParticipant.objects.get_or_create(
+        room=room,
+        user=request.user,
+        defaults={'is_online': True}
+    )
+    if not created and not participant.is_online:
+        participant.is_online = True
+        participant.save()
     
     # Get current participants
     participants = CallParticipant.objects.filter(
@@ -62,7 +91,8 @@ def call_room(request, room_id):
     
     return render(request, 'main_app/call_room.html', context)
 
-# @login_required
+
+@login_required
 def list_rooms(request):
     active_rooms = CallRoom.objects.filter(is_active=True).order_by('-created_at')
     
@@ -79,7 +109,7 @@ def list_rooms(request):
     
     return render(request, 'main_app/list_rooms.html', context)
 
-# @login_required
+@login_required
 def deactivate_room(request, room_id):
     room = get_object_or_404(CallRoom, room_id=room_id)
     if request.user == room.created_by:  # Only creator can deactivate

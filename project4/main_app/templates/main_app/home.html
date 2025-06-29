@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+Welcome to the Home Page
+
+{% if user.is_authenticated %}
+  Hello, {{ user.username }}! 
+{% else %}
+  Welcome! Please log in or sign up.
+{% endif %}
+
+{% endblock %}
