@@ -2,6 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
+  path('', include('main_app.urls')),
     path('', views.home, name='home'),
     path('accounts/signup/', views.signup, name='signup'),  # Custom signup view
     path('accounts/', include('django.contrib.auth.urls')), # Built-in auth views

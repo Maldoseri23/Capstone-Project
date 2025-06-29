@@ -96,7 +96,7 @@ DATABASES = {
         'USER': os.getenv('DATABASEUSER'),
         'PASSWORD': os.getenv('DATABASEPASSWORD'),
         'PORT': os.getenv('DATABASEPORT'),
-    }
+
 }
 
 # Password validation
