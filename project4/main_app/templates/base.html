@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Document</title>
-   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -15,7 +16,7 @@
       {% if user.is_authenticated %}
         <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
         <li><a href="{% url 'event_list' %}">EVENTS</a></li>
-         <li><a href="{% url 'calendar' %}">CALENDAR</a></li>
+        <li><a href="{% url 'calendar' %}">CALENDAR</a></li>
         <li>
           <form method="post" action="{% url 'logout' %}" style="display:inline;">
             {% csrf_token %}
