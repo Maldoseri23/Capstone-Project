@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Active Call Rooms</h1>
+  <hr>
+  {% if rooms %}
+    <ul>
+      {% for room in rooms %}
+        <li>
+          <strong>{{ room.name }}</strong>
+          ({{ room.current_participants }}/{{ room.max_participants }} participants)
+          <a href="{% url 'join_room' room.room_id %}">Join</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No active rooms right now. <a href="{% url 'create_room' %}">Create one?</a></p>
+  {% endif %}
+{% endblock %}

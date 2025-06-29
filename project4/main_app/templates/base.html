@@ -1,38 +1,38 @@
-<!-- {% load static %} -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>HearMe</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <!-- FullCalendar CSS -->
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
 
-  
-
+  <title>Document</title>
+   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
 </head>
 <body>
-  <header class="navbar-fixed">
-    <nav>
-      <div class="nav-wrapper">
-        <ul class="menuItems">
-           <li><a href="{% url 'home' %}">HOME</a></li>
-          <li><a href="{% url 'event_list' %}">EVENTS</a></li>
-          <li><a href="{% url 'calendar' %}">CALENDAR</a></li>
-        </ul>
-      </div>
-    </nav>
-  </header>
-  <main class="container">
-    {% block content %}
-    {% endblock %}
-  </main>
-  <footer class="page-footer">
-    <!-- <div class="right">All Rights Reserved, &copy; 2025 Hear ME  &nbsp;</div> -->
-  </footer>
-   <!-- FullCalendar JS -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.js"></script>
+  <nav>
+    <ul>
+      
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
+        <li><a href="{% url 'event_list' %}">EVENTS</a></li>
+         <li><a href="{% url 'calendar' %}">CALENDAR</a></li>
+        <li>
+          <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; padding:0; color:blue; text-decoration:underline; cursor:pointer;">
+              Log Out
+            </button>
+          </form>
+        </li>
+      {% else %}
+        <li><a href="{% url 'signup' %}">Sign Up</a></li>
+        <li><a href="{% url 'login' %}">Log In</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  
+  {% block content %}
+  {% endblock %}  
 </body>
 </html>
+

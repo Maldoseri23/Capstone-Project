@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +34,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'main_app',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +54,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+ASGI_APPLICATION = 'project4.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+
 
 ROOT_URLCONF = 'project4.urls'
 
@@ -70,17 +85,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'project4.wsgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'project4',
-        'USER': 'postgres',
-        'PASSWORD': '121212',
-        'PORT': '5432'
-    }
+        'NAME': os.getenv('DATABASENAME'),
+        'USER': os.getenv('DATABASEUSER'),
+        'PASSWORD': os.getenv('DATABASEPASSWORD'),
+        'PORT': os.getenv('DATABASEPORT'),
+
 }
 
 # Password validation
@@ -118,6 +134,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
