@@ -8,6 +8,7 @@
 <body>
   <nav>
     <ul>
+      
       {% if user.is_authenticated %}
         <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
         <li>
