@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-# Create your views here.
+from .models import Plant
+from django.views.generic.edit import CreateView , UpdateView , DeleteView
 
-def home(request):
-    return HttpResponse('<h1>project 4</h1>')
+
+

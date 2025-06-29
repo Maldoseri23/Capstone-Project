@@ -1,0 +1,38 @@
+body {
+  background: #f9f8fd;
+  font-family: 'Lexend Exa', sans-serif;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-block;
+  border: 2px solid #ebecf1;
+  border-radius: 30px;
+  padding: 10px 30px;
+}
+
+ul {
+  display: flex;
+  margin: 0;
+  padding: 0 30px;
+  list-style-type: none;
+  li:not(:last-child) {
+    margin-right: 40px;
+  }
+  li {
+    border: 2px solid transparent;
+    padding: 10px;
+    a {
+      color: #2375d8;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+  }
+}
+
+main.container {
+  padding-top: 100px; /* adjust based on navbar height */
+}
