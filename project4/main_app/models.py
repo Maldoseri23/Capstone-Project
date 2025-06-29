@@ -144,3 +144,21 @@ class CallSession(models.Model):
     
     def __str__(self):
         return f"Session in {self.room.name} - {self.started_at}"
+
+
+class Lesson(models.Model):
+    LESSON_TYPE_CHOICES = [
+        ('letter', 'Letter'),
+        ('word', 'Word'),
+    ]
+    LANGUAGE_CHOICES = [
+        ('bsl', 'Bahraini Sign Language'),
+        ('asl', 'American Sign Language'),
+    ]
+    lesson_type = models.CharField(max_length=10, choices=LESSON_TYPE_CHOICES)
+    label = models.CharField(max_length=50)  # letter or word
+    video_id = models.CharField(max_length=20)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+
+    def __str__(self):
+        return f"{self.get_language_display()} {self.get_lesson_type_display()}: {self.label}"
