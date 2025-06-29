@@ -17,6 +17,10 @@
         <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
         <li><a href="{% url 'event_list' %}">EVENTS</a></li>
         <li><a href="{% url 'calendar' %}">CALENDAR</a></li>
+        <li><a href="{% url 'lessons_by_language' 'bsl' %}">BSL Lessons</a></li>
+        <li><a href="{% url 'lessons_by_language' 'asl' %}">ASL Lessons</a></li>
+    
+
         <li>
           <form method="post" action="{% url 'logout' %}" style="display:inline;">
             {% csrf_token %}
