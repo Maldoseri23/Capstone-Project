@@ -156,7 +156,7 @@ class Lesson(models.Model):
         ('asl', 'American Sign Language'),
     ]
     lesson_type = models.CharField(max_length=10, choices=LESSON_TYPE_CHOICES)
-    label = models.CharField(max_length=50)  # letter or word
+    label = models.CharField(max_length=50)  # The letter or word
     video_id = models.CharField(max_length=20)
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
 

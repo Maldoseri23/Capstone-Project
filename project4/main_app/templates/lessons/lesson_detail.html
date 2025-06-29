@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{{ lesson.get_lesson_type_display }}: {{ lesson.label }}</h2>
+<iframe width="320" height="180"
+        src="https://www.youtube.com/embed/{{ lesson.video_id }}"
+        frameborder="0" allowfullscreen></iframe>
+
+<p>
+  <a href="{% url 'lessons_by_language' language_code %}">&larr; Back to Lessons</a>
+</p>
+
+{% endblock %}
