@@ -7,3 +7,6 @@ def home(request):
 
 def calendar(request):
     return render(request, 'calendar.html')
+
+def sign_to_text_view(request):
+    return render(request, 'main_app/sign_to_text.html')
