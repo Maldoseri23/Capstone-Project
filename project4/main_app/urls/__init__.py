@@ -5,4 +5,5 @@ urlpatterns = [
     path('', include('main_app.urls.event_url')),
     path('', include('main_app.urls.usercalls_url')),
     path('', include('main_app.urls.lessons_url')),
+    path('', include('main_app.urls.sign_to_text_url')),
 ]
