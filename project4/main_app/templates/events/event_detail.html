@@ -2,20 +2,23 @@
 {% block content %}
 
 
-<h1>{{ object.title }}</h1>
-<p>{{ object.description }}</p>
-<p>{{ object.date }}</p>
-<p>{{ object.location }}</p>
-<p>{% if object.is_virtual %}Online{% else %}In-person{% endif %}</p>
-{% if object.link %}
-  <p><a href="{{ object.link }}">Event Link</a></p>
+<h1>{{ event.title }}</h1>
+<p>Description :{{ event.description }}</p>
+<p> Date & Time : {{ event.date }}</p>
+<p>Location : {{ event.location }}</p>
+<p>is_virtual : {% if event.is_virtual %}Online{% else %}In-person{% endif %}</p>
+{% if event.link %}
+  <p>Link : <a href="{{ event.link }}">Event Link</a></p>
 {% endif %}
-{% if object %}
-  <p><strong>Created by:</strong> {{ object.created_by.username }}</p>
+{% if event %}
+  <p><strong>Created by:</strong> {{ event.created_by.username }}</p>
 {% endif %}
 
-<a href="{% url 'EventEdit' object.pk %}">Edit</a> |
-<a href="{% url 'EventDelete' object.pk %}">Delete</a> |
-<a href="{% url 'event_list' %}">Back</a>
+{% if request.user == event.created_by %}
+  <a href="{% url 'EventEdit' event.pk %}">Edit</a> |
+  <a href="{% url 'EventDelete' event.pk %}">Delete</a> |
+{% endif %}
+
+<a href="{% url 'calendar' %}">Back</a>
 
 {% endblock %}
