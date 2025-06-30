@@ -10,7 +10,7 @@
       font-family: sans-serif;
       text-align: center;
     }
-    canvas, video {
+    canvas {
       border: 2px solid #0f0;
       border-radius: 10px;
     }
@@ -23,7 +23,7 @@
 </head>
 <body>
   <h1>Sign Language Recognition</h1>
-  <video id="webcam" width="640" height="480" autoplay muted></video>
+  <!-- Removed the <video> element -->
   <canvas class="output_canvas" width="640" height="480"></canvas>
   <div id="sign">Sign: ...</div>
 
@@ -33,10 +33,18 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.min.js"></script>
 
   <script>
-    const videoElement = document.getElementById('webcam');
     const canvasElement = document.querySelector('.output_canvas');
     const canvasCtx = canvasElement.getContext('2d');
     const signElement = document.getElementById('sign');
+
+    const videoElement = document.createElement('video');
+    videoElement.width = 640;
+    videoElement.height = 480;
+    videoElement.autoplay = true;
+    videoElement.muted = true;
+    videoElement.style.display = 'none'; // hide it from view
+
+    document.body.appendChild(videoElement); // still needed for camera input
 
     function distance(p1, p2) {
       return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
@@ -107,8 +115,6 @@
 
       if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
         const landmarks = results.multiHandLandmarks[0];
-
-        // Draw dots & lines
         drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#0f0', lineWidth: 3 });
         drawLandmarks(canvasCtx, landmarks, { color: '#f00', lineWidth: 2 });
 
@@ -133,6 +139,4 @@
     camera.start();
   </script>
 </body>
-
-
 </html>

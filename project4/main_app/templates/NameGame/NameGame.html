@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>لعبة اسمك بلغة الإشارة</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      background: #222;
+      color: white;
+      direction: rtl;
+    }
+    #lettersContainer img {
+      width: 80px;
+      height: 80px;
+      margin: 5px;
+      border: 2px solid #0f0;
+      border-radius: 10px;
+    }
+    input, button {
+      font-size: 1.2em;
+      padding: 8px 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: none;
+    }
+    button {
+      background-color: #0f0;
+      color: #222;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>أدخل اسمك لتعرفه بلغة الإشارة</h1>
+  <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
+  <br />
+  <button onclick="showSigns()">عرض</button>
+
+  <div id="lettersContainer"></div>
+
+  <script>
+    const arabicSigns = {
+      'ا': '/static/BSL_ar/alif.png',
+      'ب': '/static/BSL_ar/baa.png',
+      'ت': '/static/BSL_ar/taa1.png',
+      'ث': '/static/BSL_ar/thaa1.png',
+      'ج': '/static/BSL_ar/jeem.png',
+      'ح': '/static/BSL_ar/haa1.png',
+      'خ': '/static/BSL_ar/khaa.png',
+      'د': '/static/BSL_ar/dhal.png',
+      'ذ': '/static/BSL_ar/dhal.png',
+      'ر': '/static/BSL_ar/raa.png',
+      'ز': '/static/BSL_ar/zaay.png',
+      'س': '/static/BSL_ar/seen.png',
+      'ش': '/static/BSL_ar/sheen.png',
+      'ص': '/static/BSL_ar/saad.png',
+      'ض': '/static/BSL_ar/daad.png',
+      'ط': '/static/BSL_ar/taa.png',
+      'ظ': '/static/BSL_ar/thaa.png',
+      'ع': '/static/BSL_ar/ain.png',
+      'غ': '/static/BSL_ar/ghain.png',
+      'ف': '/static/BSL_ar/faa.png',
+      'ق': '/static/BSL_ar/qaf.png',
+      'ك': '/static/BSL_ar/kaaf.png',
+      'ل': '/static/BSL_ar/laam.png',
+      'م': '/static/BSL_ar/meem.png',
+      'ن': '/static/BSL_ar/noon.png',
+      'ه': '/static/BSL_ar/haa.png',
+      'و': '/static/BSL_ar/waw.png',
+      'ي': '/static/BSL_ar/yaa.png',
+      'ى': '/static/BSL_ar/aalif_maqsura.png',
+      'ة': '/static/BSL_ar/taa_marbuta.png',
+    };
+
+    function showSigns() {
+      const input = document.getElementById('nameInput').value.trim();
+      const container = document.getElementById('lettersContainer');
+      container.innerHTML = '';
+
+      for (const char of input) {
+        if (arabicSigns[char]) {
+          const img = document.createElement('img');
+          img.src = arabicSigns[char];
+          img.alt = char;
+          container.appendChild(img);
+        } else if (char.trim() === '') {
+          // ignore space
+        } else {
+          const span = document.createElement('span');
+          span.textContent = '?';
+          span.style.color = 'red';
+          span.style.fontSize = '3em';
+          span.style.margin = '5px';
+          container.appendChild(span);
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>
