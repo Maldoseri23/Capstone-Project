@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="game-container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <h2 style="text-align: center; color: #333;">Sign Language Guessing Game</h2>
+    
+    <!-- Score Display -->
+    <div class="score-board" style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+        <div style="display: flex; justify-content: space-around; align-items: center;">
+            <div>
+                <strong>Score: <span id="score" style="color: #28a745;">{{ score }}</span></strong>
+            </div>
+            <div>
+                <strong>High Score: <span id="highscore" style="color: #dc3545;">{{ highscore }}</span></strong>
+            </div>
+            <div>
+                <strong>Streak: <span id="streak" style="color: #ffc107;">0</span></strong>
+            </div>
+        </div>
+        <div style="margin-top: 10px;">
+            <a href="{% url 'leaderboard' %}" class="btn btn-info" style="margin-right: 10px;">Leaderboard</a>
+            <a href="{% url 'reset_score' %}" class="btn btn-warning">Reset Score</a>
+        </div>
+    </div>
+
+    <!-- Game Area -->
+    <div class="game-area" style="text-align: center;">
+        <!-- Image Display -->
+        <div id="image-row" style="margin: 30px 0; min-height: 100px; background: #e9ecef; border-radius: 10px; padding: 20px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <p style="color: #6c757d;">Click "New Word" to start playing!</p>
+        </div>
+
+        <!-- Input and Buttons -->
+        <div class="input-section" style="margin: 20px 0;">
+            <input 
+                type="text" 
+                id="guess-input" 
+                placeholder="Type your guess here..." 
+                style="padding: 10px; font-size: 16px; border: 2px solid #dee2e6; border-radius: 5px; width: 250px; margin-right: 10px;"
+                autocomplete="off"
+            >
+            <button id="submit-guess" class="btn btn-primary" style="padding: 10px 20px; font-size: 16px;">Submit Guess</button>
+        </div>
+
+        <div class="action-buttons" style="margin: 20px 0;">
+            <button id="next-word" class="btn btn-success" style="margin: 5px; padding: 10px 20px;">New Word</button>
+            <button id="show-answer" class="btn btn-secondary" style="margin: 5px; padding: 10px 20px;">Show Answer</button>
+        </div>
+
+        <!-- Message Display -->
+        <div id="message" style="margin-top: 20px; font-size: 18px; font-weight: bold; min-height: 30px;"></div>
+    </div>
+</div>
+
+<script>
+let currentWordId = null;
+
+function loadWord() {
+    fetch("{% url 'get_word' %}")
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('image-row').innerHTML = `<p style="color: red;">${data.error}</p>`;
+                return;
+            }
+            
+            currentWordId = data.word_id;
+            
+            // Display images
+            let imageHtml = '';
+            data.images.forEach((img, index) => {
+                imageHtml += `<img src="{% static 'images/letters/' %}${img}" 
+                             style="width: 80px; height: 80px; margin: 5px; border: 2px solid #dee2e6; border-radius: 8px; object-fit: cover;" 
+                             alt="Letter ${index + 1}">`;
+            });
+            
+            document.getElementById('image-row').innerHTML = imageHtml;
+            document.getElementById('guess-input').value = '';
+            document.getElementById('message').innerHTML = '';
+            document.getElementById('guess-input').focus();
+        })
+        .catch(error => {
+            console.error('Error loading word:', error);
+            document.getElementById('message').innerHTML = '<span style="color: red;">Error loading word. Please try again.</span>';
+        });
+}
+
+function checkGuess() {
+    const guess = document.getElementById('guess-input').value.trim();
+    
+    if (!guess) {
+        document.getElementById('message').innerHTML = '<span style="color: orange;">Please enter a guess!</span>';
+        return;
+    }
+    
+    if (!currentWordId) {
+        document.getElementById('message').innerHTML = '<span style="color: orange;">Please load a word first!</span>';
+        return;
+    }
+
+    fetch("{% url 'check_guess' %}", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            word_id: currentWordId,
+            guess: guess
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.correct) {
+            document.getElementById('message').innerHTML = '<span style="color: green; font-size: 24px;">🎉 Correct! 🎉</span>';
+            document.getElementById('score').textContent = data.score;
+            document.getElementById('highscore').textContent = data.highscore;
+            document.getElementById('streak').textContent = data.streak;
+        } else {
+            document.getElementById('message').innerHTML = '<span style="color: red;">❌ Try again!</span>';
+            document.getElementById('streak').textContent = data.streak;
+        }
+    })
+    .catch(error => {
+        console.error('Error checking guess:', error);
+        document.getElementById('message').innerHTML = '<span style="color: red;">Error checking guess. Please try again.</span>';
+    });
+}
+
+function showAnswer() {
+    if (!currentWordId) {
+        document.getElementById('message').innerHTML = '<span style="color: orange;">Please load a word first!</span>';
+        return;
+    }
+
+    fetch(`{% url 'show_answer' %}?word_id=${currentWordId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('message').innerHTML = `<span style="color: blue;">💡 Answer: <strong>${data.answer.toUpperCase()}</strong></span>`;
+        })
+        .catch(error => {
+            console.error('Error showing answer:', error);
+            document.getElementById('message').innerHTML = '<span style="color: red;">Error showing answer. Please try again.</span>';
+        });
+}
+
+// Event listeners
+document.getElementById('submit-guess').addEventListener('click', checkGuess);
+document.getElementById('next-word').addEventListener('click', loadWord);
+document.getElementById('show-answer').addEventListener('click', showAnswer);
+
+// Allow Enter key to submit guess
+document.getElementById('guess-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkGuess();
+    }
+});
+
+// Load first word when page loads
+window.addEventListener('load', loadWord);
+</script>
+
+<style>
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary { background-color: #007bff; }
+.btn-primary:hover { background-color: #0056b3; }
+
+.btn-success { background-color: #28a745; }
+.btn-success:hover { background-color: #1e7e34; }
+
+.btn-secondary { background-color: #6c757d; }
+.btn-secondary:hover { background-color: #545b62; }
+
+.btn-info { background-color: #17a2b8; }
+.btn-info:hover { background-color: #117a8b; }
+
+.btn-warning { background-color: #ffc107; color: #212529; }
+.btn-warning:hover { background-color: #e0a800; }
+</style>
+{% endblock %}
