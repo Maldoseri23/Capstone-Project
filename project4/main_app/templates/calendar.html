@@ -1,34 +1,22 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <h2>Event Calendar</h2>
 <div id="calendar"></div>
 
-<!-- ✅ Only the JS that uses FullCalendar -->
+<!-- FullCalendar CSS & JS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
+<a href="{% url 'EventCreate' %}">Add Event</a>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Wait 300ms to give time for FullCalendar to fully load (optional but safe)
-    setTimeout(function () {
-      console.log("FullCalendar is loaded:", typeof FullCalendar);
-
-      if (typeof FullCalendar === 'undefined') {
-        alert("FullCalendar failed to load.");
-        return;
-      }
-
-      let calendarEl = document.getElementById('calendar');
-      let calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        events: '/events/json/',
-        eventClick: function (info) {
-          info.jsEvent.preventDefault();
-          if (info.event.url) {
-            window.location.href = info.event.url;
-          }
-        }
-      });
-      calendar.render();
-    }, 300);
+document.addEventListener('DOMContentLoaded', function () {
+  var calendarEl = document.getElementById('calendar');
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    events: '/api/events/', 
+    displayEventTime: false,
   });
+  calendar.render()
+})
 </script>
 {% endblock %}
