@@ -20,6 +20,9 @@
         <li><a href="{% url 'lessons_by_language' 'bsl' %}">BSL Lessons</a></li>
         <li><a href="{% url 'lessons_by_language' 'asl' %}">ASL Lessons</a></li>
         <li><a href="{% url 'sign_to_text' %}">Sign to Text</a></li>
+        <li><a href="{% url 'name-game' %}" > Game </a></li> 
+       
+
   
 
         <li>
@@ -36,9 +39,82 @@
       {% endif %}
     </ul>
   </nav>
+
+  <div style="text-align: center; padding: 20px;">
+  <h2>Search for a word in sign language</h2>
+  <input id="searchInput" type="text" placeholder="اكتب كلمة بالعربي" style="font-size: 1.2em; padding: 8px 12px; border-radius: 6px; border: none;">
+  <button onclick="showSearchSigns()" style="font-size: 1.2em; padding: 8px 12px; border-radius: 6px; background-color: #0ff; color: #111; border: none; cursor: pointer;">عرض</button>
+  <div id="searchLettersResult" style="margin-top: 15px;"></div>
+</div>
+
   
   {% block content %}
-  {% endblock %}  
+  {% endblock %} 
+  
+  <script>
+  const arabicSigns = {
+    ا: '/static/images/letters/ا.png',
+    ب: '/static/images/letters/ب.png',
+    ت: '/static/images/letters/ت.png',
+    ث: '/static/images/letters/ث.png',
+    ج: '/static/images/letters/ج.png',
+    ح: '/static/images/letters/ح.png',
+    خ: '/static/images/letters/خ.png',
+    د: '/static/images/letters/د.png',
+    ذ: '/static/images/letters/ذ.png',
+    ر: '/static/images/letters/ر.png',
+    ز: '/static/images/letters/ز.png',
+    س: '/static/images/letters/س.png',
+    ش: '/static/images/letters/ش.png',
+    ص: '/static/images/letters/ص.png',
+    ض: '/static/images/letters/ض.png',
+    ط: '/static/images/letters/ط.png',
+    ظ: '/static/images/letters/ظ.png',
+    ع: '/static/images/letters/ع.png',
+    غ: '/static/images/letters/غ.png',
+    ف: '/static/images/letters/ف.png',
+    ق: '/static/images/letters/ق.png',
+    ك: '/static/images/letters/ك.png',
+    ل: '/static/images/letters/ل.png',
+    م: '/static/images/letters/م.png',
+    ن: '/static/images/letters/ن.png',
+    ه: '/static/images/letters/ح.png',
+    و: '/static/images/letters/و.png',
+    ي: '/static/images/letters/ي.png',
+    ى: '/static/images/letters/ى.png',
+    ة: '/static/images/letters/ة.png'
+  };
+
+  function showSearchSigns() {
+    const input = document.getElementById('searchInput').value.trim();
+    const container = document.getElementById('searchLettersResult');
+    container.innerHTML = '';
+
+    for (const char of input) {
+      if (arabicSigns[char]) {
+        const img = document.createElement('img');
+        img.src = arabicSigns[char];
+        img.alt = char;
+        img.style.width = '80px';
+        img.style.height = '80px';
+        img.style.margin = '5px';
+        img.style.border = '2px solid #0ff';
+        img.style.borderRadius = '10px';
+        container.appendChild(img);
+      } else if (char.trim() === '') {
+        // ignore space
+      } else {
+        const span = document.createElement('span');
+        span.textContent = '?';
+        span.style.color = 'red';
+        span.style.fontSize = '3em';
+        span.style.margin = '5px';
+        container.appendChild(span);
+      }
+    }
+  }
+</script>
+
 </body>
 </html>
 
