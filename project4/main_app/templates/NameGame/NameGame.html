@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <title>لعبة اسمك بلغة الإشارة</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        background: #222;
+        color: white;
+        direction: rtl;
+      }
+      #lettersContainer img {
+        width: 80px;
+        height: 80px;
+        margin: 5px;
+        border: 2px solid #0f0;
+        border-radius: 10px;
+      }
+      input,
+      button {
+        font-size: 1.2em;
+        padding: 8px 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: none;
+      }
+      button {
+        background-color: #0f0;
+        color: #222;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>أدخل اسمك لتعرفه بلغة الإشارة</h1>
+    <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
+    <br />
+    <button onclick="showSigns()">عرض</button>
+
+    <div id="lettersContainer"></div>
+
+    <script>
+      const arabicSigns = {
+        ا: '/static/images/letters/ا.png',
+        ب: '/static/images/letters/ب.png',
+        ت: '/static/images/letters/ت.png',
+        ث: '/static/images/letters/ث.png',
+        ج: '/static/images/letters/ج.png',
+        ح: '/static/images/letters/ح.png',
+        خ: '/static/images/letters/خ.png',
+        د: '/static/images/letters/د.png',
+        ذ: '/static/images/letters/ذ.png',
+        ر: '/static/images/letters/ر.png',
+        ز: '/static/images/letters/ز.png',
+        س: '/static/images/letters/س.png',
+        ش: '/static/images/letters/ش.png',
+        ص: '/static/images/letters/ص.png',
+        ض: '/static/images/letters/ض.png',
+        ط: '/static/images/letters/ط.png',
+        ظ: '/static/images/letters/ظ.png',
+        ع: '/static/images/letters/ع.png',
+        غ: '/static/images/letters/غ.png',
+        ف: '/static/images/letters/ف.png',
+        ق: '/static/images/letters/ق.png',
+        ك: '/static/images/letters/ك.png',
+        ل: '/static/images/letters/ل.png',
+        م: '/static/images/letters/م.png',
+        ن: '/static/images/letters/ن.png',
+        ه: '/static/images/letters/ح.png',
+        و: '/static/images/letters/و.png',
+        ي: '/static/images/letters/ي.png',
+        ى: '/static/images/letters/ى.png',
+        ة: '/static/images/letters/ة.png'
+      }
+
+      function showSigns() {
+        const input = document.getElementById('nameInput').value.trim()
+        const container = document.getElementById('lettersContainer')
+        container.innerHTML = ''
+
+        for (const char of input) {
+          if (arabicSigns[char]) {
+            const img = document.createElement('img')
+            img.src = arabicSigns[char]
+            img.alt = char
+            container.appendChild(img)
+          } else if (char.trim() === '') {
+            // ignore space
+          } else {
+            const span = document.createElement('span')
+            span.textContent = '?'
+            span.style.color = 'red'
+            span.style.fontSize = '3em'
+            span.style.margin = '5px'
+            container.appendChild(span)
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

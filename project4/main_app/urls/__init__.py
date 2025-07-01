@@ -7,6 +7,7 @@ urlpatterns = [
     path('', include('main_app.urls.usercalls_url')),
     path('', include('main_app.urls.lessons_url')),
     path('', include('main_app.urls.sign_to_text_url')),
+    path('', include('main_app.urls.NameGame_url')),
     path('', include('main_app.urls.guessgame_url')),
     path('', include('main_app.urls.garden_url')),
     path('profile/', views.profile_page, name='profile_page'),
