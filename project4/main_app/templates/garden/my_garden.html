@@ -3,14 +3,61 @@
 
 {% block content %}
 <h2>My Progress Garden</h2>
-<div style="position: relative; width: 400px; height: 300px; background: #cce5cc; border-radius: 20px;">
-    <img src="{% static 'images/garden/tree.png' %}" style="position: absolute; left: 150px; bottom: 0; width: 100px;">
-    {% for flower in flower_imgs %}
-        <img src="{% static 'images/garden/flower1.jpg' %}" style="position: absolute; left: {{ flower.left }}px; bottom: 10px; width: 40px;">
-    {% endfor %}
-    {% for fruit in fruit_imgs %}
-        <img src="{% static 'images/garden/fruit1.jpg' %}" style="position: absolute; left: {{ fruit.left }}px; bottom: 80px; width: 30px;">
-    {% endfor %}
+<div class="garden-container">
+    <!-- Tree: centered and large -->
+    <img src="{% static 'images/garden/tree.png' %}" class="garden-tree">
+
+    <!-- Flowers: bottom center, spaced evenly -->
+    <div class="garden-row garden-flowers" style="bottom: 0;">
+        {% for flower in flower_imgs %}
+            <img src="{% static 'images/garden/' %}{% cycle 'flower1.png' 'flower2.png' %}" class="garden-flower">
+        {% endfor %}
+    </div>
+
+    <!-- Fruits: above flowers, bottom center, spaced evenly -->
+    <div class="garden-row garden-fruits" style="bottom: 50px;">
+        {% for fruit in fruit_imgs %}
+            <img src="{% static 'images/garden/' %}{% cycle 'fruit1.png' 'fruit2.png' 'fruit3.png' %}" class="garden-fruit">
+        {% endfor %}
+    </div>
 </div>
-<p>You have grown {{ profile.flowers }} flowers and {{ profile.fruits }} fruits!</p>
+<p style="text-align:center;">You have grown {{ profile.flowers }} flowers and {{ profile.fruits }} fruits!</p>
+
+<style>
+.garden-container {
+    position: relative;
+    width: 400px;
+    height: 300px;
+    margin: 30px auto 0 auto;
+    background: #cce5cc;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.garden-tree {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 180px;   /* Large tree */
+    transform: translateX(-50%);
+    z-index: 1;
+}
+.garden-row {
+    position: absolute;
+    left: 50%;
+    display: flex;
+    gap: 8px;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+.garden-flower {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+.garden-fruit {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+</style>
 {% endblock %}
