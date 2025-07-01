@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 30px auto; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+    <h2 style="text-align:center;">👤 My Profile</h2>
+    <div style="text-align:center;">
+        {% if profile.profile_image %}
+            <img src="{{ profile.profile_image.url }}" alt="Profile Image"
+                 style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #ddd;">
+        {% else %}
+            <div style="width:120px; height:120px; border-radius:50%; background:#ccc; display:inline-block;"></div>
+        {% endif %}
+        <h3>{{ profile.user.username }}</h3>
+        <p style="color:#666;">{{ profile.bio }}</p>
+    </div>
+    <hr>
+    <h4>Game Stats</h4>
+    <ul>
+        <li><strong>High Score:</strong> {{ profile.highscore }}</li>
+        <li><strong>Streak:</strong> {{ profile.streak_count }}</li>
+        <li><strong>Flowers in Garden:</strong> {{ profile.flowers }}</li>
+        <li><strong>Fruits in Garden:</strong> {{ profile.fruits }}</li>
+    </ul>
+    <div style="margin-top:30px; text-align:center;">
+        <a href="{% url 'my_garden' %}" class="btn btn-success">🌱 View My Garden</a>
+    </div>
+</div>
+{% endblock %}

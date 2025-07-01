@@ -10,4 +10,13 @@
   <a href="{% url 'lessons_by_language' language_code %}">&larr; Back to Lessons</a>
 </p>
 
+<form method="post" action="{% url 'complete_lesson' language_code lesson.id %}">
+    {% csrf_token %}
+    <button type="submit">Lesson Complete</button>
+</form>
+
+{% if message %}
+  <div style="color: green;">{{ message }}</div>
+{% endif %}
+
 {% endblock %}
