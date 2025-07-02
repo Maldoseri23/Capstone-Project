@@ -1,19 +1,27 @@
 {% extends 'base.html' %}
+
 {% block content %}
+<div class="lesson-wrapper">
+  <h1 class="page-title">
+    {% if language_code == 'bsl' %}
+      Bahraini Sign Language Lessons
+    {% elif language_code == 'asl' %}
+      American Sign Language Lessons
+    {% endif %}
+  </h1>
 
-<h1>
-  {% if language_code == 'bsl' %}Bahraini Sign Language{% elif language_code == 'asl' %}American Sign Language{% endif %} Lessons
-</h1>
-
-<ul>
-  {% for lesson in lessons %}
-    <li>
-      <a href="{% url 'lesson_detail' language_code lesson.pk %}">Lesson {{ forloop.counter }}</a>
-      <!-- Optionally: show lesson type or label here -->
-    </li>
-  {% empty %}
-    <li>No lessons found for this language.</li>
-  {% endfor %}
-</ul>
-
+  {% if lessons %}
+    <ul class="lesson-list">
+      {% for lesson in lessons %}
+        <li class="lesson-card">
+          <a href="{% url 'lesson_detail' language_code lesson.pk %}" class="lesson-link">
+            📘 Lesson {{ forloop.counter }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="no-lessons">No lessons found for this language.</p>
+  {% endif %}
+</div>
 {% endblock %}

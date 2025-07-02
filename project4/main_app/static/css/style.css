@@ -195,3 +195,1271 @@ margin:0% 3%;
     border-radius: 0.6rem;
   }
 }
+/* ===== Login Page Styling ===== */
+body.login-page {
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  background-color: #fff3e6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  color: #2e5d36;
+}
+
+.login-wrapper {
+  background: #fff8ee;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.login-wrapper h1 {
+  font-size: 2.5rem;
+  color: #2e5d36;
+  margin-bottom: 1rem;
+}
+
+form p {
+  margin-bottom: 1.5rem;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ffd280;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: #fffdf7;
+}
+
+input[type="submit"].btn {
+  margin-top: 1rem;
+  width: 100%;
+  background-color: #f4a900;
+  color: #2e5d36;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+input[type="submit"].btn:hover {
+  background-color: #e29400;
+}
+
+.login-wrapper a {
+  display: block;
+  margin-top: 1rem;
+  color: #2e5d36;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-wrapper a:hover {
+  text-decoration: underline;
+}
+
+body.login-page::before,
+body.login-page::after {
+  content: '🖐 👌 🤟 ✋';
+  position: absolute;
+  font-size: 2rem;
+  color: #a0522d;
+  opacity: 0.3;
+}
+
+body.login-page::before {
+  top: 10%;
+  left: 5%;
+}
+
+body.login-page::after {
+  bottom: 10%;
+  right: 5%;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+label {
+  display: block;
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  font-size: 1rem;
+  color: #2e5d36; /* Dark green (matches your theme) */
+  margin-bottom: 0.5rem;
+  cursor: pointer; /* Better than default */
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+label:hover {
+  color: #f4a900; /* Highlight on hover */
+}
+
+
+
+/* ---------- Event Calendar Styling ---------- */
+
+.calendar-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2e5d36;
+  margin-bottom: 2rem;
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+}
+
+#calendar {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff8ee;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Add Event Button */
+.calendar-add-btn {
+  display: block;
+  margin: 2rem auto;
+  padding: 12px 24px;
+  background-color: #f4a900;
+  color: #2e5d36;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  text-align: center;
+  width: max-content;
+}
+
+.calendar-add-btn:hover {
+  background-color: #e29400;
+}
+
+/* FullCalendar theme override */
+.fc {
+  --fc-button-bg-color: #f4a900;
+  --fc-button-border-color: #f4a900;
+  --fc-button-hover-bg-color: #e29400;
+  --fc-button-active-bg-color: #d48300;
+  --fc-event-bg-color: #f4a900;
+  --fc-event-border-color: #f4a900;
+  --fc-today-bg-color: #fff2cc;
+}
+
+.fc-toolbar-title {
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 1.75rem;
+  color: #2e5d36;
+}
+
+.fc-daygrid-event {
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* ---------- FullCalendar Date Table Custom Styling ---------- */
+
+/* Style for each cell (day box) in the calendar grid */
+.fc-daygrid-day {
+  background-color: #fffdf7;
+  border: 1px solid #ffd280;
+  transition: background-color 0.2s ease;
+}
+
+/* On hover: highlight the day box */
+.fc-daygrid-day:hover {
+  background-color: #fff1cc;
+  cursor: pointer;
+}
+
+/* Style the number (date) in the top corner of each day */
+.fc-daygrid-day-number {
+  color: #2e5d36;
+  font-weight: bold;
+  font-family: 'Comic Sans MS', cursive;
+  padding: 4px;
+}
+
+/* Highlight today's date */
+.fc-day-today {
+  background-color: #ffecb3 !important;
+  border: 2px solid #f4a900;
+}
+
+/* Optional: soften weekend background */
+.fc-day-sat,
+.fc-day-sun {
+  background-color: #fff7e0;
+}
+
+/* Remove spacing between table cells */
+.fc-scrollgrid {
+  border-collapse: collapse;
+}
+
+/* ---------- Event Detail Page Styling ---------- */
+
+.event-detail-card {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #fff8ee;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  color: #2e5d36;
+}
+
+.event-detail-card h1.event-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #2e5d36;
+  text-align: center;
+}
+
+.event-detail-card p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.event-detail-card .event-link {
+  color: #f4a900;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.event-actions {
+  margin: 2rem 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-back {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #2e5d36;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+.btn-edit {
+  background-color: #ffd280;
+}
+
+.btn-delete {
+  background-color: #f8c8c8;
+}
+
+.btn-back {
+  background-color: #f4a900;
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.btn-edit:hover {
+  background-color: #ffcc66;
+}
+
+.btn-delete:hover {
+  background-color: #f4a1a1;
+}
+
+.btn-back:hover {
+  background-color: #e29400;
+}
+
+/* Container for the form page */
+.page-wrapper {
+  max-width: 600px;
+  margin: 3rem auto 5rem;
+  background-color: #fff8ee; /* soft warm background */
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  color: #2e5d36; /* dark green */
+}
+
+/* Page title */
+.page-wrapper h1 {
+  font-size: 2.2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2e5d36;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+/* Highlight teal-text if used */
+.teal-text {
+  color: #2ecc40; /* your green accent */
+}
+
+/* Form styling */
+.page-wrapper form p {
+  margin-bottom: 1.2rem;
+  font-size: 1.1rem;
+}
+
+/* Inputs and textareas */
+.page-wrapper input[type="text"],
+.page-wrapper input[type="email"],
+.page-wrapper input[type="password"],
+.page-wrapper textarea,
+.page-wrapper select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #ffd280;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #fffdf7;
+  box-sizing: border-box;
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  color: #2e5d36;
+  transition: border-color 0.3s ease;
+}
+
+.page-wrapper input[type="text"]:focus,
+.page-wrapper input[type="email"]:focus,
+.page-wrapper input[type="password"]:focus,
+.page-wrapper textarea:focus,
+.page-wrapper select:focus {
+  border-color: #f4a900;
+  outline: none;
+}
+
+/* Submit button */
+.page-wrapper input[type="submit"].btn {
+  margin-top: 1.5rem;
+  width: 100%;
+  background-color: #f4a900;
+  color: #2e5d36;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.page-wrapper input[type="submit"].btn:hover {
+  background-color: #e29400;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .page-wrapper {
+    padding: 1.5rem 1.8rem;
+    margin: 2rem 1rem 4rem;
+  }
+
+  .page-wrapper h1 {
+    font-size: 1.8rem;
+  }
+
+  .page-wrapper input[type="submit"].btn {
+    font-size: 1rem;
+    padding: 12px;
+  }
+}
+
+/* Wrapper for delete confirmation */
+.page-wrapper {
+  max-width: 480px;
+  margin: 4rem auto 6rem;
+  background-color: #fff8ee; /* soft warm background */
+  padding: 2.5rem 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  color: #2e5d36;
+  text-align: center;
+}
+
+/* Heading styles */
+.page-wrapper h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2e5d36;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.page-wrapper h4 {
+  font-size: 1.3rem;
+  margin-bottom: 2.5rem;
+  font-weight: normal;
+  color: #3a4d2f;
+}
+
+/* Highlight teal text */
+.teal-text {
+  color: #2ecc40;
+  font-weight: bold;
+}
+
+/* Buttons container */
+.page-wrapper form {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Confirm Delete button */
+.page-wrapper input[type="submit"].btn {
+  background-color: #f44336; /* red */
+  color: #fff8ee;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  flex: 1 1 150px;
+}
+
+.page-wrapper input[type="submit"].btn:hover {
+  background-color: #d7372a;
+}
+
+/* Cancel link styled as button */
+.page-wrapper a.btn.red {
+  background-color: #ffd280; /* your warm yellow */
+  color: #2e5d36;
+  font-weight: bold;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  text-decoration: none;
+  line-height: 1.2;
+  flex: 1 1 150px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.page-wrapper a.btn.red:hover {
+  background-color: #e29400;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .page-wrapper {
+    padding: 2rem 1.5rem 2.5rem;
+  }
+  .page-wrapper h1 {
+    font-size: 2rem;
+  }
+  .page-wrapper h4 {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  .page-wrapper form {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .page-wrapper input[type="submit"].btn,
+  .page-wrapper a.btn.red {
+    flex: none;
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+}
+
+
+/* Container and General Layout */
+.container {
+  max-width: 900px;
+  margin: 3rem auto 6rem;
+  background: #fff8ee;
+  padding: 2rem 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  color: #2e5d36;
+}
+
+/* Headings */
+h1 {
+  font-size: 2.5rem;
+  font-family: 'Comic Sans MS', cursive;
+  color: #2e5d36;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+h3, h4 {
+  color: #3a4d2f;
+  margin-bottom: 0.75rem;
+}
+
+hr {
+  border: none;
+  border-bottom: 2px solid #ffd280;
+  margin-bottom: 2rem;
+}
+
+/* Room Details */
+.room-info p {
+  font-size: 1rem;
+  margin: 0.3rem 0;
+}
+
+.room-info ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  margin-bottom: 1.5rem;
+}
+
+.room-info ul li {
+  margin: 0.4rem 0;
+  font-weight: 500;
+}
+
+/* Highlight current user */
+.room-info ul li span.you {
+  font-weight: bold;
+  color: #2ecc40;
+}
+
+/* Buttons */
+button, input[type="submit"], a.btn {
+  background-color: #f4a900;
+  color: #2e5d36;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+button:hover, input[type="submit"]:hover, a.btn:hover {
+  background-color: #e29400;
+}
+
+/* Special red button for End Call */
+button.end-call {
+  background-color: #f44336;
+  color: #fff8ee;
+}
+
+button.end-call:hover {
+  background-color: #d7372a;
+}
+
+/* Layout for video call and chat */
+.call-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.video-section {
+  flex: 2;
+  min-width: 320px;
+}
+
+.video-section h3 {
+  margin-bottom: 1rem;
+}
+
+#videos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+#videos > div {
+  border: 1px solid #ffd280;
+  background: #fffdf7;
+  border-radius: 10px;
+  padding: 0.5rem;
+  width: 320px;
+  text-align: center;
+}
+
+#videos video {
+  background: #222;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 0.5rem;
+}
+
+/* Chat Section */
+.chat-section {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-section h3 {
+  margin-bottom: 1rem;
+}
+
+#chatContainer {
+  border: 1px solid #ccc;
+  background: #fffdf7;
+  border-radius: 12px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+#chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  font-size: 0.95rem;
+  color: #2e5d36;
+}
+
+#chatMessages div {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+#chatMessages div.own-message {
+  background: #f4a900;
+  color: #2e5d36;
+  margin-left: auto;
+  text-align: right;
+}
+
+#chatMessages div.other-message {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+#chatInput {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ffd280;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  margin-right: 8px;
+  background-color: #fffdf7;
+  color: #2e5d36;
+}
+
+#sendChatBtn {
+  background-color: #f4a900;
+  color: #2e5d36;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#sendChatBtn:hover {
+  background-color: #e29400;
+}
+
+/* Form Styling for Create Room */
+form div {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #2e5d36;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+form input[type="text"],
+form input[type="number"] {
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid #ffd280;
+  border-radius: 10px;
+  background-color: #fffdf7;
+  color: #2e5d36;
+  box-sizing: border-box;
+}
+
+form button[type="submit"] {
+  width: 100%;
+  max-width: 200px;
+  align-self: center;
+}
+
+/* Active Rooms List */
+.rooms-list ul {
+  list-style: none;
+  padding: 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.rooms-list li {
+  background: #fffdf7;
+  border: 2px solid #ffd280;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #2e5d36;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.rooms-list li strong {
+  font-size: 1.2rem;
+}
+
+.rooms-list li a {
+  background-color: #f4a900;
+  padding: 8px 18px;
+  border-radius: 12px;
+  color: #2e5d36;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.rooms-list li a:hover {
+  background-color: #e29400;
+}
+
+/* No rooms message */
+.rooms-list p {
+  text-align: center;
+  color: #3a4d2f;
+  font-size: 1.1rem;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .call-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #videos > div {
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  .chat-section {
+    width: 100%;
+    max-width: 480px;
+  }
+  
+  form div {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  button, input[type="submit"], a.btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}
+
+
+.call-room-layout {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.video-section {
+  flex: 2;
+  min-width: 480px;
+  background-color: #fef9f4;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.chat-section {
+  flex: 1;
+  min-width: 320px;
+  background-color: #f9f9fb;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.video-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.video-box {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  width: 320px;
+}
+
+.video-box video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background-color: #222;
+}
+
+.video-label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  background-color: #fafafa;
+}
+
+.chat-input-row {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #fff;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.chat-send-btn {
+  background-color: #00b894;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chat-send-btn:hover {
+  background-color: #019875;
+}
+.call-room-layout {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.video-section {
+  flex: 3;
+  min-width: 600px;
+  background-color: #fffaf2;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.chat-section {
+  flex: 1.3;
+  min-width: 340px;
+  background-color: #f4f7ff;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  margin-bottom: 18px;
+  color: #333;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.video-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.video-box {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  width: 400px;
+}
+
+.video-box video {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background-color: #222;
+}
+
+.video-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+/* End Call Button */
+.end-call-form {
+  margin-top: 20px;
+}
+
+.end-call-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.end-call-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Back Button */
+.back-btn-container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.back-btn {
+  text-decoration: none;
+  background-color: #0984e3;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: inline-block;
+  transition: background-color 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #0077cc;
+}
+
+/* Chat Styling (same as before) */
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  background-color: #fafafa;
+}
+
+.chat-input-row {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #fff;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.chat-send-btn {
+  background-color: #00b894;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chat-send-btn:hover {
+  background-color: #019875;
+}
+
+@media (max-width: 768px) {
+  .call-room-layout {
+    flex-direction: column;
+  }
+
+  .video-box {
+    width: 100%;
+  }
+
+  .chat-section,
+  .video-section {
+    width: 100%;
+  }
+}
+.lessons-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+.lesson-heading {
+  text-align: center;
+  color: #2a2a2a;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.lesson-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.lesson-item {
+  background: #e6f7ff;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.lesson-item:hover {
+  background: #cceeff;
+}
+
+.lesson-link {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.lesson-link:hover {
+  text-decoration: underline;
+}
+
+.no-lessons-msg {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+.lesson-wrapper {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fffdf7;
+  border: 2px solid #ffd280;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.page-title {
+  text-align: center;
+  color: #444;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.lesson-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.lesson-card {
+  background-color: #fffaf0;
+  border: 1px solid #ffd280;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.lesson-card:hover {
+  background-color: #fff0cc;
+}
+
+.lesson-link {
+  text-decoration: none;
+  font-weight: bold;
+  color: #444;
+  font-size: 1.2rem;
+}
+
+.lesson-link:hover {
+  color: #d17f00;
+}
+
+.no-lessons {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  margin-top: 2rem;
+}
+
+.lesson-detail-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fffdf7;
+  border: 2px solid #ffd280;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.lesson-title {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+.video-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.lesson-video {
+  width: 100%;
+  max-width: 560px;
+  height: 315px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: #000;
+}
+
+.lesson-actions {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.back-button {
+  text-decoration: none;
+  font-weight: 500;
+  color: #007bff;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.back-button:hover {
+  color: #0056b3;
+}
+
+.complete-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.complete-button:hover {
+  background-color: #218838;
+}
+
+.success-message {
+  margin-top: 1rem;
+  color: #2d7a2d;
+  font-weight: bold;
+}
+

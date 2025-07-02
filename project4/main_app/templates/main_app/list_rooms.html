@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container rooms-list">
   <h1>Active Call Rooms</h1>
   <hr>
   {% if rooms %}
@@ -15,4 +16,5 @@
   {% else %}
     <p>No active rooms right now. <a href="{% url 'create_room' %}">Create one?</a></p>
   {% endif %}
+</div>
 {% endblock %}

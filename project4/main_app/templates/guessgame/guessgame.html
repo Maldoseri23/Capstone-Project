@@ -2,24 +2,27 @@
 {% load static %}
 
 {% block content %}
-<div class="game-container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
-    <h2 style="text-align: center; color: #333;">Sign Language Guessing Game</h2>
+<div class="game-container" style="max-width: 800px; margin: 40px auto; padding: 25px; background: #fff8ee; border-radius: 1.5rem; box-shadow: 0 8px 32px rgba(40,40,40,0.1); backdrop-filter: blur(14px); border: 1px solid rgba(255, 222, 130, 0.4); font-family: 'Fira Mono', 'Play', monospace;">
+
+    <h2 style="text-align: center; color: #f9a825; font-weight: 800; font-size: 2.2em; margin-bottom: 30px; text-shadow: 0 2px 6px rgba(255, 222, 100, 0.3);">
+        Sign Language Guessing Game
+    </h2>
     
     <!-- Score Display -->
-    <div class="score-board" style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
-        <div style="display: flex; justify-content: space-around; align-items: center;">
-            <div>
-                <strong>Score: <span id="score" style="color: #28a745;">{{ score }}</span></strong>
+    <div class="score-board" style="background: rgba(255, 255, 240, 0.8); padding: 18px 25px; border-radius: 1rem; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 18px rgba(255, 204, 102, 0.22);">
+        <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div style="font-weight: 700; color: #444; font-size: 1.1em;">
+                Score: <span id="score" style="color: #fbc02d;">{{ score }}</span>
             </div>
-            <div>
-                <strong>High Score: <span id="highscore" style="color: #dc3545;">{{ highscore }}</span></strong>
+            <div style="font-weight: 700; color: #444; font-size: 1.1em;">
+                High Score: <span id="highscore" style="color: #f9a825;">{{ highscore }}</span>
             </div>
-            <div>
-                <strong>Streak: <span id="streak" style="color: #ffc107;">0</span></strong>
+            <div style="font-weight: 700; color: #444; font-size: 1.1em;">
+                Streak: <span id="streak" style="color: #fbc02d;">0</span>
             </div>
         </div>
-        <div style="margin-top: 10px;">
-            <a href="{% url 'leaderboard' %}" class="btn btn-info" style="margin-right: 10px;">Leaderboard</a>
+        <div style="margin-top: 12px; text-align: center;">
+            <a href="{% url 'leaderboard' %}" class="btn btn-info">Leaderboard</a>
             <a href="{% url 'reset_score' %}" class="btn btn-warning">Reset Score</a>
         </div>
     </div>
@@ -27,29 +30,37 @@
     <!-- Game Area -->
     <div class="game-area" style="text-align: center;">
         <!-- Image Display -->
-        <div id="image-row" style="margin: 30px 0; min-height: 100px; background: #e9ecef; border-radius: 10px; padding: 20px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-            <p style="color: #6c757d;">Click "New Word" to start playing!</p>
+        <div id="image-row" style="margin: 35px 0; min-height: 110px; background: rgba(255, 255, 240, 0.6); border-radius: 1rem; padding: 25px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; box-shadow: 0 4px 12px rgba(255, 204, 102, 0.25);">
+            <p style="color: #aaa;">Click "New Word" to start playing!</p>
         </div>
 
         <!-- Input and Buttons -->
-        <div class="input-section" style="margin: 20px 0;">
+        <div class="input-section" style="margin: 25px 0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
             <input 
                 type="text" 
                 id="guess-input" 
                 placeholder="Type your guess here..." 
-                style="padding: 10px; font-size: 16px; border: 2px solid #dee2e6; border-radius: 5px; width: 250px; margin-right: 10px;"
+                style="padding: 12px 18px; font-size: 1.1em; border: 2px solid #fbc02d; border-radius: 1rem; width: 280px; box-shadow: 0 4px 10px rgba(255, 213, 79, 0.3); transition: all 0.3s ease; font-family: 'Fira Mono', 'Play', monospace;"
                 autocomplete="off"
+                onfocus="this.style.borderColor='#f9a825'; this.style.boxShadow='0 0 15px #f9a825';"
+                onblur="this.style.borderColor='#fbc02d'; this.style.boxShadow='0 4px 10px rgba(255, 213, 79, 0.3)';"
             >
-            <button id="submit-guess" class="btn btn-primary" style="padding: 10px 20px; font-size: 16px;">Submit Guess</button>
+            <button id="submit-guess" class="btn btn-primary" style="padding: 12px 26px; font-size: 1.1em; border-radius: 1.5rem; box-shadow: 0 6px 18px rgba(255, 193, 7, 0.3); font-weight: 700; font-family: 'Fira Mono', 'Play', monospace;">
+                Submit
+            </button>
         </div>
 
-        <div class="action-buttons" style="margin: 20px 0;">
-            <button id="next-word" class="btn btn-success" style="margin: 5px; padding: 10px 20px;">New Word</button>
-            <button id="show-answer" class="btn btn-secondary" style="margin: 5px; padding: 10px 20px;">Show Answer</button>
+        <div class="action-buttons" style="margin: 20px 0; text-align: center;">
+            <button id="next-word" class="btn btn-success" style="margin: 8px; padding: 12px 26px; border-radius: 1.5rem; font-weight: 700; font-family: 'Fira Mono', 'Play', monospace;">
+                New Word
+            </button>
+            <button id="show-answer" class="btn btn-secondary" style="margin: 8px; padding: 12px 26px; border-radius: 1.5rem; font-weight: 700; font-family: 'Fira Mono', 'Play', monospace;">
+                Show Answer
+            </button>
         </div>
 
         <!-- Message Display -->
-        <div id="message" style="margin-top: 20px; font-size: 18px; font-weight: bold; min-height: 30px;"></div>
+        <div id="message" style="margin-top: 30px; font-size: 20px; font-weight: 800; min-height: 36px; font-family: 'Fira Mono', 'Play', monospace;"></div>
     </div>
 </div>
 
@@ -71,7 +82,7 @@ function loadWord() {
             let imageHtml = '';
             data.images.forEach((img, index) => {
                 imageHtml += `<img src="{% static 'images/letters/' %}${img}" 
-                             style="width: 80px; height: 80px; margin: 5px; border: 2px solid #dee2e6; border-radius: 8px; object-fit: cover;" 
+                             style="width: 90px; height: 90px; margin: 6px; border: 2px solid #fbc02d; border-radius: 14px; object-fit: cover; box-shadow: 0 0 8px rgba(251, 192, 7, 0.5);" 
                              alt="Letter ${index + 1}">`;
             });
             
@@ -90,12 +101,12 @@ function checkGuess() {
     const guess = document.getElementById('guess-input').value.trim();
     
     if (!guess) {
-        document.getElementById('message').innerHTML = '<span style="color: orange;">Please enter a guess!</span>';
+        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please enter a guess!</span>';
         return;
     }
     
     if (!currentWordId) {
-        document.getElementById('message').innerHTML = '<span style="color: orange;">Please load a word first!</span>';
+        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please load a word first!</span>';
         return;
     }
 
@@ -113,35 +124,35 @@ function checkGuess() {
     .then(response => response.json())
     .then(data => {
         if (data.correct) {
-            document.getElementById('message').innerHTML = '<span style="color: green; font-size: 24px;">🎉 Correct! 🎉</span>';
+            document.getElementById('message').innerHTML = '<span style="color: #388e3c; font-size: 24px;">🎉 Correct! 🎉</span>';
             document.getElementById('score').textContent = data.score;
             document.getElementById('highscore').textContent = data.highscore;
             document.getElementById('streak').textContent = data.streak;
         } else {
-            document.getElementById('message').innerHTML = '<span style="color: red;">❌ Try again!</span>';
+            document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">❌ Try again!</span>';
             document.getElementById('streak').textContent = data.streak;
         }
     })
     .catch(error => {
         console.error('Error checking guess:', error);
-        document.getElementById('message').innerHTML = '<span style="color: red;">Error checking guess. Please try again.</span>';
+        document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">Error checking guess. Please try again.</span>';
     });
 }
 
 function showAnswer() {
     if (!currentWordId) {
-        document.getElementById('message').innerHTML = '<span style="color: orange;">Please load a word first!</span>';
+        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please load a word first!</span>';
         return;
     }
 
     fetch(`{% url 'show_answer' %}?word_id=${currentWordId}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('message').innerHTML = `<span style="color: blue;">💡 Answer: <strong>${data.answer.toUpperCase()}</strong></span>`;
+            document.getElementById('message').innerHTML = `<span style="color: #1565c0;">💡 Answer: <strong>${data.answer.toUpperCase()}</strong></span>`;
         })
         .catch(error => {
             console.error('Error showing answer:', error);
-            document.getElementById('message').innerHTML = '<span style="color: red;">Error showing answer. Please try again.</span>';
+            document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">Error showing answer. Please try again.</span>';
         });
 }
 
@@ -162,32 +173,90 @@ window.addEventListener('load', loadWord);
 </script>
 
 <style>
+
+      body {
+    background-image: url("{% static 'images/game-bacground.png' %}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #fff8ee; /* fallback color */
+    font-family: 'Fira Mono', 'Play', monospace;
+  }
+/* Button styles to match theme */
 .btn {
     display: inline-block;
-    padding: 8px 16px;
-    margin: 2px;
+    padding: 10px 22px;
+    margin: 5px 8px;
     border: none;
-    border-radius: 4px;
+    border-radius: 1.5rem;
     text-decoration: none;
-    color: white;
+    color: #333;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
+    font-size: 1em;
+    font-weight: 700;
+    font-family: 'Fira Mono', 'Play', monospace;
+    box-shadow: 0 6px 18px rgba(251, 192, 7, 0.35);
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffd54f 0%, #fbc02d 100%);
 }
 
-.btn-primary { background-color: #007bff; }
-.btn-primary:hover { background-color: #0056b3; }
+.btn:hover {
+    background: linear-gradient(135deg, #fdd835 0%, #f9a825 100%);
+    box-shadow: 0 10px 28px rgba(255, 202, 40, 0.45);
+    color: #222;
+    transform: translateY(-2px);
+}
 
-.btn-success { background-color: #28a745; }
-.btn-success:hover { background-color: #1e7e34; }
+.btn-primary {
+    /* Same as default btn */
+}
 
-.btn-secondary { background-color: #6c757d; }
-.btn-secondary:hover { background-color: #545b62; }
+.btn-success {
+    background: linear-gradient(135deg, #81c784 0%, #66bb6a 100%);
+    box-shadow: 0 6px 18px rgba(102, 187, 106, 0.35);
+    color: #1b3b1b;
+}
 
-.btn-info { background-color: #17a2b8; }
-.btn-info:hover { background-color: #117a8b; }
+.btn-success:hover {
+    background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+    box-shadow: 0 10px 28px rgba(76, 175, 80, 0.45);
+    color: #111;
+}
 
-.btn-warning { background-color: #ffc107; color: #212529; }
-.btn-warning:hover { background-color: #e0a800; }
+.btn-secondary {
+    background: linear-gradient(135deg, #b0bec5 0%, #90a4ae 100%);
+    box-shadow: 0 6px 18px rgba(130, 144, 157, 0.35);
+    color: #263238;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #90a4ae 0%, #78909c 100%);
+    box-shadow: 0 10px 28px rgba(105, 121, 133, 0.45);
+    color: #111;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #4fc3f7 0%, #039be5 100%);
+    box-shadow: 0 6px 18px rgba(3, 155, 229, 0.35);
+    color: white;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #039be5 0%, #0288d1 100%);
+}
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+    color: #212529;
+    box-shadow: 0 6px 18px rgba(255, 193, 7, 0.35);
+    font-weight: 700;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%);
+    color: #212529;
+}
+
+
 </style>
 {% endblock %}
