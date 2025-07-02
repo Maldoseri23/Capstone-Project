@@ -1,19 +1,31 @@
 {% extends 'base.html' %}
+
 {% block content %}
+<div class="lesson-detail-container">
+  <h2 class="lesson-title">
+    {{ lesson.get_lesson_type_display }}: {{ lesson.label }}
+  </h2>
 
-<h2>{{ lesson.get_lesson_type_display }}: {{ lesson.label }}</h2>
-<iframe width="320" height="180"
-        src="https://www.youtube.com/embed/{{ lesson.video_id }}"
-        frameborder="0" allowfullscreen></iframe>
+  <div class="video-wrapper">
+    <iframe 
+      src="https://www.youtube.com/embed/{{ lesson.video_id }}"
+      frameborder="0"
+      allowfullscreen
+      class="lesson-video"
+      title="Lesson Video">
+    </iframe>
+  </div>
 
-<p>
-  <a href="{% url 'lessons_by_language' language_code %}">&larr; Back to Lessons</a>
-</p>
+  <div class="lesson-actions">
+    <a href="{% url 'lessons_by_language' language_code %}" class="back-button">
+      &larr; Back to Lessons
+    </a>
 
+  
 <!-- Lesson Complete Form -->
 <form method="post" action="{% url 'complete_lesson' language_code lesson.id %}">
     {% csrf_token %}
-    <button type="submit">Lesson Complete</button>
+    <button type="submit"class="complete-button">✅ Lesson Complete</button>
 </form>
 
 <!-- Rating and Comment Form -->
@@ -61,5 +73,6 @@
 {% if message %}
   <div style="color: green;">{{ message }}</div>
 {% endif %}
-
+  </div>
+</div>
 {% endblock %}

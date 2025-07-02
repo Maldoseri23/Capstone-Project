@@ -1,103 +1,243 @@
-<!DOCTYPE html>
-<html lang="ar">
-  <head>
-    <meta charset="UTF-8" />
-    <title>لعبة اسمك بلغة الإشارة</title>
-    <style>
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        text-align: center;
-        background: #222;
-        color: white;
-        direction: rtl;
-      }
-      #lettersContainer img {
-        width: 80px;
-        height: 80px;
-        margin: 5px;
-        border: 2px solid #0f0;
-        border-radius: 10px;
-      }
-      input,
-      button {
-        font-size: 1.2em;
-        padding: 8px 12px;
-        margin: 10px 0;
-        border-radius: 6px;
-        border: none;
-      }
-      button {
-        background-color: #0f0;
-        color: #222;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>أدخل اسمك لتعرفه بلغة الإشارة</h1>
-    <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
-    <br />
-    <button onclick="showSigns()">عرض</button>
+{% extends 'base.html' %}
 
-    <div id="lettersContainer"></div>
+{% block content %}
+<style>
+  body {
+    font-family: 'Fira Mono', 'Play', monospace;
+    text-align: center;
+    color: #444;
+    direction: rtl;
+    padding: 40px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    <script>
-      const arabicSigns = {
-        ا: '/static/images/letters/ا.png',
-        ب: '/static/images/letters/ب.png',
-        ت: '/static/images/letters/ت.png',
-        ث: '/static/images/letters/ث.png',
-        ج: '/static/images/letters/ج.png',
-        ح: '/static/images/letters/ح.png',
-        خ: '/static/images/letters/خ.png',
-        د: '/static/images/letters/د.png',
-        ذ: '/static/images/letters/ذ.png',
-        ر: '/static/images/letters/ر.png',
-        ز: '/static/images/letters/ز.png',
-        س: '/static/images/letters/س.png',
-        ش: '/static/images/letters/ش.png',
-        ص: '/static/images/letters/ص.png',
-        ض: '/static/images/letters/ض.png',
-        ط: '/static/images/letters/ط.png',
-        ظ: '/static/images/letters/ظ.png',
-        ع: '/static/images/letters/ع.png',
-        غ: '/static/images/letters/غ.png',
-        ف: '/static/images/letters/ف.png',
-        ق: '/static/images/letters/ق.png',
-        ك: '/static/images/letters/ك.png',
-        ل: '/static/images/letters/ل.png',
-        م: '/static/images/letters/م.png',
-        ن: '/static/images/letters/ن.png',
-        ه: '/static/images/letters/ح.png',
-        و: '/static/images/letters/و.png',
-        ي: '/static/images/letters/ي.png',
-        ى: '/static/images/letters/ى.png',
-        ة: '/static/images/letters/ة.png'
+    background-image: 
+      url('/static/images/game-bacground.png'),
+      linear-gradient(145deg, #fffef6, #fff8ee);
+
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover; /* zoom in */
+
+    background-color: #fff8ee;
+  }
+
+  h1 {
+    font-size: 1.6em;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    color: #f9a825;
+    text-shadow: 0 2px 6px rgba(255, 222, 100, 0.3);
+  }
+
+  #nameInput {
+    font-size: 1.3em;
+    padding: 0.8em 1.2em;
+    border-radius: 1em;
+    border: 2px solid #fdd835;
+    background: #fffef6;
+    color: #333;
+    width: 280px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(255, 224, 130, 0.2);
+  }
+
+  #nameInput:focus {
+    outline: none;
+    border-color: #fbc02d;
+    box-shadow: 0 0 12px rgba(255, 213, 79, 0.4);
+    background: #fff9e1;
+  }
+
+  button {
+    font-size: 1.2em;
+    margin-top: 1.5rem;
+    padding: 0.75em 2em;
+    border-radius: 2em;
+    border: none;
+    background: linear-gradient(135deg, #ffd54f, #fbc02d);
+    color: #222;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 14px rgba(255, 204, 0, 0.25);
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #fdd835, #f9a825);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 202, 40, 0.35);
+  }
+
+  .home-button {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.8em 2em;
+    border-radius: 2em;
+    background: linear-gradient(135deg, #ffd54f, #fbc02d);
+    color: #333;
+    font-weight: 700;
+    font-size: 1.1em;
+    text-decoration: none;
+    font-family: 'Fira Mono', 'Play', monospace;
+    box-shadow: 0 3px 14px rgba(255, 193, 7, 0.22);
+    transition: all 0.25s ease;
+  }
+
+  .home-button:hover {
+    background: linear-gradient(135deg, #fdd835, #f9a825);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 202, 40, 0.35);
+  }
+
+  #lettersContainer img {
+    margin-top: 60px;
+    width: 170px;
+    height: 170px;
+  }
+
+  #lettersContainer span {
+    width: 170px;
+    height: 170px;
+    font-size: 4.2em;
+  }
+
+  /* responsive */
+  @media (max-width: 600px) {
+    #lettersContainer img,
+    #lettersContainer span {
+      width: 110px;
+      height: 110px;
+      font-size: 3em;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin-bottom: 20px;
+    max-width: 370px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .input-group input,
+  .input-group button {
+    height: 45px;
+    font-size: 1.3em;
+    border-radius: 8px;
+    margin-top: 0;
+  }
+
+  .input-group input {
+    flex-grow: 1;
+    max-width: 260px;
+    border: 2px solid #fdd835;
+    background: #fffef6;
+    color: #333;
+    padding: 0.8em 1.2em;
+    box-shadow: 0 2px 10px rgba(255, 224, 130, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .input-group input:focus {
+    outline: none;
+    border-color: #fbc02d;
+    box-shadow: 0 0 12px rgba(255, 213, 79, 0.4);
+    background: #fff9e1;
+  }
+
+  .input-group button {
+    min-width: 120px;
+    background: linear-gradient(135deg, #ffd54f, #fbc02d);
+    color: #222;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0 20px;
+    border: none;
+    box-shadow: 0 4px 14px rgba(255, 204, 0, 0.25);
+    border-radius: 2em;
+    transition: all 0.2s ease-in-out;
+    margin-top: 0;
+  }
+
+  .input-group button:hover {
+    background: linear-gradient(135deg, #fdd835, #f9a825);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 202, 40, 0.35);
+  }
+</style>
+
+<div class="input-group">
+  <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
+  <button onclick="showSigns()">عرض</button>
+</div>
+
+<div id="lettersContainer"></div>
+
+<script>
+  const arabicSigns = {
+    ا: '/static/images/letters/ا.png',
+    ب: '/static/images/letters/ب.png',
+    ت: '/static/images/letters/ت.png',
+    ث: '/static/images/letters/ث.png',
+    ج: '/static/images/letters/ج.png',
+    ح: '/static/images/letters/ح.png',
+    خ: '/static/images/letters/خ.png',
+    د: '/static/images/letters/د.png',
+    ذ: '/static/images/letters/ذ.png',
+    ر: '/static/images/letters/ر.png',
+    ز: '/static/images/letters/ز.png',
+    س: '/static/images/letters/س.png',
+    ش: '/static/images/letters/ش.png',
+    ص: '/static/images/letters/ص.png',
+    ض: '/static/images/letters/ض.png',
+    ط: '/static/images/letters/ط.png',
+    ظ: '/static/images/letters/ظ.png',
+    ع: '/static/images/letters/ع.png',
+    غ: '/static/images/letters/غ.png',
+    ف: '/static/images/letters/ف.png',
+    ق: '/static/images/letters/ق.png',
+    ك: '/static/images/letters/ك.png',
+    ل: '/static/images/letters/ل.png',
+    م: '/static/images/letters/م.png',
+    ن: '/static/images/letters/ن.png',
+    ه: '/static/images/letters/ه.png',  // Fixed image path for ه
+    و: '/static/images/letters/و.png',
+    ي: '/static/images/letters/ي.png',
+    ى: '/static/images/letters/ى.png',
+    ة: '/static/images/letters/ة.png'
+  };
+
+  function showSigns() {
+    const input = document.getElementById('nameInput').value.trim();
+    const container = document.getElementById('lettersContainer');
+    container.innerHTML = '';
+
+    for (const char of input) {
+      if (arabicSigns[char]) {
+        const img = document.createElement('img');
+        img.src = arabicSigns[char];
+        img.alt = char;
+        container.appendChild(img);
+      } else if (char.trim() === '') {
+        // Ignore spaces
+      } else {
+        const span = document.createElement('span');
+        span.textContent = '?';
+        container.appendChild(span);
       }
+    }
+  }
+</script>
 
-      function showSigns() {
-        const input = document.getElementById('nameInput').value.trim()
-        const container = document.getElementById('lettersContainer')
-        container.innerHTML = ''
-
-        for (const char of input) {
-          if (arabicSigns[char]) {
-            const img = document.createElement('img')
-            img.src = arabicSigns[char]
-            img.alt = char
-            container.appendChild(img)
-          } else if (char.trim() === '') {
-            // ignore space
-          } else {
-            const span = document.createElement('span')
-            span.textContent = '?'
-            span.style.color = 'red'
-            span.style.fontSize = '3em'
-            span.style.margin = '5px'
-            container.appendChild(span)
-          }
-        }
-      }
-    </script>
-  </body>
-</html>
+<div style="margin-top: 50px;">
+  <a href="/" class="home-button">🏠</a>
+</div>
+{% endblock %}

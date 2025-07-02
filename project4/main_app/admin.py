@@ -15,3 +15,4 @@ admin.site.register(Lesson)
 admin.site.register(GameWord)
 
 admin.site.register(LessonComment)
+

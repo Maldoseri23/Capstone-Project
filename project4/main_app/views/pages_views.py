@@ -10,3 +10,4 @@ def calendar(request):
 
 def sign_to_text_view(request):
     return render(request, 'main_app/sign_to_text.html')
+
