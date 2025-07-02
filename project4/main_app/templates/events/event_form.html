@@ -1,5 +1,117 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+  body {
+    font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+    background-color: #fffdf7;
+    color: #2e5d36;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .page-wrapper {
+    background: #fff8ee; 
+    border: 3px solid #ffd280;
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    box-shadow: 0 6px 20px rgba(244, 169, 0, 0.2);
+    text-align: left;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    color: #f4a900;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  h1 .teal-text {
+    color: #2e5d36;
+  }
+
+  form p {
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #2e5d36;
+  }
+
+  input[type="text"],
+  input[type="url"],
+  input[type="email"],
+  input[type="datetime-local"],
+  input[type="file"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #ffd280;
+    border-radius: 10px;
+    background-color: #fffef6;
+    color: #2e5d36;
+    box-shadow: 0 2px 8px rgba(255, 204, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  input[type="url"] {
+    background-image: url('https://img.icons8.com/ios/20/link--v1.png');
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    padding-left: 35px;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: #f4a900;
+    box-shadow: 0 0 10px rgba(244, 169, 0, 0.3);
+  }
+
+  .btn {
+    display: block;
+    width: 160px; 
+    background: linear-gradient(135deg, #ffd54f, #fbc02d);
+    color: #2e5d36;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    margin: 2rem auto 0;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 204, 0, 0.25);
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .btn:hover {
+    background: linear-gradient(135deg, #fdd835, #f9a825);
+    color: #000;
+  }
+
+  @media (max-width: 600px) {
+    .page-wrapper {
+      padding: 1.5rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+    .btn {
+      width: 100%;
+      font-size: 1rem;
+    }
+  }
+</style>
+
 <div class="page-wrapper">
   {% if object %}
     <h1>Edit <span class="teal-text">{{ event.name }}</span></h1>

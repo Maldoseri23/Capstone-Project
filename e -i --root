@@ -1,0 +1,63 @@
+[33m7ecceeb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaryam/styling[m[33m, [m[1;31morigin/Maryam/styling[m[33m)[m add styling of pages
+[33md7bb7a6[m[33m ([m[1;32mmain[m[33m)[m Resolved merge conflicts
+[33m51e6727[m edit
+[33m517654f[m edits
+[33m29a144c[m edits
+[33m59847f7[m edit
+[33m2bf1a12[m edits
+[33mc70f004[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #16 from Maldoseri23/Maryam/style
+[33mcccb12b[m[33m ([m[1;31morigin/Maryam/style[m[33m)[m styling
+[33m3756595[m Merge pull request #14 from Maldoseri23/Maryam/guess
+[33m58f0cb6[m[33m ([m[1;31morigin/Maryam/guess[m[33m)[m Merge branch 'main' into Maryam/guess
+[33m3c36b80[m completed garden and profile views
+[33mb13cb1f[m Merge pull request #13 from Maldoseri23/calenderError
+[33mbb8fc26[m[33m ([m[1;32mmaryam/serch[m[33m, [m[1;32mmaryam/quiz[m[33m)[m added letters
+[33m92d5cd2[m[33m ([m[1;31morigin/calenderError[m[33m)[m Calendar doneeee git add .!
+[33m4e356c8[m edits
+[33mb61b178[m Merge pull request #12 from Maldoseri23/maryam/NameGame
+[33m4cd51c4[m completed game added garden feature
+[33mb5471df[m[33m ([m[1;31morigin/Maryam/NameGame[m[33m)[m feat: Add NameGame feature with routing, view, and template updates
+[33m2a29b05[m Merge pull request #11 from Maldoseri23/maryam/st2
+[33mb62d5f1[m[33m ([m[1;31morigin/Maryam/st2[m[33m, [m[1;32mmaryam/st2[m[33m)[m Add view function sign_to_text_view to render sign-to-text template
+[33m7142c03[m Add sign-to-text route to pages_url for direct access
+[33maef4a86[m Include sign_to_text_url in main_app URL configuration
+[33mbbde68c[m Add separate URL configuration for sign-to-text route
+[33m4bc87f7[m Add HTML template for sign-to-text page with MediaPipe hand recognition
+[33md24da7a[m add link for sign to text
+[33m8e3a686[m added lessons to nav
+[33m19a2b86[m Merge pull request #10 from Maldoseri23/Maryam/lessons
+[33m006ed5c[m[33m ([m[1;31morigin/Maryam/lessons[m[33m)[m bsl and asl lessons done
+[33mf5aedf8[m[33m ([m[1;32mmaryam/signCode[m[33m)[m Merge pull request #8 from Maldoseri23/Maryam/lessons
+[33m19a8915[m fixed migrations
+[33m74165e9[m fixed merging errors
+[33m95fb871[m edits
+[33m0eaf345[m Merge pull request #7 from Maldoseri23/Maryam/user
+[33m68393da[m[33m ([m[1;31morigin/Maryam/user[m[33m)[m Merge branch 'main' into Maryam/user
+[33m8f3f401[m edits
+[33m3f48b99[m edits
+[33ma16492d[m edits
+[33mb257d5f[m minor
+[33m1311676[m deleted pycache
+[33m59696a5[m minor edits
+[33m469b24c[m needs final testing mostly done
+[33m42cc178[m Merge pull request #4 from Maldoseri23/EventCalendar
+[33m6e5c993[m Event Clander
+[33md5920d8[m home
+[33ma91c448[m I am not Finshed yet!
+[33md3612b6[m main
+[33m436ac78[m needs testing after user is completed
+[33mcb9e44e[m trouble shooting errors
+[33m4d58373[m Merge branch 'main' of https://github.com/Maldoseri23/Capstone-Project
+[33mb77186c[m error
+[33m9a40201[m Merge pull request #2 from Maldoseri23/models
+[33meaff990[m[33m ([m[1;31morigin/models[m[33m)[m models
+[33mf161f1d[m README
+[33m561a588[m README
+[33md446dec[m README
+[33mbd050b6[m README
+[33m0822ddc[m README
+[33mc0421ee[m Merge pull request #1 from Maldoseri23/README
+[33m7e45035[m README
+[33mcd0ad7c[m added home page
+[33mf5d2473[m created django project and main app
+[33m257d4ac[m Initial commit
