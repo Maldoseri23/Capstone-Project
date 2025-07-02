@@ -38,6 +38,14 @@ class EventCreate(CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['date'].widget.input_type = 'datetime-local'
+        form.fields['date'].widget.format = '%Y-%m-%dT%H:%M'
+        if form.initial.get('date'):
+            form.initial['date'] = form.initial['date'].strftime('%Y-%m-%dT%H:%M')
+        return form
 
 
 # Edit Event 
@@ -48,6 +56,14 @@ class EventEdit(UpdateView):
     
     def get_success_url(self):
         return reverse('event_detail', args=[self.object.pk])
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['date'].widget.input_type = 'datetime-local'
+        form.fields['date'].widget.format = '%Y-%m-%dT%H:%M'
+        if form.initial.get('date'):
+            form.initial['date'] = form.initial['date'].strftime('%Y-%m-%dT%H:%M')
+        return form
 
 
 # Delete Event 

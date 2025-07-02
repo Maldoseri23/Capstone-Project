@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  body {
+    font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+    background: url('/static/images/game-bacground.png') center center / cover no-repeat fixed;
+    color: #2E5D36;
+    text-align: center;
+    padding: 2rem;
+  }
+  h1 {
+    font-size: 2.8rem;
+    color: #F4A900;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 6px rgba(244, 169, 0, 0.3);
+  }
+  h2 {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 2rem;
+  }
+  .game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .game-card {
+    background: #FFFEF6;
+    border: 3px solid #FFD54F;
+    border-radius: 16px;
+    padding: 20px 30px;
+    box-shadow: 0 4px 16px rgba(255, 204, 0, 0.3);
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+  }
+  .game-card:hover {
+    transform: scale(1.03);
+  }
+  .game-card a {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: #2E5D36;
+    font-weight: bold;
+    background: linear-gradient(135deg, #FFD54F, #FBC02D);
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(255, 204, 0, 0.25);
+    transition: background 0.3s ease;
+  }
+  .game-card a:hover {
+    background: linear-gradient(135deg, #FDD835, #F9A825);
+    color: #000;
+  }
+</style>
+<h1> Games</h1>
+<h2>Try our games</h2>
+<h3>Play our games to practice and improve!</h3>
+<div class="game-container">
+  <div class="game-card">
+    <a href="{% url 'game_home' %}"> Learn My Name</a>
+  </div>
+  <div class="game-card">
+    <a href="{% url 'name_game' %}"> Spelling Game</a>
+  </div>
+</div>
+{% endblock %}
