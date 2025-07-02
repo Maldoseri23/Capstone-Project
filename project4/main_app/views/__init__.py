@@ -11,4 +11,11 @@ from ..models import Profile
 @login_required
 def profile_page(request):
     profile = Profile.objects.get(user=request.user)
-    return render(request, 'profile/profile_page.html', {'profile': profile})
+    flower_imgs = range(profile.flowers)
+    fruit_imgs = range(profile.fruits)
+    return render(request, 'profile/profile_page.html', {
+        'profile': profile,
+        'flower_imgs': flower_imgs,
+        'fruit_imgs': fruit_imgs,
+    })
+
