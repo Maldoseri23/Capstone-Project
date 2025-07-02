@@ -52,15 +52,17 @@ body.splash-active {
 
 /* Hero section styling */
 .hero {
-  background: linear-gradient(120deg, #e0f7fa 0%, #f8bbd0 100%);
+  background: rgba(255, 255, 255, 0.6); /* transparent white */
+  backdrop-filter: blur(6px); /* optional soft blur */
   padding: 3rem 1.5rem 2rem 1.5rem;
   border-radius: 1.5rem;
-  max-width: 760px;
-  margin: 3rem auto 2rem auto;
-  box-shadow: 0 6px 32px 0 rgba(60,60,90,0.10);
-  text-align: center;
-  position: relative;
+  box-shadow: 0 2px 24px 0 rgba(244, 169, 0, 0.07);
+  max-width: 800px;
+  margin: 2rem auto;
+  font-family: 'Play', 'Fira Mono', monospace;
+  color: #232323;
 }
+
 
 .hero-image {
   margin-bottom: 2rem;
