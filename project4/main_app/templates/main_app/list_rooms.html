@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container rooms-list">
-  <h1>Active Call Rooms</h1>
+  <h1>Active Call Rooms</h1>  
   <hr>
   {% if rooms %}
     <ul>
@@ -12,9 +12,14 @@
           <a href="{% url 'join_room' room.room_id %}">Join</a>
         </li>
       {% endfor %}
+      <form action="{% url 'create_room' %}" method="get">
+         <button type="submit" class="btn">Create</button>
+      </form>
+
     </ul>
   {% else %}
     <p>No active rooms right now. <a href="{% url 'create_room' %}">Create one?</a></p>
   {% endif %}
+    
 </div>
 {% endblock %}

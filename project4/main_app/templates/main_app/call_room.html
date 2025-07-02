@@ -2,7 +2,6 @@
 {% block content %}
 <h1>Room: {{ room.name }}</h1>
 <hr>
-<p>Room ID: {{ room.room_id }}</p>
 <p>Participants ({{ participants|length }}/{{ room.max_participants }}):</p>
 <ul>
   {% for participant in participants %}

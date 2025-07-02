@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-   <style>
-body {
+<style>
+.sign-recognition-bg {
   background-color: #fff3e6;
-  background-image: url('/static/images/game-bacground.png'); /* Add your image path */
+  background-image: url('/static/images/game-bacground.png');
   background-size: cover;       /* Makes it zoom in (fill screen) */
   background-position: center;  /* Centers the image */
   background-repeat: no-repeat; /* Prevents tiling */
@@ -13,179 +13,182 @@ body {
   margin: 0;
   padding: 2rem;
   position: relative;
+  min-height: 80vh;
 }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #2e5d36;
-    }
+/* Fun decorative emojis around the page */
+.sign-recognition-bg::before,
+.sign-recognition-bg::after {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0.3;
+  color: #a0522d;
+  pointer-events: none;
+ 
+}
+.sign-recognition-bg::before {
+  top: 20px;
+  left: 20px;
 
-    canvas.output_canvas {
-      border: 4px solid #f4a900;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
-    }
+}
+.sign-recognition-bg::after {
+  bottom: 20px;
+  right: 20px;
 
-    #sign {
-      font-size: 2.5rem;
-      margin-top: 25px;
-      color: #f4a900;
-      font-weight: bold;
-    }
+}
 
-    /* Fun decorative emojis around the page */
-    body::before,
-    body::after {
-      position: absolute;
-      font-size: 2rem;
-      opacity: 0.3;
-      color: #a0522d;
-      pointer-events: none;
-    }
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2e5d36;
+}
 
-    body::before {
-      top: 20px;
-      left: 20px;
-    }
+canvas.output_canvas {
+  border: 4px solid #f4a900;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
 
-    body::after {
-      bottom: 20px;
-      right: 20px;
-    }
+#sign {
+  font-size: 2.5rem;
+  margin-top: 25px;
+  color: #f4a900;
+  font-weight: bold;
+}
 
-    /* Responsive adjustments */
-    @media (max-width: 700px) {
-      canvas.output_canvas {
-        width: 100%;
-        height: auto;
-      }
+/* Responsive adjustments */
+@media (max-width: 700px) {
+  canvas.output_canvas {
+    width: 100%;
+    height: auto;
+  }
 
-      #sign {
-        font-size: 2rem;
-      }
+  #sign {
+    font-size: 2rem;
+  }
 
-      h1 {
-        font-size: 2rem;
-      }
-    }
-  </style>
+  h1 {
+    font-size: 2rem;
+  }
+}
+</style>
 
+<div class="sign-recognition-bg">
   <h1>Sign Language Recognition</h1>
-  <!-- Removed the <video> element -->
   <canvas class="output_canvas" width="640" height="480"></canvas>
   <div id="sign">Sign: ...</div>
+</div>
 
-  <!-- MediaPipe Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.min.js"></script>
+<!-- MediaPipe Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.min.js"></script>
 
-  <script>
-    const canvasElement = document.querySelector('.output_canvas');
-    const canvasCtx = canvasElement.getContext('2d');
-    const signElement = document.getElementById('sign');
+<script>
+  const canvasElement = document.querySelector('.output_canvas');
+  const canvasCtx = canvasElement.getContext('2d');
+  const signElement = document.getElementById('sign');
 
-    const videoElement = document.createElement('video');
-    videoElement.width = 640;
-    videoElement.height = 480;
-    videoElement.autoplay = true;
-    videoElement.muted = true;
-    videoElement.style.display = 'none'; // hide it from view
+  const videoElement = document.createElement('video');
+  videoElement.width = 640;
+  videoElement.height = 480;
+  videoElement.autoplay = true;
+  videoElement.muted = true;
+  videoElement.style.display = 'none'; // hide it from view
 
-    document.body.appendChild(videoElement); // still needed for camera input
+  document.body.appendChild(videoElement); // still needed for camera input
 
-    function distance(p1, p2) {
-      return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+  function distance(p1, p2) {
+    return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+  }
+
+  function classifyWord(landmarks) {
+    const folded = [8, 12, 16, 20].map(tip => landmarks[tip].y > landmarks[tip - 2].y);
+    if (landmarks[4].y < landmarks[3].y && folded.every(f => f)) return "YES";
+    if (landmarks[4].y > landmarks[3].y && folded.every(f => f)) return "NO";
+    if ([8, 12, 16, 20].every(tip => landmarks[tip].y < landmarks[tip - 2].y) && landmarks[4].x < landmarks[3].x) return "HELLO";
+    const up = tip => landmarks[tip].y < landmarks[tip - 2].y;
+    if (up(4) && up(8) && up(20) && !up(12) && !up(16)) return "I LOVE YOU";
+    return null;
+  }
+
+  function classifySign(landmarks) {
+    const folded = [8, 12, 16, 20].map(tip => landmarks[tip].y > landmarks[tip - 2].y);
+    const thumb_extended = landmarks[4].x < landmarks[3].x;
+    const all_folded = folded.every(f => f);
+    const none_folded = folded.every(f => !f);
+    const dist_thumb_index = distance(landmarks[4], landmarks[8]);
+    const dist_thumb_pinky = distance(landmarks[4], landmarks[20]);
+
+    if (all_folded && thumb_extended) return "A";
+    if (none_folded && landmarks[4].y > landmarks[3].y) return "B";
+    if (dist_thumb_index < 0.1 && landmarks[8].y < landmarks[6].y && landmarks[12].y < landmarks[10].y) return "C";
+    if (folded.filter(f => !f).length === 1 && !folded[0] && landmarks[8].y < landmarks[6].y) return "D";
+    if (all_folded && landmarks[4].y < landmarks[3].y) return "E";
+    if (dist_thumb_index < 0.05 && !folded[1] && !folded[2] && !folded[3]) return "F";
+    if (folded[1] && folded[2] && folded[3] && landmarks[8].y < landmarks[6].y && Math.abs(landmarks[4].y - landmarks[8].y) < 0.05) return "G";
+    if (!folded[0] && !folded[1] && folded[2] && folded[3]) return "H";
+    if (folded[0] && folded[1] && folded[2] && !folded[3]) return "I";
+    if (folded[0] && folded[1] && folded[2] && !folded[3]) return "J";
+    if (!folded[0] && !folded[1] && folded[2] && folded[3] && landmarks[4].y > landmarks[6].y && landmarks[4].y < landmarks[10].y) return "K";
+    if (!folded[0] && folded[1] && folded[2] && folded[3] && landmarks[4].x < landmarks[3].x) return "L";
+    if (folded.every(f => f) && landmarks[4].x > landmarks[3].x) return "M";
+    if (folded[0] && folded[1] && !folded[2] && folded[3] && landmarks[4].x > landmarks[3].x) return "N";
+    if (dist_thumb_index < 0.1 && dist_thumb_pinky < 0.15 && !all_folded) return "O";
+    if (!folded[0] && !folded[1] && folded[2] && folded[3]) return "P";
+    if (folded[1] && folded[2] && folded[3] && landmarks[8].y < landmarks[6].y && Math.abs(landmarks[4].y - landmarks[8].y) < 0.05) return "Q";
+    if (!folded[0] && !folded[1] && folded[2] && folded[3] && landmarks[8].x > landmarks[12].x) return "R";
+    if (all_folded && landmarks[4].x < landmarks[3].x) return "S";
+    if (all_folded && landmarks[4].x > landmarks[8].x && landmarks[4].x < landmarks[12].x) return "T";
+    if (!folded[0] && !folded[1] && folded[2] && folded[3] && Math.abs(landmarks[8].x - landmarks[12].x) < 0.05) return "U";
+    if (!folded[0] && !folded[1] && folded[2] && folded[3] && Math.abs(landmarks[8].x - landmarks[12].x) > 0.1) return "V";
+    if (!folded[0] && !folded[1] && !folded[2] && folded[3]) return "W";
+    if (folded.every(f => f) && landmarks[8].y < landmarks[6].y) return "X";
+    if (folded[0] && folded[1] && folded[2] && !folded[3] && landmarks[4].x < landmarks[3].x) return "Y";
+    if (folded.filter(f => !f).length === 1 && !folded[0] && landmarks[8].y < landmarks[6].y) return "Z";
+    return "...";
+  }
+
+  const hands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
+  });
+
+  hands.setOptions({
+    maxNumHands: 1,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.7,
+    minTrackingConfidence: 0.7,
+  });
+
+  hands.onResults((results) => {
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+    if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+      const landmarks = results.multiHandLandmarks[0];
+      drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#0f0', lineWidth: 3 });
+      drawLandmarks(canvasCtx, landmarks, { color: '#f00', lineWidth: 2 });
+
+      const word = classifyWord(landmarks);
+      const sign = word || classifySign(landmarks);
+      signElement.textContent = `Sign: ${sign}`;
+    } else {
+      signElement.textContent = "Sign: ...";
     }
 
-    function classifyWord(landmarks) {
-      const folded = [8, 12, 16, 20].map(tip => landmarks[tip].y > landmarks[tip - 2].y);
-      if (landmarks[4].y < landmarks[3].y && folded.every(f => f)) return "YES";
-      if (landmarks[4].y > landmarks[3].y && folded.every(f => f)) return "NO";
-      if ([8, 12, 16, 20].every(tip => landmarks[tip].y < landmarks[tip - 2].y) && landmarks[4].x < landmarks[3].x) return "HELLO";
-      const up = tip => landmarks[tip].y < landmarks[tip - 2].y;
-      if (up(4) && up(8) && up(20) && !up(12) && !up(16)) return "I LOVE YOU";
-      return null;
-    }
+    canvasCtx.restore();
+  });
 
-    function classifySign(landmarks) {
-      const folded = [8, 12, 16, 20].map(tip => landmarks[tip].y > landmarks[tip - 2].y);
-      const thumb_extended = landmarks[4].x < landmarks[3].x;
-      const all_folded = folded.every(f => f);
-      const none_folded = folded.every(f => !f);
-      const dist_thumb_index = distance(landmarks[4], landmarks[8]);
-      const dist_thumb_pinky = distance(landmarks[4], landmarks[20]);
+  const camera = new Camera(videoElement, {
+    onFrame: async () => {
+      await hands.send({ image: videoElement });
+    },
+    width: 640,
+    height: 480,
+  });
 
-      if (all_folded && thumb_extended) return "A";
-      if (none_folded && landmarks[4].y > landmarks[3].y) return "B";
-      if (dist_thumb_index < 0.1 && landmarks[8].y < landmarks[6].y && landmarks[12].y < landmarks[10].y) return "C";
-      if (folded.filter(f => !f).length === 1 && !folded[0] && landmarks[8].y < landmarks[6].y) return "D";
-      if (all_folded && landmarks[4].y < landmarks[3].y) return "E";
-      if (dist_thumb_index < 0.05 && !folded[1] && !folded[2] && !folded[3]) return "F";
-      if (folded[1] && folded[2] && folded[3] && landmarks[8].y < landmarks[6].y && Math.abs(landmarks[4].y - landmarks[8].y) < 0.05) return "G";
-      if (!folded[0] && !folded[1] && folded[2] && folded[3]) return "H";
-      if (folded[0] && folded[1] && folded[2] && !folded[3]) return "I";
-      if (folded[0] && folded[1] && folded[2] && !folded[3]) return "J";
-      if (!folded[0] && !folded[1] && folded[2] && folded[3] && landmarks[4].y > landmarks[6].y && landmarks[4].y < landmarks[10].y) return "K";
-      if (!folded[0] && folded[1] && folded[2] && folded[3] && landmarks[4].x < landmarks[3].x) return "L";
-      if (folded.every(f => f) && landmarks[4].x > landmarks[3].x) return "M";
-      if (folded[0] && folded[1] && !folded[2] && folded[3] && landmarks[4].x > landmarks[3].x) return "N";
-      if (dist_thumb_index < 0.1 && dist_thumb_pinky < 0.15 && !all_folded) return "O";
-      if (!folded[0] && !folded[1] && folded[2] && folded[3]) return "P";
-      if (folded[1] && folded[2] && folded[3] && landmarks[8].y < landmarks[6].y && Math.abs(landmarks[4].y - landmarks[8].y) < 0.05) return "Q";
-      if (!folded[0] && !folded[1] && folded[2] && folded[3] && landmarks[8].x > landmarks[12].x) return "R";
-      if (all_folded && landmarks[4].x < landmarks[3].x) return "S";
-      if (all_folded && landmarks[4].x > landmarks[8].x && landmarks[4].x < landmarks[12].x) return "T";
-      if (!folded[0] && !folded[1] && folded[2] && folded[3] && Math.abs(landmarks[8].x - landmarks[12].x) < 0.05) return "U";
-      if (!folded[0] && !folded[1] && folded[2] && folded[3] && Math.abs(landmarks[8].x - landmarks[12].x) > 0.1) return "V";
-      if (!folded[0] && !folded[1] && !folded[2] && folded[3]) return "W";
-      if (folded.every(f => f) && landmarks[8].y < landmarks[6].y) return "X";
-      if (folded[0] && folded[1] && folded[2] && !folded[3] && landmarks[4].x < landmarks[3].x) return "Y";
-      if (folded.filter(f => !f).length === 1 && !folded[0] && landmarks[8].y < landmarks[6].y) return "Z";
-      return "...";
-    }
-
-    const hands = new Hands({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
-    });
-
-    hands.setOptions({
-      maxNumHands: 1,
-      modelComplexity: 1,
-      minDetectionConfidence: 0.7,
-      minTrackingConfidence: 0.7,
-    });
-
-    hands.onResults((results) => {
-      canvasCtx.save();
-      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-
-      if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-        const landmarks = results.multiHandLandmarks[0];
-        drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#0f0', lineWidth: 3 });
-        drawLandmarks(canvasCtx, landmarks, { color: '#f00', lineWidth: 2 });
-
-        const word = classifyWord(landmarks);
-        const sign = word || classifySign(landmarks);
-        signElement.textContent = `Sign: ${sign}`;
-      } else {
-        signElement.textContent = "Sign: ...";
-      }
-
-      canvasCtx.restore();
-    });
-
-    const camera = new Camera(videoElement, {
-      onFrame: async () => {
-        await hands.send({ image: videoElement });
-      },
-      width: 640,
-      height: 480,
-    });
-
-    camera.start();
-  </script>
+  camera.start();
+</script>
 {% endblock %}

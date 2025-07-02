@@ -32,12 +32,14 @@
 <h3>Leave a Comment & Rating</h3>
 <form method="post">
   {% csrf_token %}
-  <label>Rating:</label><br>
+  <label for="rating">Rating:</label>
+<select name="rating" id="rating" required>
+  <option value="" disabled selected>Select a rating</option>
   {% for i in "12345" %}
-    <label>
-      <input type="radio" name="rating" value="{{ i }}" required> {{ i }}★
-    </label><br>
+    <option value="{{ i }}">{{ i }}★</option>
   {% endfor %}
+</select>
+
   
   <label>Comment:</label><br>
   <textarea name="comment" rows="3" style="width:100%;"></textarea><br>

@@ -23,5 +23,19 @@
   {% else %}
     <p class="no-lessons">No lessons found for this language.</p>
   {% endif %}
+
+  {% if language_code == 'asl' %}
+    <div class="video-copyright">
+      <small>
+        ASL videos © <a href="https://www.youtube.com/@LearnHowToSign" target="_blank" rel="noopener">Learn How to Sign</a> (YouTube). All rights reserved.
+      </small>
+    </div>
+  {% elif language_code == 'bsl' %}
+    <div class="video-copyright">
+      <small>
+        BSL videos © Bahrain Association of Banks. All rights reserved.
+      </small>
+    </div>
+  {% endif %}
 </div>
 {% endblock %}
