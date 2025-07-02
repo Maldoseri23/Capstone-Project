@@ -1,36 +1,136 @@
+/* Reset inherited styles */
 html, body {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden; /* Prevent scrolling while splash is visible */
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  background: #f6fafb;
+  color: #222;
+  min-height: 100vh;
 }
 
-/* Overlay covers everything, including nav/footer */
+/* Splash screen styles */
 #splash {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   z-index: 999999;
-  background: #fff; /* or any color you want behind the GIF */
+  background: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* GIF fills and centers in the overlay */
 #splash img {
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover; /* Ensures the GIF covers the whole area, like background-size: cover */
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: contain;
   display: block;
 }
 
-/* Optional: prevent body scroll when splash is active */
+/* Hide landing content initially */
+#landing {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1);
+}
+
+/* Show landing content after splash */
+#landing.show {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Prevent scrolling when splash is active */
 body.splash-active {
-  overflow: hidden;
-  height: 100vh;
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* Hero section styling */
+.hero {
+  background: linear-gradient(120deg, #e0f7fa 0%, #f8bbd0 100%);
+  padding: 3rem 1.5rem 2rem 1.5rem;
+  border-radius: 1.5rem;
+  max-width: 760px;
+  margin: 3rem auto 2rem auto;
+  box-shadow: 0 6px 32px 0 rgba(60,60,90,0.10);
+  text-align: center;
+  position: relative;
+}
+
+.hero-image {
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #00796b;
+  margin-bottom: 0.6rem;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.hero h2 {
+  font-size: 1.7rem;
+  color: #c2185b;
+  margin: 1.5rem 0 0.5rem 0;
+  font-weight: 700;
+}
+
+.hero h3 {
+  font-size: 1.2rem;
+  color: #00796b;
+  margin: 1.2rem 0 0.3rem 0;
+  font-weight: 600;
+}
+
+.hero p {
+  font-size: 1.12rem;
+  color: #333;
+  margin: 0.7rem 0 0.7rem 0;
+  line-height: 1.7;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Add a soft highlight for important text */
+.hero p strong, .hero h2, .hero h3 {
+  background: linear-gradient(90deg, #fffde4 60%, #ffe3e3 100%);
+  padding: 0.1em 0.4em;
+  border-radius: 0.4em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .hero {
+    padding: 2rem 0.5rem 1.5rem 0.5rem;
+    border-radius: 1rem;
+  }
+  .hero h1 {
+    font-size: 2rem;
+  }
+  .hero h2 {
+    font-size: 1.2rem;
+  }
+  .hero p {
+    font-size: 1rem;
+  }
+}
+
+/* Optional: Subtle fade-in for hero after splash */
+#landing.show .hero {
+  animation: fadeInUp 1s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px);}
+  to { opacity: 1; transform: translateY(0);}
 }
 
 

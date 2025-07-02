@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
@@ -64,55 +65,19 @@ class Event(models.Model):
         return self.title
 
 
-class Comment(models.Model):
-    content = models.TextField()
+class LessonComment(models.Model):
+    rating = models.PositiveIntegerField(choices=[(i, f'{i} Star{"s" if i > 1 else ""}') for i in range(1, 6)])
+    comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     # Foreign Key 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
+    lesson = models.ForeignKey('Lesson' , on_delete=models.CASCADE ,  related_name='comments')
 
-    # model objects
-    def __str__(self):
-        return f"Comment by {self.user.username}"
+    # # model objects
+    # def __str__(self):
+    #     return f"Comment by {self.user.username}"
 
-
-class Rating(models.Model):
-    score = models.IntegerField()
-
-    # Foreign Keys
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    video = models.ForeignKey(Video, on_delete=models.CASCADE)
-    
-    comment = models.TextField(blank=True)
-
-    # model objects
-    def __str__(self):
-        return f"{self.user.username} - {self.video.title} - {self.score}"
-
-
-class SoundToSign(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
-    recognized_speech = models.CharField(max_length=255)
-
-    # Foreign Keys
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    # model objects
-    def __str__(self):
-        return f"{self.user.username} - SoundToSign"
-
-
-class SignToText(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
-    recognized_sign = models.CharField(max_length=255)
-
-    # Foreign Keys
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    # model objects
-    def __str__(self):
-        return f"{self.user.username} - SignToText"
 
 class CallRoom(models.Model):
     """Model to represent a video call room"""

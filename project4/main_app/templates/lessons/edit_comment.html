@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Your Comment</h2>
+<form method="post">
+  {% csrf_token %}
+  <label>Rating:</label><br>
+  {% for i in "12345" %}
+    <input type="radio" name="rating" value="{{ i }}" {% if comment.rating|stringformat:"s" == i %}checked{% endif %}> {{ i }}★<br>
+  {% endfor %}
+  <label>Comment:</label><br>
+  <textarea name="comment" rows="3" style="width:100%;">{{ comment.comment }}</textarea><br>
+  <button type="submit">Save</button>
+</form>
+{% endblock %}

@@ -21,14 +21,58 @@
       &larr; Back to Lessons
     </a>
 
-    <form method="post" action="{% url 'complete_lesson' language_code lesson.id %}">
-      {% csrf_token %}
-      <button type="submit" class="complete-button">✅ Lesson Complete</button>
+  
+<!-- Lesson Complete Form -->
+<form method="post" action="{% url 'complete_lesson' language_code lesson.id %}">
+    {% csrf_token %}
+    <button type="submit"class="complete-button">✅ Lesson Complete</button>
+</form>
+
+<!-- Rating and Comment Form -->
+<h3>Leave a Comment & Rating</h3>
+<form method="post">
+  {% csrf_token %}
+  <label>Rating:</label><br>
+  {% for i in "12345" %}
+    <label>
+      <input type="radio" name="rating" value="{{ i }}" required> {{ i }}★
+    </label><br>
+  {% endfor %}
+  
+  <label>Comment:</label><br>
+  <textarea name="comment" rows="3" style="width:100%;"></textarea><br>
+  <button type="submit" name="submit_comment">Submit</button>
+</form>
+
+<hr>
+
+<h3>Comments</h3>
+{% for c in comments %}
+  <div style="margin-bottom: 12px;">
+    <strong>{{ c.user.username }}</strong> - {{ c.rating }}★<br>
+    <em>{{ c.comment }}</em><br>
+    <small>{{ c.created_at|date:"Y-m-d H:i" }}</small>
+  </div>
+  
+  {% if c.user == request.user %}
+    <!-- Edit Button -->
+    <form method="get" action="{% url 'edit_comment' language_code lesson.id c.id %}">
+      <button type="submit">Edit</button>
     </form>
 
-    {% if message %}
-      <div class="success-message">{{ message }}</div>
-    {% endif %}
+    <!-- Delete Button -->
+    <form method="post" action="{% url 'delete_comment' language_code lesson.id c.id %}">
+      {% csrf_token %}
+      <button type="submit" style="color: red;">Delete</button>
+    </form>
+  {% endif %}
+{% empty %}
+  <p>No comments yet.</p>
+{% endfor %}
+
+{% if message %}
+  <div style="color: green;">{{ message }}</div>
+{% endif %}
   </div>
 </div>
 {% endblock %}
