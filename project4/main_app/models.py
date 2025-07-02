@@ -74,10 +74,6 @@ class LessonComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lesson = models.ForeignKey('Lesson' , on_delete=models.CASCADE ,  related_name='comments')
 
-    # # model objects
-    # def __str__(self):
-    #     return f"Comment by {self.user.username}"
-
 
 class CallRoom(models.Model):
     """Model to represent a video call room"""

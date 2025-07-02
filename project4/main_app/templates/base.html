@@ -23,6 +23,7 @@
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
                 <li><a href="{% url 'calendar' %}">Calendar</a></li>
+                <li><a href="{% url 'Games' %}">Games</a></li>
                 <li><a href="{% url 'lessons_by_language' 'bsl' %}">BSL Lessons</a></li>
                 <li><a href="{% url 'lessons_by_language' 'asl' %}">ASL Lessons</a></li>
                 <li><a href="{% url 'sign_to_text' %}">Sign to Text</a></li>
