@@ -2,28 +2,277 @@
 {% load static %}
 
 {% block content %}
-<div style="max-width: 600px; margin: 30px auto; padding: 20px; background: #f8f9fa; border-radius: 12px;">
-    <h2 style="text-align:center;">👤 My Profile</h2>
-    <div style="text-align:center;">
-        {% if profile.profile_image %}
-            <img src="{{ profile.profile_image.url }}" alt="Profile Image"
-                 style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #ddd;">
-        {% else %}
-            <div style="width:120px; height:120px; border-radius:50%; background:#ccc; display:inline-block;"></div>
-        {% endif %}
-        <h3>{{ profile.user.username }}</h3>
-        <p style="color:#666;">{{ profile.bio }}</p>
+<style>
+ .profile-container {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(40,40,40,0.10), 0 1.5px 8px rgba(40,40,40,0.04);
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(40,40,40,0.08);
+    transition: box-shadow 0.2s;
+}
+
+.profile-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A, #CDDC39);
+    border-radius: 1.5rem 1.5rem 0 0;
+    z-index: 2;
+}
+
+.profile-header {
+    background: rgba(255,255,255,0.25);
+    padding: 2.5rem 2rem 1.5rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(40,40,40,0.07);
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(7px);
+}
+
+.profile-title {
+    font-size: 2.1em;
+    margin-bottom: 1.2rem;
+    color: #222;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    font-family: 'Fira Mono', 'Play', monospace;
+    text-shadow: 0 2px 6px rgba(80, 200, 120, 0.08);
+}
+
+.profile-image-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.2rem;
+}
+
+.profile-image,
+.profile-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255,255,255,0.9);
+    box-shadow: 0 4px 16px rgba(60, 120, 80, 0.12);
+    background: linear-gradient(135deg, #e0e4e7 0%, #f6f7f9 100%);
+    transition: transform 0.22s cubic-bezier(.4,2,.6,1);
+}
+
+.profile-image:hover {
+    transform: scale(1.06) rotate(-2deg);
+    box-shadow: 0 8px 32px rgba(60, 120, 80, 0.16);
+}
+
+.profile-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bdbdbd;
+    font-size: 3.2em;
+    background: linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%);
+}
+
+.profile-username {
+    font-size: 1.25em;
+    margin: 0.7em 0 0.3em 0;
+    color: #222;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    font-family: 'Fira Mono', 'Play', monospace;
+}
+
+.profile-bio {
+    color: #5a6c7d;
+    font-size: 1em;
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+    opacity: 0.85;
+}
+
+.profile-content {
+    padding: 2rem;
+    background: rgba(255,255,255,0.18);
+    border-radius: 0 0 1.5rem 1.5rem;
+    backdrop-filter: blur(7px);
+}
+
+.divider {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #d0e6d2 60%, transparent);
+    margin: 2rem 0;
+}
+
+.stats-title {
+    font-size: 1.1em;
+    color: #222;
+    margin-bottom: 1.1rem;
+    font-weight: 700;
+    font-family: 'Fira Mono', 'Play', monospace;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    letter-spacing: 0.02em;
+}
+
+.stats-title::before {
+    content: '📊';
+    font-size: 1.1em;
+}
+
+.stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.stats-item {
+    background: rgba(255,255,255,0.44);
+    margin: 0.7em 0;
+    padding: 1em 1.4em;
+    border-radius: 1em;
+    border-left: 4px solid #4CAF50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.18s cubic-bezier(.4,2,.6,1);
+    box-shadow: 0 2px 8px rgba(40,40,40,0.06);
+    backdrop-filter: blur(3px);
+    font-family: 'Fira Mono', 'Play', monospace;
+}
+
+.stats-item:hover {
+    background: rgba(255,255,255,0.7);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 6px 18px rgba(76, 175, 80, 0.11);
+}
+
+.stats-label {
+    font-weight: 600;
+    color: #222;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 1em;
+}
+
+.stats-value {
+    font-weight: 700;
+    color: #27ae60;
+    font-size: 1.15em;
+}
+
+.garden-button-container {
+    margin-top: 2.5rem;
+    text-align: center;
+}
+
+.garden-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.95em 2.2em;
+    background: linear-gradient(135deg, #4CAF50 60%, #8BC34A 100%);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 2em;
+    font-weight: 700;
+    font-size: 1.08em;
+    font-family: 'Fira Mono', 'Play', monospace;
+    transition: all 0.18s cubic-bezier(.4,2,.6,1);
+    box-shadow: 0 2px 12px rgba(76, 175, 80, 0.14);
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+}
+
+.garden-button:hover {
+    background: linear-gradient(135deg, #43a047 60%, #4CAF50 100%);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(76, 175, 80, 0.18);
+    color: #fff;
+    text-decoration: none;
+}
+
+.garden-button:active {
+    transform: translateY(0) scale(1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .profile-container {
+        margin: 18px;
+        max-width: 98vw;
+        border-radius: 1rem;
+    }
+    .profile-header {
+        padding: 1.5rem 1rem 1rem 1rem;
+    }
+    .profile-content {
+        padding: 1.2rem;
+    }
+    .profile-title {
+        font-size: 1.3em;
+    }
+    .profile-image, .profile-placeholder {
+        width: 90px;
+        height: 90px;
+    }
+    .stats-item {
+        padding: 0.8em 1em;
+        font-size: 0.98em;
+    }
+}
+
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <h2 class="profile-title"> My Profile</h2>
+        <div class="profile-image-container">
+            {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="Profile Image" class="profile-image">
+            {% else %}
+                <div class="profile-placeholder"></div>
+            {% endif %}
+        </div>
+        <h3 class="profile-username">{{ profile.user.username }}</h3>
+        <p class="profile-bio">{{ profile.bio }}</p>
     </div>
-    <hr>
-    <h4>Game Stats</h4>
-    <ul>
-        <li><strong>High Score:</strong> {{ profile.highscore }}</li>
-        <li><strong>Streak:</strong> {{ profile.streak_count }}</li>
-        <li><strong>Flowers in Garden:</strong> {{ profile.flowers }}</li>
-        <li><strong>Fruits in Garden:</strong> {{ profile.fruits }}</li>
-    </ul>
-    <div style="margin-top:30px; text-align:center;">
-        <a href="{% url 'my_garden' %}" class="btn btn-success">🌱 View My Garden</a>
+    
+    <div class="profile-content">
+        <hr class="divider">
+        <h4 class="stats-title">Game Stats</h4>
+        <ul class="stats-list">
+            <li class="stats-item">
+                <span class="stats-label">🏆 High Score:</span>
+                <span class="stats-value">{{ profile.highscore }}</span>
+            </li>
+            <li class="stats-item">
+                <span class="stats-label">🔥 Streak:</span>
+                <span class="stats-value">{{ profile.streak_count }}</span>
+            </li>
+            <li class="stats-item">
+                <span class="stats-label">🌸 Flowers in Garden:</span>
+                <span class="stats-value">{{ profile.flowers }}</span>
+            </li>
+            <li class="stats-item">
+                <span class="stats-label">🍎 Fruits in Garden:</span>
+                <span class="stats-value">{{ profile.fruits }}</span>
+            </li>
+        </ul>
+        
+        <div class="garden-button-container">
+            <a href="{% url 'my_garden' %}" class="garden-button">🌱 View My Garden</a>
+        </div>
     </div>
 </div>
 {% endblock %}
