@@ -34,7 +34,7 @@
             <p style="color: #aaa;">Click "New Word" to start playing!</p>
         </div>
 
-        <!-- Input and Buttons -->
+        
         <div class="input-section" style="margin: 25px 0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
             <input 
                 type="text" 
@@ -59,55 +59,54 @@
             </button>
         </div>
 
-        <!-- Message Display -->
+    
         <div id="message" style="margin-top: 30px; font-size: 20px; font-weight: 800; min-height: 36px; font-family: 'Fira Mono', 'Play', monospace;"></div>
     </div>
 </div>
 
 <script>
-let currentWordId = null;
+let currentWordId = null
 
-function loadWord() {
+const loadWord = () => {
     fetch("{% url 'get_word' %}")
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                document.getElementById('image-row').innerHTML = `<p style="color: red;">${data.error}</p>`;
-                return;
+                document.getElementById('image-row').innerHTML = `<p style="color: red;">${data.error}</p>`
+                return
             }
-            
-            currentWordId = data.word_id;
-            
-            // Display images
-            let imageHtml = '';
+
+            currentWordId = data.word_id
+
+            let imageHtml = ''
             data.images.forEach((img, index) => {
                 imageHtml += `<img src="{% static 'images/letters/' %}${img}" 
-                             style="width: 90px; height: 90px; margin: 6px; border: 2px solid #fbc02d; border-radius: 14px; object-fit: cover; box-shadow: 0 0 8px rgba(251, 192, 7, 0.5);" 
-                             alt="Letter ${index + 1}">`;
-            });
-            
-            document.getElementById('image-row').innerHTML = imageHtml;
-            document.getElementById('guess-input').value = '';
-            document.getElementById('message').innerHTML = '';
-            document.getElementById('guess-input').focus();
+                            style="width: 90px; height: 90px; margin: 6px; border: 2px solid #fbc02d; border-radius: 14px; object-fit: cover; box-shadow: 0 0 8px rgba(251, 192, 7, 0.5);" 
+                            alt="Letter ${index + 1}">`
+            })
+
+            document.getElementById('image-row').innerHTML = imageHtml
+            document.getElementById('guess-input').value = ''
+            document.getElementById('message').innerHTML = ''
+            document.getElementById('guess-input').focus()
         })
         .catch(error => {
-            console.error('Error loading word:', error);
-            document.getElementById('message').innerHTML = '<span style="color: red;">Error loading word. Please try again.</span>';
-        });
+            console.error('Error loading word:', error)
+            document.getElementById('message').innerHTML = '<span style="color: red;">Error loading word. Please try again.</span>'
+        })
 }
 
-function checkGuess() {
-    const guess = document.getElementById('guess-input').value.trim();
-    
+const checkGuess = () => {
+    const guess = document.getElementById('guess-input').value.trim()
+
     if (!guess) {
-        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please enter a guess!</span>';
-        return;
+        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please enter a guess!</span>'
+        return
     }
-    
+
     if (!currentWordId) {
-        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please load a word first!</span>';
-        return;
+        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please load a word first!</span>'
+        return
     }
 
     fetch("{% url 'check_guess' %}", {
@@ -118,63 +117,60 @@ function checkGuess() {
         },
         body: JSON.stringify({
             word_id: currentWordId,
-            guess: guess
+            guess
         })
     })
     .then(response => response.json())
     .then(data => {
         if (data.correct) {
-            document.getElementById('message').innerHTML = '<span style="color: #388e3c; font-size: 24px;">🎉 Correct! 🎉</span>';
-            document.getElementById('score').textContent = data.score;
-            document.getElementById('highscore').textContent = data.highscore;
-            document.getElementById('streak').textContent = data.streak;
+            document.getElementById('message').innerHTML = '<span style="color: #388e3c; font-size: 24px;">🎉 Correct! 🎉</span>'
+            document.getElementById('score').textContent = data.score
+            document.getElementById('highscore').textContent = data.highscore
+            document.getElementById('streak').textContent = data.streak
         } else {
-            document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">❌ Try again!</span>';
-            document.getElementById('streak').textContent = data.streak;
+            document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">❌ Try again!</span>'
+            document.getElementById('streak').textContent = data.streak
         }
     })
     .catch(error => {
-        console.error('Error checking guess:', error);
-        document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">Error checking guess. Please try again.</span>';
-    });
+        console.error('Error checking guess:', error)
+        document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">Error checking guess. Please try again.</span>'
+    })
 }
 
-function showAnswer() {
+const showAnswer = () => {
     if (!currentWordId) {
-        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please load a word first!</span>';
-        return;
+        document.getElementById('message').innerHTML = '<span style="color: #fbc02d;">Please load a word first!</span>'
+        return
     }
 
     fetch(`{% url 'show_answer' %}?word_id=${currentWordId}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('message').innerHTML = `<span style="color: #1565c0;">💡 Answer: <strong>${data.answer.toUpperCase()}</strong></span>`;
+            document.getElementById('message').innerHTML = `<span style="color: #1565c0;">💡 Answer: <strong>${data.answer.toUpperCase()}</strong></span>`
         })
         .catch(error => {
-            console.error('Error showing answer:', error);
-            document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">Error showing answer. Please try again.</span>';
-        });
+            console.error('Error showing answer:', error)
+            document.getElementById('message').innerHTML = '<span style="color: #d32f2f;">Error showing answer. Please try again.</span>'
+        })
 }
 
-// Event listeners
-document.getElementById('submit-guess').addEventListener('click', checkGuess);
-document.getElementById('next-word').addEventListener('click', loadWord);
-document.getElementById('show-answer').addEventListener('click', showAnswer);
+document.getElementById('submit-guess').addEventListener('click', checkGuess)
+document.getElementById('next-word').addEventListener('click', loadWord)
+document.getElementById('show-answer').addEventListener('click', showAnswer)
 
-// Allow Enter key to submit guess
-document.getElementById('guess-input').addEventListener('keypress', function(e) {
+document.getElementById('guess-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-        checkGuess();
+        checkGuess()
     }
-});
+})
 
-// Load first word when page loads
-window.addEventListener('load', loadWord);
+window.addEventListener('load', loadWord)
 </script>
 
 <style>
 
-      body {
+    body {
     background-image: url("{% static 'images/game-bacground.png' %}");
     background-size: cover;
     background-position: center;
@@ -182,7 +178,7 @@ window.addEventListener('load', loadWord);
     background-attachment: fixed;
     background-color: #fff8ee; /* fallback color */
     font-family: 'Fira Mono', 'Play', monospace;
-  }
+}
 /* Button styles to match theme */
 .btn {
     display: inline-block;

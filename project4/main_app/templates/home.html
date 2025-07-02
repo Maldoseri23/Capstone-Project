@@ -148,8 +148,8 @@ height: 100vh;
 </div>
 
 <script>
-  // Force hide landing content immediately
-  document.addEventListener('DOMContentLoaded', function () {
+  //  hide home for 5 sec then show content immediately
+  document.addEventListener('DOMContentLoaded',  () => {
     const landing = document.getElementById('landing')
     const splash = document.getElementById('splash')
     // Ensure landing is hidden

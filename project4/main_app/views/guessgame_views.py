@@ -10,8 +10,7 @@ from .garden_views import award_garden_item
 
 @login_required
 def game_home(request):
-    # Get or create profile for the user
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile= Profile.objects.get_or_create(user=request.user)
     return render(request, 'guessgame/guessgame.html', {
         'highscore': profile.highscore,
         'score': request.session.get('score', 0)
@@ -43,7 +42,7 @@ def check_guess(request):
         word_id = data.get('word_id')
         guess = data.get('guess', '').strip().lower()
     except:
-        # Fallback to form data
+        
         word_id = request.POST.get('word_id')
         guess = request.POST.get('guess', '').strip().lower()
     
@@ -59,16 +58,16 @@ def check_guess(request):
         score += 1
         request.session['score'] = score
         
-        # Update streak
+        
         profile.streak_count += 1
         
-        # Update high score
+        
         if score > profile.highscore:
             profile.highscore = score
         
         profile.save()
 
-        # Alternate between flower and fruit based on score
+        
         if score % 2 == 0:
             award_garden_item(profile, 'fruit')
         else:
@@ -81,7 +80,6 @@ def check_guess(request):
             'streak': profile.streak_count
         })
     else:
-        # Reset streak on wrong answer
         profile.streak_count = 0
         profile.save()
         

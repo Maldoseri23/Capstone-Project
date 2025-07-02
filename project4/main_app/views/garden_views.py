@@ -7,7 +7,6 @@ def award_garden_item(profile, item_type):
         profile.flowers += 1
     elif item_type == 'fruit':
         profile.fruits += 1
-    # Optionally, increase garden_level based on total items
     profile.garden_level = profile.flowers + profile.fruits
     profile.save()
 

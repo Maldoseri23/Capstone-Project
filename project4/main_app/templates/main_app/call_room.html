@@ -20,7 +20,7 @@
         <h4 class="video-label">You</h4>
         <video id="localVideo" autoplay playsinline muted></video>
       </div>
-      <!-- Remote videos go here -->
+    
     </div>
 
     {% if user == room.created_by %}
@@ -31,7 +31,6 @@
     {% endif %}
   </div>
 
-  <!-- Chat Section -->
   <div class="chat-section">
     <h3 class="section-title">💬 Chat</h3>
     <div class="chat-box">
@@ -44,56 +43,55 @@
   </div>
 </div>
 
-<!-- Styled Back Button -->
 <div class="back-btn-container">
   <a href="{% url 'list_rooms' %}" class="back-btn">⬅ Back to Rooms</a>
 </div>
 
 
 <script>
-const roomId = "{{ room_id_str }}";
-const userId = "{{ user_id }}";
-const username = "{{ user.username }}";
-const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+const roomId = "{{ room_id_str }}"
+const userId = "{{ user_id }}"
+const username = "{{ user.username }}"
+const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws"
 const ws = new WebSocket(
   ws_scheme + '://' + window.location.host + '/ws/call/' + roomId + '/'
-);
+)
 
-let localStream = null;
-let peers = {}; // { peerUserId: RTCPeerConnection }
-let remoteStreams = {}; // { peerUserId: MediaStream }
-let pendingMessages = []; // Store messages until we're ready to process them
-let isReady = false; // Flag to track if we have local stream and WebSocket is open
+let localStream = null
+let peers = {}
+let remoteStreams = {}
+let pendingMessages = []
+let isReady = false
 
-const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
 
-// Chat functionality
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendChatBtn = document.getElementById('sendChatBtn');
+// Chat 
+const chatMessages = document.getElementById('chatMessages')
+const chatInput = document.getElementById('chatInput')
+const sendChatBtn = document.getElementById('sendChatBtn')
 
 function addChatMessage(username, message, isOwnMessage = false) {
-  const messageDiv = document.createElement('div');
+  const messageDiv = document.createElement('div')
   messageDiv.style.cssText = `
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 8px;
-    max-width: 80%;
-    word-wrap: break-word;
+    margin-bottom: 10px
+    padding: 8px
+    border-radius: 8px
+    max-width: 80%
+    word-wrap: break-word
     ${isOwnMessage ? 
       'background: #007bff; color: white; margin-left: auto; text-align: right;' : 
       'background: white; border: 1px solid #ddd;'
     }
-  `;
+  `
   
-  const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
   
   messageDiv.innerHTML = `
     <div style="font-size: 12px; opacity: 0.7; margin-bottom: 4px;">
       ${isOwnMessage ? 'You' : username} • ${timestamp}
     </div>
     <div>${message}</div>
-  `;
+  `
   
   chatMessages.appendChild(messageDiv);
   chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -107,89 +105,87 @@ function sendChatMessage() {
       'message': message,
       'username': username,
       'user_id': userId
-    }));
+    }))
     
-    chatInput.value = '';
+    chatInput.value = ''
   }
 }
 
 sendChatBtn.addEventListener('click', sendChatMessage);
 chatInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
-    sendChatMessage();
+    sendChatMessage()
   }
 });
 
 function addRemoteVideo(peerUserId, stream) {
   if (document.getElementById('video_' + peerUserId)) {
-    // Update existing video element
-    const existingVideo = document.getElementById('video_' + peerUserId);
-    existingVideo.srcObject = stream;
-    console.log(`Updated video for user ${peerUserId}, tracks: ${stream.getTracks().length}`);
-    return;
+    const existingVideo = document.getElementById('video_' + peerUserId)
+    existingVideo.srcObject = stream
+    console.log(`Updated video for user ${peerUserId}, tracks: ${stream.getTracks().length}`)
+    return
   }
   
-  const container = document.getElementById('videos');
-  const div = document.createElement('div');
+  const container = document.getElementById('videos')
+  const div = document.createElement('div')
   div.innerHTML = `
     <h4>User ${peerUserId}</h4>
     <video id="video_${peerUserId}" autoplay playsinline width="320" height="240" style="background:#222;border:1px solid #ccc;"></video>
     <div style="font-size:12px; color:#666;">Tracks: <span id="tracks_${peerUserId}">0</span></div>
-  `;
-  container.appendChild(div);
+  `
+  container.appendChild(div)
   
-  const videoElement = document.getElementById('video_' + peerUserId);
-  videoElement.srcObject = stream;
+  const videoElement = document.getElementById('video_' + peerUserId)
+  videoElement.srcObject = stream
   
-  // Update track count
-  document.getElementById('tracks_' + peerUserId).textContent = stream.getTracks().length;
   
-  // Add event listeners for debugging
+  document.getElementById('tracks_' + peerUserId).textContent = stream.getTracks().length
+  
+
   videoElement.addEventListener('loadedmetadata', () => {
-    console.log(`Video metadata loaded for user ${peerUserId}`);
-  });
+    console.log(`Video metadata loaded for user ${peerUserId}`)
+  })
   
   videoElement.addEventListener('canplay', () => {
-    console.log(`Video can play for user ${peerUserId}`);
-  });
+    console.log(`Video can play for user ${peerUserId}`)
+  })
   
   videoElement.addEventListener('error', (e) => {
-    console.error(`Video error for user ${peerUserId}:`, e);
-  });
+    console.error(`Video error for user ${peerUserId}:`, e)
+  })
   
-  console.log(`Added video for user ${peerUserId}, tracks: ${stream.getTracks().length}`);
+  console.log(`Added video for user ${peerUserId}, tracks: ${stream.getTracks().length}`)
 }
 
 function removeRemoteVideo(peerUserId) {
-  const videoElem = document.getElementById('video_' + peerUserId);
+  const videoElem = document.getElementById('video_' + peerUserId)
   if (videoElem) videoElem.parentElement.remove();
   if (remoteStreams[peerUserId]) {
-    delete remoteStreams[peerUserId];
+    delete remoteStreams[peerUserId]
   }
 }
 
 async function createPeerConnection(peerUserId, isInitiator = false) {
   if (peers[peerUserId]) {
-    console.log(`Peer connection for ${peerUserId} already exists`);
-    return peers[peerUserId];
+    console.log(`Peer connection for ${peerUserId} already exists`)
+    return peers[peerUserId]
   }
   
   if (!localStream) {
-    console.error('Local stream not available when creating peer connection');
-    return null;
+    console.error('Local stream not available when creating peer connection')
+    return null
   }
 
-  console.log(`Creating peer connection for ${peerUserId}, isInitiator: ${isInitiator}`);
+  console.log(`Creating peer connection for ${peerUserId}, isInitiator: ${isInitiator}`)
   
-  const pc = new RTCPeerConnection(config);
-  peers[peerUserId] = pc;
+  const pc = new RTCPeerConnection(config)
+  peers[peerUserId] = pc
 
-  // Add local tracks
+ 
   localStream.getTracks().forEach(track => {
-    pc.addTrack(track, localStream);
-  });
+    pc.addTrack(trac, localStream)
+  })
 
-  // ICE candidate handling
   pc.onicecandidate = event => {
     if (event.candidate) {
       ws.send(JSON.stringify({
@@ -197,222 +193,210 @@ async function createPeerConnection(peerUserId, isInitiator = false) {
         'to': peerUserId,
         'from': userId,
         'ice': event.candidate
-      }));
+      }))
     }
-  };
+  }
 
-  // Connection state monitoring
+
   pc.onconnectionstatechange = () => {
     console.log(`Connection state for ${peerUserId}: ${pc.connectionState}`);
     if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
       console.log(`Cleaning up failed connection for ${peerUserId}`);
       cleanupPeer(peerUserId);
     }
-  };
+  }
 
-  // Track handling
+
   pc.ontrack = event => {
-    console.log(`Received track from ${peerUserId}:`, event.track.kind, event.track.readyState);
+    console.log(`Received track from ${peerUserId}:`, event.track.kind, event.track.readyState)
     
     if (!remoteStreams[peerUserId]) {
-      remoteStreams[peerUserId] = new MediaStream();
-      console.log(`Created new MediaStream for ${peerUserId}`);
+      remoteStreams[peerUserId] = new MediaStream()
+      console.log(`Created new MediaStream for ${peerUserId}`)
     }
     
-    const stream = remoteStreams[peerUserId];
+    const stream = remoteStreams[peerUserId]
     
-    // Add track to stream if not already present
-    const existingTrack = stream.getTracks().find(t => t.id === event.track.id);
-    if (!existingTrack) {
-      stream.addTrack(event.track);
-      console.log(`Added ${event.track.kind} track to stream for ${peerUserId}. Total tracks: ${stream.getTracks().length}`);
-    }
     
-    // Create or update video element
+
     addRemoteVideo(peerUserId, stream);
     
-    // Log track state changes
+
     event.track.addEventListener('ended', () => {
       console.log(`Track ended for ${peerUserId}:`, event.track.kind);
-    });
+    })
     
     event.track.addEventListener('mute', () => {
-      console.log(`Track muted for ${peerUserId}:`, event.track.kind);
-    });
+      console.log(`Track muted for ${peerUserId}:`, event.track.kind)
+    })
     
     event.track.addEventListener('unmute', () => {
-      console.log(`Track unmuted for ${peerUserId}:`, event.track.kind);
-    });
-  };
+      console.log(`Track unmuted for ${peerUserId}:`, event.track.kind)
+    })
+  }
 
-  // If we're the initiator, create and send offer
   if (isInitiator) {
     try {
-      const offer = await pc.createOffer();
-      await pc.setLocalDescription(offer);
+      const offer = await pc.createOffer()
+      await pc.setLocalDescription(offer)
       ws.send(JSON.stringify({
         'type': 'offer',
         'to': peerUserId,
         'from': userId,
         'offer': offer
-      }));
-      console.log(`Sent offer to ${peerUserId}`);
+      }))
+      console.log(`Sent offer to ${peerUserId}`)
     } catch (error) {
-      console.error(`Error creating offer for ${peerUserId}:`, error);
+      console.error(`Error creating offer for ${peerUserId}:`, error)
     }
   }
 
-  return pc;
+  return pc
 }
 
 function cleanupPeer(peerUserId) {
   if (peers[peerUserId]) {
-    peers[peerUserId].close();
-    delete peers[peerUserId];
+    peers[peerUserId].close()
+    delete peers[peerUserId]
   }
-  removeRemoteVideo(peerUserId);
+  removeRemoteVideo(peerUserId)
 }
 
 async function handleWebSocketMessage(data) {
-  console.log('Received message:', data.type, data);
+  console.log('Received message:', data.type, data)
 
   if (data.type === 'chat_message') {
-    // Handle incoming chat messages
-    if (data.user_id !== userId) { // Don't display our own messages again
-      addChatMessage(data.username || `User ${data.user_id}`, data.message, false);
+    if (data.user_id !== userId) { // Don't display user own messages again
+      addChatMessage(data.username || `User ${data.user_id}`, data.message, false)
     }
   }
   else if (data.type === 'users_in_room') {
-    // Connect to existing users in the room
     for (const peerUserId of data.users) {
       if (peerUserId !== userId && !peers[peerUserId]) {
-        await createPeerConnection(peerUserId, true); // We initiate connection
+        await createPeerConnection(peerUserId, true)
       }
     }
   } 
   else if (data.type === 'new_user' || data.type === 'user_joined') {
     const peerUserId = data.user_id || data.sender_id;
     if (peerUserId && peerUserId !== userId && !peers[peerUserId]) {
-      // Don't initiate - wait for them to send us an offer
-      console.log(`New user ${peerUserId} joined, waiting for their offer`);
+      console.log(`New user ${peerUserId} joined, waiting for their offer`)
       
       // Add system message to chat
-      addChatMessage('System', `User ${peerUserId} joined the call`, false);
+      addChatMessage('System', `User ${peerUserId} joined the call`, false)
     }
   } 
   else if (data.type === 'offer') {
-    const peerUserId = data.from || data.sender_id;
-    console.log(`Received offer from ${peerUserId}`);
+    const peerUserId = data.from || data.sender_id
+    console.log(`Received offer from ${peerUserId}`)
     
     if (!peerUserId) {
-      console.error('Offer message missing sender information:', data);
-      return;
+      console.error('Offer message missing sender information:', data)
+      return
     }
     
-    // Create peer connection if it doesn't exist
+
     if (!peers[peerUserId]) {
-      await createPeerConnection(peerUserId, false);
+      await createPeerConnection(peerUserId, false)
     }
     
-    const pc = peers[peerUserId];
+    const pc = peers[peerUserId]
     if (pc) {
-      // Only process offer if we're in the right state
       if (pc.signalingState === 'stable' || pc.signalingState === 'have-remote-offer') {
         try {
-          await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+          await pc.setRemoteDescription(new RTCSessionDescription(data.offer))
           
           if (pc.signalingState === "have-remote-offer") {
-            const answer = await pc.createAnswer();
-            await pc.setLocalDescription(answer);
+            const answer = await pc.createAnswer()
+            await pc.setLocalDescription(answer)
             ws.send(JSON.stringify({ 
               'type': 'answer', 
               'to': peerUserId, 
               'from': userId, 
               'answer': answer 
             }));
-            console.log(`Sent answer to ${peerUserId}`);
+            console.log(`Sent answer to ${peerUserId}`)
           } else {
-            console.warn(`Unexpected signaling state for ${peerUserId}: ${pc.signalingState}`);
+            console.warn(`Unexpected signaling state for ${peerUserId}: ${pc.signalingState}`)
           }
         } catch (error) {
-          console.error(`Error handling offer from ${peerUserId}:`, error);
+          console.error(`Error handling offer from ${peerUserId}:`, error)
         }
       } else {
-        console.log(`Ignoring offer from ${peerUserId} - signaling state is ${pc.signalingState}`);
+        console.log(`Ignoring offer from ${peerUserId} - signaling state is ${pc.signalingState}`)
       }
     }
   } 
   else if (data.type === 'answer') {
     const peerUserId = data.from || data.sender_id;
-    console.log(`Received answer from ${peerUserId}`);
+    console.log(`Received answer from ${peerUserId}`)
     
     if (!peerUserId) {
-      console.error('Answer message missing sender information:', data);
-      return;
+      console.error('Answer message missing sender information:', data)
+      return
     }
     
-    const pc = peers[peerUserId];
+    const pc = peers[peerUserId]
     if (pc) {
-      // Only process answer if we're in the right state
       if (pc.signalingState === 'have-local-offer') {
         try {
-          await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
-          console.log(`Set remote description for ${peerUserId}`);
+          await pc.setRemoteDescription(new RTCSessionDescription(data.answer))
+          console.log(`Set remote description for ${peerUserId}`)
         } catch (error) {
-          console.error(`Error handling answer from ${peerUserId}:`, error);
+          console.error(`Error handling answer from ${peerUserId}:`, error)
         }
       } else {
-        console.log(`Ignoring answer from ${peerUserId} - signaling state is ${pc.signalingState}`);
+        console.log(`Ignoring answer from ${peerUserId} - signaling state is ${pc.signalingState}`)
       }
     } else {
-      console.error(`No peer connection found for ${peerUserId} when handling answer`);
+      console.error(`No peer connection found for ${peerUserId} when handling answer`)
     }
   } 
   else if (data.type === 'ice' || data.type === 'ice_candidate') {
-    const peerUserId = data.from || data.sender_id;
-    const candidate = data.ice || data.candidate;
+    const peerUserId = data.from || data.sender_id
+    const candidate = data.ice || data.candidate
     
     if (!peerUserId) {
-      console.log('ICE candidate message missing sender information:', data);
+      console.log('ICE candidate message missing sender information:', data)
       return;
     }
     
-    const pc = peers[peerUserId];
+    const pc = peers[peerUserId]
     if (pc && pc.remoteDescription && pc.signalingState !== 'closed') {
       try {
-        await pc.addIceCandidate(new RTCIceCandidate(candidate));
-        console.log(`Added ICE candidate for ${peerUserId}`);
+        await pc.addIceCandidate(new RTCIceCandidate(candidate))
+        console.log(`Added ICE candidate for ${peerUserId}`)
       } catch (error) {
-        console.error(`Error adding ICE candidate for ${peerUserId}:`, error);
+        console.error(`Error adding ICE candidate for ${peerUserId}:`, error)
       }
     } else {
-      console.log(`Ignoring ICE candidate for ${peerUserId} - not ready (state: ${pc ? pc.signalingState : 'no peer'})`);
+      console.log(`Ignoring ICE candidate for ${peerUserId} - not ready (state: ${pc ? pc.signalingState : 'no peer'})`)
     }
   } 
   else if (data.type === 'user_left') {
     const peerUserId = data.user_id || data.sender_id;
-    console.log(`User ${peerUserId} left`);
+    console.log(`User ${peerUserId} left`)
     if (peerUserId) {
-      cleanupPeer(peerUserId);
+      cleanupPeer(peerUserId)
       // Add system message to chat
-      addChatMessage('System', `User ${peerUserId} left the call`, false);
+      addChatMessage('System', `User ${peerUserId} left the call`, false)
     }
   } 
   else if (data.type === 'room_deactivated') {
-    alert("The room has been ended by the creator.");
-    window.location.href = "{% url 'list_rooms' %}";
+    alert("The room has been ended by the creator.")
+    window.location.href = "{% url 'list_rooms' %}"
   }
 }
 
 function processPendingMessages() {
-  console.log(`Processing ${pendingMessages.length} pending messages`);
+  console.log(`Processing ${pendingMessages.length} pending messages`)
   for (const message of pendingMessages) {
-    handleWebSocketMessage(message);
+    handleWebSocketMessage(message)
   }
-  pendingMessages = [];
+  pendingMessages = []
 }
 
-// Initialize WebRTC
+
 navigator.mediaDevices.getUserMedia({ 
   video: { 
     width: { ideal: 640 }, 
@@ -425,122 +409,119 @@ navigator.mediaDevices.getUserMedia({
   } 
 })
   .then(stream => {
-    console.log('Got local stream with tracks:', stream.getTracks().map(t => `${t.kind}: ${t.readyState}`));
+    console.log('Got local stream with tracks:', stream.getTracks().map(t => `${t.kind}: ${t.readyState}`))
     
-    const localVideo = document.getElementById('localVideo');
-    localVideo.srcObject = stream;
-    localStream = stream;
+    const localVideo = document.getElementById('localVideo')
+    localVideo.srcObject = stream
+    localStream = stream
     
-    // Add event listeners to local video
     localVideo.addEventListener('loadedmetadata', () => {
-      console.log('Local video metadata loaded');
-    });
+      console.log('Local video metadata loaded')
+    })
     
     localVideo.addEventListener('canplay', () => {
-      console.log('Local video can play');
-    });
-    
-    // Log track states
+      console.log('Local video can play')
+    })
+  
+
     stream.getTracks().forEach(track => {
-      console.log(`Local ${track.kind} track state:`, track.readyState);
+      console.log(`Local ${track.kind} track state:`, track.readyState)
       track.addEventListener('ended', () => {
-        console.log(`Local ${track.kind} track ended`);
-      });
-    });
+        console.log(`Local ${track.kind} track ended`)
+      })
+    })
     
-    // Check if we're ready to start processing messages
+
     if (ws.readyState === WebSocket.OPEN) {
-      isReady = true;
-      ws.send(JSON.stringify({ 'type': 'join', 'user_id': userId }));
-      processPendingMessages();
+      isReady = true
+      ws.send(JSON.stringify({ 'type': 'join', 'user_id': userId }))
+      processPendingMessages()
     }
   })
   .catch(err => {
-    console.error('Could not access camera or microphone:', err);
+    console.error('Could not access camera or microphone:', err)
     
-    // Try with video disabled if camera access fails
     if (err.name === 'NotAllowedError' || err.name === 'NotFoundError') {
-      console.log('Trying audio-only fallback...');
-      return navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log('Trying audio-only fallback...')
+      return navigator.mediaDevices.getUserMedia({ audio: true })
     } else {
-      alert('Could not access camera or microphone: ' + err.message);
-      throw err;
+      alert('Could not access camera or microphone: ' + err.message)
+      throw err
     }
   })
   .then(audioStream => {
     if (audioStream && !localStream) {
-      console.log('Got audio-only stream');
+      console.log('Got audio-only stream')
       localStream = audioStream;
-      document.getElementById('localVideo').style.background = '#444';
+      document.getElementById('localVideo').style.background = '#444'
       
       if (ws.readyState === WebSocket.OPEN) {
         isReady = true;
-        ws.send(JSON.stringify({ 'type': 'join', 'user_id': userId }));
-        processPendingMessages();
+        ws.send(JSON.stringify({ 'type': 'join', 'user_id': userId }))
+        processPendingMessages()
       }
     }
   })
   .catch(err => {
     console.error('Complete media access failed:', err);
-    alert('Could not access any media devices: ' + err.message);
-  });
+    alert('Could not access any media devices: ' + err.message)
+  })
 
-// WebSocket event handlers
+
 ws.onopen = () => {
-  console.log('WebSocket opened');
+  console.log('WebSocket opened')
   if (localStream) {
-    isReady = true;
-    ws.send(JSON.stringify({ 'type': 'join', 'user_id': userId }));
-    processPendingMessages();
+    isReady = true
+    ws.send(JSON.stringify({ 'type': 'join', 'user_id': userId }))
+    processPendingMessages()
   }
 };
 
 ws.onmessage = async (event) => {
-  const data = JSON.parse(event.data);
+  const data = JSON.parse(event.data)
   
   if (isReady) {
-    await handleWebSocketMessage(data);
+    await handleWebSocketMessage(data)
   } else {
-    console.log('Queueing message until ready:', data.type);
-    pendingMessages.push(data);
+    console.log('Queueing message until ready:', data.type)
+    pendingMessages.push(data)
   }
-};
+}
 
 ws.onerror = (error) => {
-  console.error('WebSocket error:', error);
-};
+  console.error('WebSocket error:', error)
+}
 
 ws.onclose = (event) => {
-  console.log('WebSocket closed:', event.code, event.reason);
-};
+  console.log('WebSocket closed:', event.code, event.reason)
+}
 
 // Handle page unload (leave room)
 window.addEventListener('beforeunload', () => {
-  console.log('Page unloading, cleaning up...');
+  console.log('Page unloading, cleaning up...')
   if (ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ 'type': 'leave', 'user_id': userId }));
+    ws.send(JSON.stringify({ 'type': 'leave', 'user_id': userId }))
   }
-  ws.close();
-  
-  // Close all peer connections
-  for (const peerUserId in peers) {
-    peers[peerUserId].close();
-  }
-  
-  // Stop local stream
-  if (localStream) {
-    localStream.getTracks().forEach(track => track.stop());
-  }
-});
+  ws.close()
 
-// Handle end call form
-const endCallForm = document.getElementById('endCallForm');
+
+  for (const peerUserId in peers) {
+    peers[peerUserId].close()
+  }
+  
+
+  if (localStream) {
+    localStream.getTracks().forEach(track => track.stop())
+  }
+})
+
+const endCallForm = document.getElementById('endCallForm')
 if (endCallForm) {
   endCallForm.addEventListener('submit', function(e) {
     setTimeout(() => {
-      ws.close();
-    }, 500); // Give time for backend to broadcast deactivation
-  });
+      ws.close()
+    }, 500)
+  })
 }
 </script>
 {% endblock %}

@@ -48,7 +48,7 @@
         </svg>
     </button>
     <div id="navbarSearchBar" class="navbar-search-bar">
-        <input id="searchInputNav" type="text" placeholder="اكتب كلمة بالعربي" />
+        <input id="searchInputNav" type="text" placeholder="اكتب كلمة بالعربية لتجد لغةالإشارة" />
         <button onclick="showSearchSignsFromNav()" class="search-bar-btn">عرض</button>
         <div id="searchLettersResultNav" class="search-letters-result"></div>
     </div>
@@ -57,7 +57,6 @@
     </nav>
     <main>
         {% block content %}
-        <!-- Page-specific content goes here -->
         {% endblock %}
     </main>
     <footer>
@@ -78,7 +77,7 @@
         </div>
     </footer>
     <script>
-    // Arabic sign images mapping
+    
     const arabicSigns = {
         ا: '/static/images/letters/ا.png',
         ب: '/static/images/letters/ب.png',
@@ -112,60 +111,60 @@
         ة: '/static/images/letters/ة.png'
     };
 
-   // Toggle search bar in navbar
-document.addEventListener('DOMContentLoaded', function() {
-    const searchBtn = document.getElementById('searchToggleBtn');
-    const searchBar = document.getElementById('navbarSearchBar');
-    const inputNav = document.getElementById('searchInputNav');
-    searchBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
+  // search bar
+document.addEventListener('DOMContentLoaded', () => {
+    const searchBtn = document.getElementById('searchToggleBtn')
+    const searchBar = document.getElementById('navbarSearchBar')
+    const inputNav = document.getElementById('searchInputNav')
+
+    searchBtn.addEventListener('click', (e) => {
+        e.stopPropagation()
         if (searchBar.style.display === 'none' || searchBar.style.display === '') {
-            searchBar.style.display = 'block';
+            searchBar.style.display = 'block'
             inputNav.focus();
         } else {
-            searchBar.style.display = 'none';
+            searchBar.style.display = 'none'
         }
-    });
-    // Hide search bar if clicked outside
-    document.addEventListener('click', function(e) {
+    })
+    
+    document.addEventListener('click', (e) => {
         if (!searchBar.contains(e.target) && e.target !== searchBtn) {
-            searchBar.style.display = 'none';
+            searchBar.style.display = 'none'
         }
-    });
-});
+    })
+})
 
-// Show sign images for entered letters in navbar search
-function showSearchSignsFromNav() {
-    const input = document.getElementById('searchInputNav').value.trim();
-    const container = document.getElementById('searchLettersResultNav');
-    container.innerHTML = '';
-    let count = 0;
+const showSearchSignsFromNav = () => {
+    const input = document.getElementById('searchInputNav').value.trim()
+    const container = document.getElementById('searchLettersResultNav')
+    container.innerHTML = ''
+    let count = 0
+
     for (const char of input) {
         if (arabicSigns[char]) {
-            const img = document.createElement('img');
-            img.src = arabicSigns[char];
-            img.alt = char;
-            img.className = 'sign-letter-img';
-            container.appendChild(img);
+            const img = document.createElement('img')
+            img.src = arabicSigns[char]
+            img.alt = char
+            img.className = 'sign-letter-img'
+            container.appendChild(img)
             count++;
         } else if (char.trim() === '') {
-            // ignore space
+            // Skip empty characters
         } else {
-            const span = document.createElement('span');
-            span.textContent = '?';
-            span.className = 'sign-letter-unknown';
-            container.appendChild(span);
-            count++;
+            const span = document.createElement('span')
+            span.textContent = '?'
+            span.className = 'sign-letter-unknown'
+            container.appendChild(span)
+            count++
         }
     }
-    // Dynamically adjust search bar width to fit images
-    const minWidth = 250; // px
-    const imgWidth = 60;  // px (see CSS below)
-    const gap = 6;        // px (see CSS below)
-    let newWidth = Math.max(minWidth, count * (imgWidth + gap));
-    container.parentElement.style.width = newWidth + 'px';
-}
 
+    const minWidth = 250
+    const imgWidth = 60
+    const gap = 6
+    const newWidth = Math.max(minWidth, count * (imgWidth + gap))
+    container.parentElement.style.width = newWidth + 'px'
+}
     </script>
     {% block extra_js %}{% endblock %}
 </body>

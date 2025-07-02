@@ -22,13 +22,13 @@
     </a>
 
   
-<!-- Lesson Complete Form -->
+
 <form method="post" action="{% url 'complete_lesson' language_code lesson.id %}">
     {% csrf_token %}
     <button type="submit"class="complete-button">✅ Lesson Complete</button>
 </form>
 
-<!-- Rating and Comment Form -->
+
 <h3>Leave a Comment & Rating</h3>
 <form method="post">
   {% csrf_token %}
@@ -57,12 +57,11 @@
   </div>
   
   {% if c.user == request.user %}
-    <!-- Edit Button -->
     <form method="get" action="{% url 'edit_comment' language_code lesson.id c.id %}">
       <button type="submit">Edit</button>
     </form>
 
-    <!-- Delete Button -->
+  
     <form method="post" action="{% url 'delete_comment' language_code lesson.id c.id %}">
       {% csrf_token %}
       <button type="submit" style="color: red;">Delete</button>

@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-
+# help from: https://www.videosdk.live/developer-hub/webrtc/django-webrtc
 
 def signup(request):
     error_message = ''
