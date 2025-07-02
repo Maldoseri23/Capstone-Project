@@ -7,7 +7,7 @@
     color: #2E5D36;
     text-align: center;
     padding: 2rem;
-    min-height: 75vh; /* Ensures enough height for content */
+    min-height: 75vh;
   }
   h1 {
     font-size: 2.8rem;
@@ -16,51 +16,57 @@
     text-shadow: 0 2px 6px rgba(244, 169, 0, 0.3);
   }
   h2 {
-font-size: 1.6rem;
-margin-bottom: 0.5rem;
-}
-h3 {
-font-size: 1.2rem;
-color: #555;
-margin-bottom: 2rem;
-}
-.game-container {
-display: flex;
-flex-direction: column;
-gap: 20px;
-align-items: center;
-max-width: 700px;
-margin: 0 auto;
-}
-.game-card {
-background: #FFFEF6;
-border: 3px solid #FFD54F;
-border-radius: 16px;
-padding: 20px 30px;
-box-shadow: 0 4px 16px rgba(255, 204, 0, 0.3);
-transition: transform 0.3s ease;
-width: 100%;
-max-width: 400px;
-}
-.game-card:hover {
-transform: scale(1.03);
-}
-.game-card a {
-display: inline-block;
-text-decoration: none;
-font-size: 1.4rem;
-color: #2E5D36;
-font-weight: bold;
-background: linear-gradient(135deg, #FFD54F, #FBC02D);
-padding: 10px 20px;
-border-radius: 30px;
-box-shadow: 0 4px 10px rgba(255, 204, 0, 0.25);
-transition: background 0.3s ease;
-}
-.game-card a:hover {
-background: linear-gradient(135deg, #FDD835, #F9A825);
-color: #000;
-}
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 2rem;
+  }
+  .game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .game-card {
+    background: #FFFEF6;
+    border: 3px solid #FFD54F;
+    border-radius: 16px;
+    padding: 20px 30px;
+    box-shadow: 0 4px 16px rgba(255, 204, 0, 0.3);
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+  }
+  .game-card:hover {
+    transform: scale(1.03);
+  }
+  .game-card a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: #2E5D36;
+    font-weight: bold;
+    background: linear-gradient(135deg, #FFD54F, #FBC02D);
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(255, 204, 0, 0.25);
+    transition: background 0.3s ease;
+  }
+  .game-card a:hover {
+    background: linear-gradient(135deg, #FDD835, #F9A825);
+    color: #000;
+  }
+  .emoji {
+    font-size: 1.6em;
+    margin-right: 8px;
+  }
 </style>
 
 <div class="game-page-bg">
@@ -69,10 +75,14 @@ color: #000;
   <h3>Play our games to practice and improve!</h3>
   <div class="game-container">
     <div class="game-card">
-      <a href="{% url 'name_game' %}"> Learn My Name</a>
+      <a href="{% url 'name_game' %}">
+        <span class="emoji">🧑‍🎓</span> Learn My Name
+      </a>
     </div>
     <div class="game-card">
-      <a href="{% url 'game_home' %}"> Spelling Game</a>
+      <a href="{% url 'game_home' %}">
+        <span class="emoji">🔤</span> Spelling Game
+      </a>
     </div>
   </div>
 </div>

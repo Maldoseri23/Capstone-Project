@@ -17,7 +17,7 @@
             </thead>
             <tbody>
                 {% for profile in top_profiles %}
-                <tr style="border-bottom: 1px solid #dee2e6; {% if forloop.counter <= 3 %}background: linear-gradient(45deg, #fff3cd, #f8f9fa);{% endif %}">
+                <tr style="border-bottom: 1px solid #dee2e6;{% if forloop.counter <= 3 %}background: linear-gradient(45deg, #fff3cd, #f8f9fa);{% endif %}">
                     <td style="padding: 15px; text-align: center; font-weight: bold;">
                         {% if forloop.counter == 1 %}
                             🥇 #{{ forloop.counter }}
