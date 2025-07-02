@@ -2,7 +2,7 @@
 
 {% block content %}
 <style>
-  body {
+  .name-game-bg {
     font-family: 'Fira Mono', 'Play', monospace;
     text-align: center;
     color: #444;
@@ -174,12 +174,18 @@
   }
 </style>
 
-<div class="input-group">
-  <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
-  <button onclick="showSigns()">عرض</button>
-</div>
+<div class="name-game-bg">
+  <div class="input-group">
+    <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
+    <button onclick="showSigns()">عرض</button>
+  </div>
 
-<div id="lettersContainer"></div>
+  <div id="lettersContainer"></div>
+
+  <div style="margin-top: 50px;">
+    <a href="{% url 'Games' %}" class="home-button">🎮 Back to Game</a>
+  </div>
+</div>
 
 <script>
   const arabicSigns = {
@@ -208,7 +214,7 @@
     ل: '/static/images/letters/ل.png',
     م: '/static/images/letters/م.png',
     ن: '/static/images/letters/ن.png',
-    ه: '/static/images/letters/ه.png',  // Fixed image path for ه
+    ه: '/static/images/letters/ه.png',
     و: '/static/images/letters/و.png',
     ي: '/static/images/letters/ي.png',
     ى: '/static/images/letters/ى.png',
@@ -236,8 +242,4 @@
     }
   }
 </script>
-
-<div style="margin-top: 50px;">
-  <a href="{% url 'Games' %}" class="home-button">   🎮 Back to Game</a>
-</div>
 {% endblock %}
