@@ -1,0 +1,34 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling while splash is visible */
+}
+
+/* Overlay covers everything, including nav/footer */
+#splash {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  background: #fff; /* or any color you want behind the GIF */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* GIF fills and centers in the overlay */
+#splash img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover; /* Ensures the GIF covers the whole area, like background-size: cover */
+  display: block;
+}
+
+/* Optional: prevent body scroll when splash is active */
+body.splash-active {
+  overflow: hidden;
+  height: 100vh;
+}

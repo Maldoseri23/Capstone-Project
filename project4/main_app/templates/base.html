@@ -1,44 +1,78 @@
-{% load static %}
+<!-- {% load static %} -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar-container">
+      <div class="navbar-inner">
+        <div class="navbar-logo">
+          <!-- Place your logo SVG or text here -->
+          <a href="/">HEAR ME</a>
+        </div>
+        <ul class="navbar-links">
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
+          <li><a href="{% url 'calendar' %}">Calendar</a></li>
+          <li>
+            <a href="{% url 'lessons_by_language' 'bsl' %}">BSL Lessons</a>
+          </li>
+          <li>
+            <a href="{% url 'lessons_by_language' 'asl' %}">ASL Lessons</a>
+          </li>
+          <li><a href="{% url 'sign_to_text' %}">Sign to Text</a></li>
+          <li><a href="{% url 'profile_page' %}">My Profile</a></li>
+          <li>
+            <form
+              method="post"
+              action="{% url 'logout' %}"
+              style="display: inline"
+            >
+              {% csrf_token %}
+              <button type="submit" class="navbar-link logout-btn">
+                Log Out
+              </button>
+            </form>
+          </li>
+          {% else %}
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+          <li><a href="{% url 'login' %}">Log In</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <main>{% block content %} {% endblock %}</main>
+  </body>
+  <footer>
+    <div class="footer">
+      <div class="row">
+        <a href="#"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-instagram"></i></a>
+        <a href="#"><i class="fa fa-youtube"></i></a>
+        <a href="#"><i class="fa fa-twitter"></i></a>
+      </div>
 
-  <title>Document</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
-</head>
-<body>
-  <nav>
-    <ul>
-      
-      {% if user.is_authenticated %}
-        <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
-        <li><a href="{% url 'event_list' %}">EVENTS</a></li>
-        <li><a href="{% url 'calendar' %}">CALENDAR</a></li>
-        <li><a href="{% url 'lessons_by_language' 'bsl' %}">BSL Lessons</a></li>
-        <li><a href="{% url 'lessons_by_language' 'asl' %}">ASL Lessons</a></li>
-        <li><a href="{% url 'sign_to_text' %}">Sign to Text</a></li>
-  
+      <div class="row">
+        <ul>
+          <li><a href="#">Contact us</a></li>
+          <li><a href="#">Our Services</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+          <li><a href="#">Career</a></li>
+        </ul>
+      </div>
 
-        <li>
-          <form method="post" action="{% url 'logout' %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" style="background:none; border:none; padding:0; color:blue; text-decoration:underline; cursor:pointer;">
-              Log Out
-            </button>
-          </form>
-        </li>
-      {% else %}
-        <li><a href="{% url 'signup' %}">Sign Up</a></li>
-        <li><a href="{% url 'login' %}">Log In</a></li>
-      {% endif %}
-    </ul>
-  </nav>
-  
-  {% block content %}
-  {% endblock %}  
-</body>
+      <div class="row">
+        HEAR ME Copyright © 2021 Hear Me - All rights reserved 
+      </div>
+    </div>
+  </footer>
 </html>
-
