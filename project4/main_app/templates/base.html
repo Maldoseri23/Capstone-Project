@@ -1,149 +1,172 @@
-<!-- {% load static %} -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>{% block title %}HEAR ME{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+</head>
+<body>
     <nav class="navbar-container">
-      <div class="navbar-inner">
-        <div class="navbar-logo">
-          <!-- Place your logo SVG or text here -->
-          <a href="/">HEAR ME</a>
-        </div>
-        <ul class="navbar-links">
-          {% if user.is_authenticated %}
-          <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
-          <li><a href="{% url 'calendar' %}">Calendar</a></li>
-          <li>
-            <a href="{% url 'lessons_by_language' 'bsl' %}">BSL Lessons</a>
-          </li>
-          <li>
-            <a href="{% url 'lessons_by_language' 'asl' %}">ASL Lessons</a>
-          </li>
-          <li><a href="{% url 'sign_to_text' %}">Sign to Text</a></li>
-          <li><a href="{% url 'profile_page' %}">My Profile</a></li>
-          <li>
-            <form
-              method="post"
-              action="{% url 'logout' %}"
-              style="display: inline"
-            >
-              {% csrf_token %}
-              <button type="submit" class="navbar-link logout-btn">
-                Log Out
-              </button>
-            </form>
-          </li>
-          {% else %}
-          <li><a href="{% url 'signup' %}">Sign Up</a></li>
-          <li><a href="{% url 'login' %}">Log In</a></li>
-          {% endif %}
-        </ul>
-      </div>
-    </nav>
-    <main>{% block content %} 
-      <div style="text-align: center; padding: 20px;">
-  <h2>Search for a word in sign language</h2>
-  <input id="searchInput" type="text" placeholder="اكتب كلمة بالعربي" style="font-size: 1.2em; padding: 8px 12px; border-radius: 6px; border: none;">
-  <button onclick="showSearchSigns()" style="font-size: 1.2em; padding: 8px 12px; border-radius: 6px; background-color: #0ff; color: #111; border: none; cursor: pointer;">عرض</button>
-  <div id="searchLettersResult" style="margin-top: 15px;"></div>
-</div>
-      
-      {% endblock %}</main>
-     <script>
-  const arabicSigns = {
-    ا: '/static/images/letters/ا.png',
-    ب: '/static/images/letters/ب.png',
-    ت: '/static/images/letters/ت.png',
-    ث: '/static/images/letters/ث.png',
-    ج: '/static/images/letters/ج.png',
-    ح: '/static/images/letters/ح.png',
-    خ: '/static/images/letters/خ.png',
-    د: '/static/images/letters/د.png',
-    ذ: '/static/images/letters/ذ.png',
-    ر: '/static/images/letters/ر.png',
-    ز: '/static/images/letters/ز.png',
-    س: '/static/images/letters/س.png',
-    ش: '/static/images/letters/ش.png',
-    ص: '/static/images/letters/ص.png',
-    ض: '/static/images/letters/ض.png',
-    ط: '/static/images/letters/ط.png',
-    ظ: '/static/images/letters/ظ.png',
-    ع: '/static/images/letters/ع.png',
-    غ: '/static/images/letters/غ.png',
-    ف: '/static/images/letters/ف.png',
-    ق: '/static/images/letters/ق.png',
-    ك: '/static/images/letters/ك.png',
-    ل: '/static/images/letters/ل.png',
-    م: '/static/images/letters/م.png',
-    ن: '/static/images/letters/ن.png',
-    ه: '/static/images/letters/ح.png',
-    و: '/static/images/letters/و.png',
-    ي: '/static/images/letters/ي.png',
-    ى: '/static/images/letters/ى.png',
-    ة: '/static/images/letters/ة.png'
-  };
-
-  function showSearchSigns() {
-    const input = document.getElementById('searchInput').value.trim();
-    const container = document.getElementById('searchLettersResult');
-    container.innerHTML = '';
-
-    for (const char of input) {
-      if (arabicSigns[char]) {
-        const img = document.createElement('img');
-        img.src = arabicSigns[char];
-        img.alt = char;
-        img.style.width = '80px';
-        img.style.height = '80px';
-        img.style.margin = '5px';
-        img.style.border = '2px solid #0ff';
-        img.style.borderRadius = '10px';
-        container.appendChild(img);
-      } else if (char.trim() === '') {
-        // ignore space
-      } else {
-        const span = document.createElement('span');
-        span.textContent = '?';
-        span.style.color = 'red';
-        span.style.fontSize = '3em';
-        span.style.margin = '5px';
-        container.appendChild(span);
-      }
-    }
-  }
-</script>
-  </body>
-  <footer>
-    <div class="footer">
-      <div class="row">
-        <a href="#"><i class="fa fa-facebook"></i></a>
-        <a href="#"><i class="fa fa-instagram"></i></a>
-        <a href="#"><i class="fa fa-youtube"></i></a>
-        <a href="#"><i class="fa fa-twitter"></i></a>
-      </div>
-
-      <div class="row">
-        <ul>
-          <li><a href="#">Contact us</a></li>
-          <li><a href="#">Our Services</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms & Conditions</a></li>
-          <li><a href="#">Career</a></li>
-        </ul>
-      </div>
-
-      <div class="row">
-        HEAR ME Copyright © 2021 Hear Me - All rights reserved 
-      </div>
+        <div class="navbar-inner">
+            <div class="navbar-logo">
+                <a href="/">HEAR ME</a>
+            </div>
+            <ul class="navbar-links">
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
+                <li><a href="{% url 'calendar' %}">Calendar</a></li>
+                <li><a href="{% url 'lessons_by_language' 'bsl' %}">BSL Lessons</a></li>
+                <li><a href="{% url 'lessons_by_language' 'asl' %}">ASL Lessons</a></li>
+                <li><a href="{% url 'sign_to_text' %}">Sign to Text</a></li>
+                <li><a href="{% url 'profile_page' %}">My Profile</a></li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="navbar-link logout-btn">Log Out</button>
+                    </form>
+                </li>
+                {% else %}
+                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                <li><a href="{% url 'login' %}">Log In</a></li>
+                {% endif %}
+            </ul>
+          <div class="navbar-search-container">
+    <button id="searchToggleBtn" aria-label="Toggle search" class="search-icon-btn">
+        <!-- Black magnifying glass SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+    </button>
+    <div id="navbarSearchBar" class="navbar-search-bar">
+        <input id="searchInputNav" type="text" placeholder="اكتب كلمة بالعربي" />
+        <button onclick="showSearchSignsFromNav()" class="search-bar-btn">عرض</button>
+        <div id="searchLettersResultNav" class="search-letters-result"></div>
     </div>
-  </footer>
+</div>
+
+    </nav>
+    <main>
+        {% block content %}
+        <!-- Page-specific content goes here -->
+        {% endblock %}
+    </main>
+    <footer>
+        <div class="footer">
+            <div class="row">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a href="#"><i class="fa fa-youtube"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+            </div>
+            <div class="row">
+                <ul>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="#">Our Services</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Career</a></li>
+                </ul>
+            </div>
+            <div class="row">
+                HEAR ME Copyright © 2021 Hear Me - All rights reserved 
+            </div>
+        </div>
+    </footer>
+    <script>
+    // Arabic sign images mapping
+    const arabicSigns = {
+        ا: '/static/images/letters/ا.png',
+        ب: '/static/images/letters/ب.png',
+        ت: '/static/images/letters/ت.png',
+        ث: '/static/images/letters/ث.png',
+        ج: '/static/images/letters/ج.png',
+        ح: '/static/images/letters/ح.png',
+        خ: '/static/images/letters/خ.png',
+        د: '/static/images/letters/د.png',
+        ذ: '/static/images/letters/ذ.png',
+        ر: '/static/images/letters/ر.png',
+        ز: '/static/images/letters/ز.png',
+        س: '/static/images/letters/س.png',
+        ش: '/static/images/letters/ش.png',
+        ص: '/static/images/letters/ص.png',
+        ض: '/static/images/letters/ض.png',
+        ط: '/static/images/letters/ط.png',
+        ظ: '/static/images/letters/ظ.png',
+        ع: '/static/images/letters/ع.png',
+        غ: '/static/images/letters/غ.png',
+        ف: '/static/images/letters/ف.png',
+        ق: '/static/images/letters/ق.png',
+        ك: '/static/images/letters/ك.png',
+        ل: '/static/images/letters/ل.png',
+        م: '/static/images/letters/م.png',
+        ن: '/static/images/letters/ن.png',
+        ه: '/static/images/letters/ح.png',
+        و: '/static/images/letters/و.png',
+        ي: '/static/images/letters/ي.png',
+        ى: '/static/images/letters/ى.png',
+        ة: '/static/images/letters/ة.png'
+    };
+
+   // Toggle search bar in navbar
+document.addEventListener('DOMContentLoaded', function() {
+    const searchBtn = document.getElementById('searchToggleBtn');
+    const searchBar = document.getElementById('navbarSearchBar');
+    const inputNav = document.getElementById('searchInputNav');
+    searchBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (searchBar.style.display === 'none' || searchBar.style.display === '') {
+            searchBar.style.display = 'block';
+            inputNav.focus();
+        } else {
+            searchBar.style.display = 'none';
+        }
+    });
+    // Hide search bar if clicked outside
+    document.addEventListener('click', function(e) {
+        if (!searchBar.contains(e.target) && e.target !== searchBtn) {
+            searchBar.style.display = 'none';
+        }
+    });
+});
+
+// Show sign images for entered letters in navbar search
+function showSearchSignsFromNav() {
+    const input = document.getElementById('searchInputNav').value.trim();
+    const container = document.getElementById('searchLettersResultNav');
+    container.innerHTML = '';
+    let count = 0;
+    for (const char of input) {
+        if (arabicSigns[char]) {
+            const img = document.createElement('img');
+            img.src = arabicSigns[char];
+            img.alt = char;
+            img.className = 'sign-letter-img';
+            container.appendChild(img);
+            count++;
+        } else if (char.trim() === '') {
+            // ignore space
+        } else {
+            const span = document.createElement('span');
+            span.textContent = '?';
+            span.className = 'sign-letter-unknown';
+            container.appendChild(span);
+            count++;
+        }
+    }
+    // Dynamically adjust search bar width to fit images
+    const minWidth = 250; // px
+    const imgWidth = 60;  // px (see CSS below)
+    const gap = 6;        // px (see CSS below)
+    let newWidth = Math.max(minWidth, count * (imgWidth + gap));
+    container.parentElement.style.width = newWidth + 'px';
+}
+
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
 </html>
