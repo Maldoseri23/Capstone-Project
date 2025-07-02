@@ -4,14 +4,13 @@
 <h1>Event Calendar</h1>
 <a href="{% url 'EventCreate' %}">Add Event</a>
 <ul>
-  {% for event in object_list %}
+  {% for event in events %}
     <li>
       <a href="{% url 'event_detail' event.pk %}">{{ event.title }}</a>
       on {{ event.date }}
     </li>
-  {% empty %}
+    {% empty %}
     <li>No events yet.</li>
   {% endfor %}
-</ul>
 
 {% endblock %}

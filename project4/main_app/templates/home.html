@@ -1,13 +1,62 @@
 {% extends 'base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
 {% block content %}
-<section class="hero">
-  <div class="hero-image">
-    <!-- <img src="/static/image/sign language.jpg" alt="sign language"> -->
-    <!-- <img src="/static/image/sign language.jpg" alt="sign language"> -->
-    <h1> Home </h1>
-  </div>
-</section>
+<div id="splash">
+  <img src="{% static 'images/l.gif' %}" alt="Loading...">
+</div>
 
+<div id="landing">
+  <section class="hero">
+    <div class="hero-image">
 
+        <h1>Welcome to Hear Me</h1>
+        <p>Learn, practice, and connect with the community</p>
+        <h2>The fun, fast and easy way to learn Sign Language</h2>
+        <p>Our bite-sized, interactive lessons will help you develop the skills you need for real-life communication. And because we know you don't have all day, our lessons are short, sweet, and designed to fit into your busy schedule. In just a few minutes a day, you will be able to engage in your first conversation in no time.</p>
+        <h2>Here is how it works</h2>
+        <p>Practical conversational skills: Use our room chat to immerse yourself in Sign Language through interactive and useful dialogues with other users that get you talking right away.</p>
+        <h3>Remember what you've learnt</h3>
+        <p>Struggling to remember what you've learnt? Challenge yourself to recall your learnings for the long term using our games.</p>
+        <h3>Sign with confidence</h3>
+        <p>Unsure whether you are signing the right way? Perfect your execution—our sign to text feature has you covered.</p>
+        <h2>Upcoming Events</h2>
+        <p>Sign up for our next events!</p>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Force hide landing content immediately
+  document.addEventListener('DOMContentLoaded', function() {
+    const landing = document.getElementById('landing');
+    const splash = document.getElementById('splash');
+    
+    // Ensure landing is hidden
+    landing.style.display = 'none';
+    landing.style.visibility = 'hidden';
+    landing.style.opacity = '0';
+    
+    // Add class to body to prevent scrolling
+    document.body.classList.add('splash-active');
+    
+    // Show splash
+    splash.style.display = 'flex';
+    
+    setTimeout(function() {
+      // Hide splash
+      splash.style.display = 'none';
+      
+      // Show landing content
+      landing.style.display = 'block';
+      landing.style.visibility = 'visible';
+      landing.style.opacity = '1';
+      landing.classList.add('show');
+      
+      // Remove body restriction
+      document.body.classList.remove('splash-active');
+    }, 5000);
+  });
+</script>
 {% endblock %}
-

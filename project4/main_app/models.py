@@ -1,14 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Profile(models.Model):
     bio = models.CharField(max_length=100)
     profile_image = models.ImageField(upload_to='main_app/static/uploads', default='')
-    streak_count = models.IntegerField()
+    streak_count = models.IntegerField(default=0)
+    highscore = models.PositiveIntegerField(default=0)
+    garden_level = models.PositiveIntegerField(default=0)
+    flowers = models.PositiveIntegerField(default=0)
+    fruits = models.PositiveIntegerField(default=0)
 
     # Foreign Key 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # model objects
     def __str__(self):
@@ -162,3 +168,16 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"{self.get_language_display()} {self.get_lesson_type_display()}: {self.label}"
+    
+class GameWord(models.Model):
+    word = models.CharField(max_length=20, unique=True)
+    # Store image filenames for each letter, e.g. ["a.png", "p.png", "p.png", "l.png", "e.png"]
+    images = models.JSONField()
+
+
+
+#automatically create user profile when user registers 
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
