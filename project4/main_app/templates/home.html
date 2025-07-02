@@ -1,62 +1,172 @@
-{% extends 'base.html' %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% extends 'base.html' %} {% load static %} {% block content %}
+<!-- Inline CSS: guaranteed to load -->
+<style>
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+  }
 
-{% block content %}
+  /* Overlay covers everything, including nav/footer */
+  #splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    background: #fff; /* or any color you want behind the GIF */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* GIF fills and centers in the overlay */
+  #splash img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* Ensures the GIF covers the whole area, like background-size: cover */
+    display: block;
+  }
+
+  /* Optional: prevent body scroll when splash is active
+body.splash-active {
+overflow: hidden;
+height: 100vh;
+} */
+
+  .hero {
+    background: linear-gradient(120deg, #fffdee 0%, #f9f6eb 100%);
+    padding: 3rem 1.5rem 2rem 1.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 2px 24px 0 rgba(244, 169, 0, 0.07);
+    max-width: 800px;
+    margin: 2rem auto;
+    font-family: 'Play', 'Fira Mono', monospace;
+    color: #232323;
+  }
+
+  .hero-image {
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+    font-family: 'Play', 'Fira Mono', monospace;
+    font-weight: 700;
+    color: #f4a900;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(244, 169, 0, 0.08);
+  }
+
+  .hero h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #232323;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    border-left: 5px solid #f4a900;
+    padding-left: 0.75rem;
+    background: rgba(244, 169, 0, 0.05);
+    display: inline-block;
+  }
+
+  .hero h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #f4a900;
+    margin-top: 1.5rem;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.03em;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: #232323;
+    margin: 0.5rem 0 1.2rem 0;
+    line-height: 1.6;
+    background: rgba(244, 169, 0, 0.03);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    display: inline-block;
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      padding: 1.5rem 0.5rem;
+      border-radius: 0.7rem;
+    }
+    .hero h1 {
+      font-size: 1.5rem;
+    }
+    .hero h2 {
+      font-size: 1.1rem;
+      padding-left: 0.5rem;
+    }
+    .hero h3 {
+      font-size: 1rem;
+    }
+    .hero p {
+      font-size: 0.98rem;
+      padding: 0.3rem 0.5rem;
+    }
+  }
+</style>
+
 <div id="splash">
-  <img src="{% static 'images/l.gif' %}" alt="Loading...">
+  <img src="{% static 'images/l.gif' %}" alt="Loading..." />
 </div>
 
 <div id="landing">
   <section class="hero">
     <div class="hero-image">
-
-        <h1>Welcome to Hear Me</h1>
-        <p>Learn, practice, and connect with the community</p>
-        <h2>The fun, fast and easy way to learn Sign Language</h2>
-        <p>Our bite-sized, interactive lessons will help you develop the skills you need for real-life communication. And because we know you don't have all day, our lessons are short, sweet, and designed to fit into your busy schedule. In just a few minutes a day, you will be able to engage in your first conversation in no time.</p>
-        <h2>Here is how it works</h2>
-        <p>Practical conversational skills: Use our room chat to immerse yourself in Sign Language through interactive and useful dialogues with other users that get you talking right away.</p>
-        <h3>Remember what you've learnt</h3>
-        <p>Struggling to remember what you've learnt? Challenge yourself to recall your learnings for the long term using our games.</p>
-        <h3>Sign with confidence</h3>
-        <p>Unsure whether you are signing the right way? Perfect your execution—our sign to text feature has you covered.</p>
-        <h2>Upcoming Events</h2>
-        <p>Sign up for our next events!</p>
+      <h1>Welcome to Hear Me 🌟</h1>
+      <p>Learn, practice, and connect with the community 🤟😊</p>
+      <h2>The fun, fast and easy way to learn Sign Language 🚀⚡</h2>
+      <p>
+        Our bite-sized, interactive lessons will help you develop the skills you
+        need for real-life communication 🎉💬
+      </p>
+      <h3>Remember what you've learnt 📝✔️</h3>
+      <p>
+        Challenge yourself to recall your learnings for the long term using our
+        games 🎮🕹️
+      </p>
+      <h3>Sign with confidence 👐</h3>
+      <p>
+        Perfect your execution—our sign to text feature has you covered 📚🎓
+      </p>
     </div>
   </section>
 </div>
 
 <script>
   // Force hide landing content immediately
-  document.addEventListener('DOMContentLoaded', function() {
-    const landing = document.getElementById('landing');
-    const splash = document.getElementById('splash');
-    
+  document.addEventListener('DOMContentLoaded', function () {
+    const landing = document.getElementById('landing')
+    const splash = document.getElementById('splash')
     // Ensure landing is hidden
-    landing.style.display = 'none';
-    landing.style.visibility = 'hidden';
-    landing.style.opacity = '0';
-    
+    landing.style.display = 'none'
+    landing.style.visibility = 'hidden'
+    landing.style.opacity = '0'
     // Add class to body to prevent scrolling
-    document.body.classList.add('splash-active');
-    
+    document.body.classList.add('splash-active')
     // Show splash
-    splash.style.display = 'flex';
-    
-    setTimeout(function() {
+    splash.style.display = 'flex'
+    setTimeout(function () {
       // Hide splash
-      splash.style.display = 'none';
-      
+      splash.style.display = 'none'
       // Show landing content
-      landing.style.display = 'block';
-      landing.style.visibility = 'visible';
-      landing.style.opacity = '1';
-      landing.classList.add('show');
-      
+      landing.style.display = 'block'
+      landing.style.visibility = 'visible'
+      landing.style.opacity = '1'
+      landing.classList.add('show')
       // Remove body restriction
-      document.body.classList.remove('splash-active');
-    }, 5000);
-  });
+      document.body.classList.remove('splash-active')
+    }, 5000)
+  })
 </script>
 {% endblock %}

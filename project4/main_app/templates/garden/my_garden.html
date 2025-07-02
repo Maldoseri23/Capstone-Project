@@ -24,40 +24,92 @@
 <p style="text-align:center;">You have grown {{ profile.flowers }} flowers and {{ profile.fruits }} fruits!</p>
 
 <style>
-.garden-container {
+    .garden-container {
     position: relative;
     width: 400px;
     height: 300px;
     margin: 30px auto 0 auto;
-    background: #cce5cc;
+    background: linear-gradient(135deg, #f9fbe7, #dcedc8); /* soft light green/yellow */
     border-radius: 20px;
     overflow: hidden;
+    box-shadow: 0 6px 18px rgba(76, 175, 80, 0.3);
+    border: 2px solid #aed581; /* medium green border */
 }
+
 .garden-tree {
     position: absolute;
     left: 50%;
     bottom: 0;
-    width: 180px;   /* Large tree */
+    width: 180px;
     transform: translateX(-50%);
     z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(76, 175, 80, 0.5));
 }
+
 .garden-row {
     position: absolute;
     left: 50%;
     display: flex;
-    gap: 8px;
+    gap: 12px;
     transform: translateX(-50%);
     z-index: 2;
 }
+
+.garden-flowers {
+    bottom: 0;
+}
+
+.garden-fruits {
+    bottom: 50px;
+}
+
 .garden-flower {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(255, 193, 7, 0.6)); /* warm yellow glow */
+    transition: transform 0.2s ease;
 }
+
+.garden-flower:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 3px 6px rgba(255, 193, 7, 0.8));
+}
+
 .garden-fruit {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(139, 195, 74, 0.6)); /* green glow */
+    transition: transform 0.2s ease;
 }
+
+.garden-fruit:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 3px 6px rgba(139, 195, 74, 0.8));
+}
+
+p {
+    text-align: center;
+    font-family: 'Fira Mono', 'Play', monospace;
+    font-size: 1.2em;
+    color: #558b2f; /* darker green */
+    margin-top: 18px;
+    text-shadow: 0 1px 2px rgba(188, 214, 141, 0.7);
+}
+
+h2 {
+    display: block;
+    font-size: 1.8em;
+    margin: 1em 0;
+    font-weight: 700;
+    font-family: 'Fira Mono', 'Play', monospace;
+    color: #4caf50; /* medium green */
+    text-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+    text-align: center;
+    unicode-bidi: isolate;
+}
+
+
 </style>
 {% endblock %}

@@ -1,24 +1,33 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
 {% block content %}
+  <div class="event-detail-card">
+    <h1 class="event-title">{{ event.title }}</h1>
+    <p><strong>Description:</strong> {{ event.description }}</p>
+    <p><strong>Date & Time:</strong> {{ event.date }}</p>
+    <p><strong>Location:</strong> {{ event.location }}</p>
+    <p><strong>Type:</strong> {% if event.is_virtual %}Online{% else %}In-person{% endif %}</p>
 
+    {% if event.link %}
+      <p><strong>Link:</strong> <a class="event-link" href="{{ event.link }}" target="_blank">Join Event</a></p>
+    {% endif %}
 
-<h1>{{ event.title }}</h1>
-<p>Description :{{ event.description }}</p>
-<p> Date & Time : {{ event.date }}</p>
-<p>Location : {{ event.location }}</p>
-<p>is_virtual : {% if event.is_virtual %}Online{% else %}In-person{% endif %}</p>
-{% if event.link %}
-  <p>Link : <a href="{{ event.link }}">Event Link</a></p>
-{% endif %}
-{% if event %}
-  <p><strong>Created by:</strong> {{ event.created_by.username }}</p>
-{% endif %}
+    {% if event %}
+      <p><strong>Created by:</strong> {{ event.created_by.username }}</p>
+    {% endif %}
 
-{% if request.user == event.created_by %}
-  <a href="{% url 'EventEdit' event.pk %}">Edit</a> |
-  <a href="{% url 'EventDelete' event.pk %}">Delete</a> |
-{% endif %}
+    {% if request.user == event.created_by %}
+      <div class="event-actions">
+        <a class="btn-edit" href="{% url 'EventEdit' event.pk %}">Edit</a>
+        <a class="btn-delete" href="{% url 'EventDelete' event.pk %}">Delete</a>
+      </div>
+    {% endif %}
 
-<a href="{% url 'calendar' %}">Back</a>
-
+    <a class="btn-back" href="{% url 'calendar' %}">← Back to Calendar</a>
+  </div>
 {% endblock %}

@@ -13,3 +13,4 @@ def sign_to_text_view(request):
 
 def Games(request):
     return render(request, 'games.html')
+
