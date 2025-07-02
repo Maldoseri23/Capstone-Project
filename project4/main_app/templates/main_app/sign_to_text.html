@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Sign to Text</title>
+{% extends 'base.html' %}
+{% block content %}
    <style>
 body {
   background-color: #fff3e6;
@@ -74,8 +71,7 @@ body {
       }
     }
   </style>
-</head>
-<body>
+
   <h1>Sign Language Recognition</h1>
   <!-- Removed the <video> element -->
   <canvas class="output_canvas" width="640" height="480"></canvas>
@@ -192,5 +188,4 @@ body {
 
     camera.start();
   </script>
-</body>
-</html>
+{% endblock %}
