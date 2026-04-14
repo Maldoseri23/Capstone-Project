@@ -1,6 +1,7 @@
-html, body {
+html,
+body {
   height: 100%;
-  margin: 0;
+  margin: 2rem auto;
   background-color: #fffdee;
 }
 
@@ -14,6 +15,9 @@ body {
 main {
   flex: 1; /* This makes main take up remaining space */
   padding-bottom: 2rem; /* Optional: adds some space above footer */
+  margin: 0;
+  padding: 0;
+  display: block;
 }
 
 .footer {
@@ -143,7 +147,9 @@ main {
   text-decoration: none;
   font-weight: 500;
   letter-spacing: 0.04em;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
   border: none;
   cursor: pointer;
 }
@@ -170,7 +176,9 @@ main {
   font-weight: 500;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 /* Responsive: Stack nav on small screens */
@@ -238,8 +246,8 @@ form p {
   margin-bottom: 1.5rem;
 }
 
-input[type="text"],
-input[type="password"] {
+input[type='text'],
+input[type='password'] {
   width: 100%;
   padding: 12px;
   border: 2px solid #ffd280;
@@ -249,7 +257,7 @@ input[type="password"] {
   background-color: #fffdf7;
 }
 
-input[type="submit"].btn {
+input[type='submit'].btn {
   margin-top: 1rem;
   width: 100%;
   background-color: #f4a900;
@@ -263,7 +271,7 @@ input[type="submit"].btn {
   transition: background 0.3s ease;
 }
 
-input[type="submit"].btn:hover {
+input[type='submit'].btn:hover {
   background-color: #e29400;
 }
 
@@ -320,8 +328,6 @@ label {
 label:hover {
   color: #f4a900; /* Highlight on hover */
 }
-
-
 
 /* ---------- Event Calendar Styling ---------- */
 
@@ -535,9 +541,9 @@ label:hover {
 }
 
 /* Inputs and textareas */
-.page-wrapper input[type="text"],
-.page-wrapper input[type="email"],
-.page-wrapper input[type="password"],
+.page-wrapper input[type='text'],
+.page-wrapper input[type='email'],
+.page-wrapper input[type='password'],
 .page-wrapper textarea,
 .page-wrapper select {
   width: 100%;
@@ -552,9 +558,9 @@ label:hover {
   transition: border-color 0.3s ease;
 }
 
-.page-wrapper input[type="text"]:focus,
-.page-wrapper input[type="email"]:focus,
-.page-wrapper input[type="password"]:focus,
+.page-wrapper input[type='text']:focus,
+.page-wrapper input[type='email']:focus,
+.page-wrapper input[type='password']:focus,
 .page-wrapper textarea:focus,
 .page-wrapper select:focus {
   border-color: #f4a900;
@@ -562,7 +568,7 @@ label:hover {
 }
 
 /* Submit button */
-.page-wrapper input[type="submit"].btn {
+.page-wrapper input[type='submit'].btn {
   margin-top: 1.5rem;
   width: 100%;
   background-color: #f4a900;
@@ -577,7 +583,7 @@ label:hover {
   user-select: none;
 }
 
-.page-wrapper input[type="submit"].btn:hover {
+.page-wrapper input[type='submit'].btn:hover {
   background-color: #e29400;
 }
 
@@ -592,7 +598,7 @@ label:hover {
     font-size: 1.8rem;
   }
 
-  .page-wrapper input[type="submit"].btn {
+  .page-wrapper input[type='submit'].btn {
     font-size: 1rem;
     padding: 12px;
   }
@@ -641,7 +647,7 @@ label:hover {
 }
 
 /* Confirm Delete button */
-.page-wrapper input[type="submit"].btn {
+.page-wrapper input[type='submit'].btn {
   background-color: #f44336; /* red */
   color: #fff8ee;
   font-weight: bold;
@@ -655,7 +661,7 @@ label:hover {
   flex: 1 1 150px;
 }
 
-.page-wrapper input[type="submit"].btn:hover {
+.page-wrapper input[type='submit'].btn:hover {
   background-color: #d7372a;
 }
 
@@ -696,7 +702,7 @@ label:hover {
     flex-direction: column;
     gap: 1rem;
   }
-  .page-wrapper input[type="submit"].btn,
+  .page-wrapper input[type='submit'].btn,
   .page-wrapper a.btn.red {
     flex: none;
     width: 100%;
@@ -704,7 +710,6 @@ label:hover {
     padding: 12px 0;
   }
 }
-
 
 /* Container and General Layout */
 .container {
@@ -727,7 +732,8 @@ h1 {
   text-align: center;
 }
 
-h3, h4 {
+h3,
+h4 {
   color: #3a4d2f;
   margin-bottom: 0.75rem;
 }
@@ -762,7 +768,9 @@ hr {
 }
 
 /* Buttons */
-button, input[type="submit"], a.btn {
+button,
+input[type='submit'],
+a.btn {
   background-color: #f4a900;
   color: #2e5d36;
   font-weight: bold;
@@ -777,7 +785,9 @@ button, input[type="submit"], a.btn {
   user-select: none;
 }
 
-button:hover, input[type="submit"]:hover, a.btn:hover {
+button:hover,
+input[type='submit']:hover,
+a.btn:hover {
   background-color: #e29400;
 }
 
@@ -923,8 +933,8 @@ form label {
   font-family: 'Comic Sans MS', cursive;
 }
 
-form input[type="text"],
-form input[type="number"] {
+form input[type='text'],
+form input[type='number'] {
   padding: 10px;
   font-size: 1rem;
   border: 2px solid #ffd280;
@@ -934,7 +944,7 @@ form input[type="number"] {
   box-sizing: border-box;
 }
 
-form button[type="submit"] {
+form button[type='submit'] {
   width: 100%;
   max-width: 200px;
   align-self: center;
@@ -994,17 +1004,17 @@ form button[type="submit"] {
     flex-direction: column;
     align-items: center;
   }
-  
+
   #videos > div {
     width: 100%;
     max-width: 320px;
   }
-  
+
   .chat-section {
     width: 100%;
     max-width: 480px;
   }
-  
+
   form div {
     width: 100%;
   }
@@ -1014,13 +1024,14 @@ form button[type="submit"] {
   h1 {
     font-size: 2rem;
   }
-  
-  button, input[type="submit"], a.btn {
+
+  button,
+  input[type='submit'],
+  a.btn {
     font-size: 1rem;
     padding: 10px 20px;
   }
 }
-
 
 .call-room-layout {
   display: flex;
@@ -1474,7 +1485,6 @@ form button[type="submit"] {
   font-weight: bold;
 }
 
-
 /* --- SEARCH IN NAVBAR --- */
 .navbar-search-container {
   position: relative;
@@ -1543,4 +1553,3 @@ form button[type="submit"] {
   font-size: 2.5em;
   margin: 0 3px;
 }
-

@@ -1,5 +1,6 @@
 /* Reset inherited styles */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', 'Arial', sans-serif;
@@ -34,7 +35,7 @@ html, body {
   display: none;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.7s cubic-bezier(.4,0,.2,1);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Show landing content after splash */
@@ -63,7 +64,6 @@ body.splash-active {
   color: #232323;
 }
 
-
 .hero-image {
   margin-bottom: 2rem;
 }
@@ -74,7 +74,7 @@ body.splash-active {
   color: #00796b;
   margin-bottom: 0.6rem;
   letter-spacing: -1px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .hero h2 {
@@ -102,7 +102,9 @@ body.splash-active {
 }
 
 /* Add a soft highlight for important text */
-.hero p strong, .hero h2, .hero h3 {
+.hero p strong,
+.hero h2,
+.hero h3 {
   background: linear-gradient(90deg, #fffde4 60%, #ffe3e3 100%);
   padding: 0.1em 0.4em;
   border-radius: 0.4em;
@@ -127,12 +129,16 @@ body.splash-active {
 
 /* Optional: Subtle fade-in for hero after splash */
 #landing.show .hero {
-  animation: fadeInUp 1s cubic-bezier(.4,0,.2,1);
+  animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(40px);}
-  to { opacity: 1; transform: translateY(0);}
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
-
