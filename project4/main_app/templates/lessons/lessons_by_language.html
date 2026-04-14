@@ -1,41 +1,51 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="lesson-wrapper">
   <h1 class="page-title">
-    {% if language_code == 'bsl' %}
-      Bahraini Sign Language Lessons
-    {% elif language_code == 'asl' %}
-      American Sign Language Lessons
-    {% endif %}
+    {% if language_code == 'esl' %} English Sign Language Lessons {% else %}
+    Arabic Sign Language Lessons {% endif %}
   </h1>
 
   {% if lessons %}
-    <ul class="lesson-list">
-      {% for lesson in lessons %}
-        <li class="lesson-card">
-          <a href="{% url 'lesson_detail' language_code lesson.pk %}" class="lesson-link">
-            📘 Lesson {{ forloop.counter }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+  <ul class="lesson-list">
+    {% for lesson in lessons %}
+    <li class="lesson-card">
+      <a
+        href="{% url 'lesson_detail' language_code lesson.pk %}"
+        class="lesson-link"
+      >
+        📘 Lesson {{ forloop.counter }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
   {% else %}
-    <p class="no-lessons">No lessons found for this language.</p>
-  {% endif %}
-
-  {% if language_code == 'asl' %}
-    <div class="video-copyright">
-      <small>
-        ASL videos © <a href="https://www.youtube.com/@LearnHowToSign" target="_blank" rel="noopener">Learn How to Sign</a> . All rights reserved.
-      </small>
-    </div>
-  {% elif language_code == 'bsl' %}
-    <div class="video-copyright">
-      <small>
-        BSL videos © Bahrain Association of Banks. All rights reserved.
-      </small>
-    </div>
+  <p class="no-lessons">No lessons found for this language.</p>
+  {% endif %} {% if language_code == 'asl' %}
+  <div class="video-copyright">
+    <small>
+      ASL videos ©
+      <a
+        href="https://www.youtube.com/@LearnHowToSign"
+        target="_blank"
+        rel="noopener"
+        >Learn How to Sign</a
+      >
+      . All rights reserved.
+    </small>
+  </div>
+  {% elif language_code == 'esl' %}
+  <div class="video-copyright">
+    <small>
+      ASL videos ©
+      <a
+        href="https://www.youtube.com/@LearnHowToSign"
+        target="_blank"
+        rel="noopener"
+        >Learn How to Sign</a
+      >
+      . All rights reserved.
+    </small>
+  </div>
   {% endif %}
 </div>
 {% endblock %}

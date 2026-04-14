@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% load static %} {% block styles %}
+<link
+  href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %}
+<div>
+  <h2 class="calendar-title">Event Calendar</h2>
+  <a
+    class="calendar-add-btn"
+    href="{% url 'EventCreate' %}"
+    style="font-family: 'Comic Sans MS', cursive"
+    >Add Event</a
+  >
+  <div id="calendar"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar')
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: '/api/events/',
+      displayEventTime: false
+    })
+    calendar.render()
+  })
+</script>
+{% endblock %}

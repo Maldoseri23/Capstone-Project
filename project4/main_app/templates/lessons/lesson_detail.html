@@ -1,79 +1,564 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
-<div class="lesson-detail-container">
-  <h2 class="lesson-title">
-    {{ lesson.get_lesson_type_display }}: {{ lesson.label }}
-  </h2>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap');
 
-  <div class="video-wrapper">
-    <iframe 
-      src="https://www.youtube.com/embed/{{ lesson.video_id }}"
-      frameborder="0"
-      allowfullscreen
-      class="lesson-video"
-      title="Lesson Video">
-    </iframe>
-  </div>
+  :root {
+    --primary: #1a1a2e;
+    --accent: #e94560;
+    --accent-soft: #ff6b81;
+    --gold: #f5c518;
+    --surface: #ffffff;
+    --surface-2: #f7f8fc;
+    --border: #e8eaf0;
+    --text: #1a1a2e;
+    --text-muted: #7a7f9a;
+    --radius: 14px;
+    --shadow: 0 4px 24px rgba(26, 26, 46, 0.09);
+  }
 
-  <div class="lesson-actions">
-    <a href="{% url 'lessons_by_language' language_code %}" class="back-button">
-      &larr; Back to Lessons
+  /* ── PAGE LAYOUT ─────────────────────────────── */
+  .ld-page {
+    font-family: 'Comic Sans MS', cursive;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    color: var(--text);
+  }
+
+  /* ── HERO ────────────────────────────────────── */
+  .ld-hero {
+    background: linear-gradient(135deg, var(--surface) 0%, #f5c518 100%);
+    border-radius: 0 0 28px 28px;
+    padding: 36px 40px 44px;
+    margin: 0 -20px 32px;
+    position: relative;
+  }
+
+  .ld-back {
+    display: inline-block;
+    color: var(--text);
+    font-size: 0.85rem;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .ld-back:hover {
+    color: #fff;
+  }
+
+  .ld-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 99px;
+    margin-bottom: 12px;
+  }
+
+  .ld-title {
+    font-family: 'Comic Sans MS', cursive;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── BODY ────────────────────────────────────── */
+  .ld-body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-shadow: var(--gold);
+  }
+
+  /* ── VIDEO CARD ──────────────────────────────── */
+  .ld-video-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: var(--gold);
+  }
+
+  .ld-video-icon {
+    font-size: 2.4rem;
+    flex-shrink: 0;
+  }
+
+  .ld-video-info {
+    flex: 1;
+  }
+
+  .ld-video-label {
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0 0 4px;
+  }
+
+  .ld-video-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .ld-watch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ff0000;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 12px 22px;
+    border-radius: 10px;
+    white-space: nowrap;
+    transition:
+      background 0.2s,
+      transform 0.15s;
+  }
+  .ld-watch-btn:hover {
+    background: #cc0000;
+    transform: translateY(-1px);
+  }
+
+  /* ── COMPLETE BUTTON ─────────────────────────── */
+  .ld-complete-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 18px 28px;
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition:
+      opacity 0.2s,
+      transform 0.15s;
+    box-shadow: var(--gold);
+  }
+  .ld-complete-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+
+  .ld-complete-icon {
+    font-size: 1.3rem;
+  }
+
+  /* ── SUCCESS MESSAGE ─────────────────────────── */
+  .ld-success-msg {
+    background: #f0fff4;
+    border: 1px solid #86efac;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    font-weight: 500;
+    color: #166534;
+  }
+
+  /* ── SECTION ─────────────────────────────────── */
+  .ld-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--gold);
+  }
+
+  .ld-section-title {
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ld-count {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 99px;
+  }
+
+  /* ── COMMENT FORM ────────────────────────────── */
+  .ld-comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .ld-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .ld-field textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 0.95rem;
+    color: var(--text);
+    resize: vertical;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    background: var(--surface-2);
+  }
+  .ld-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+  }
+
+  /* Star rating */
+  .ld-stars {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 4px;
+  }
+
+  .ld-stars input[type='radio'] {
+    display: none;
+  }
+
+  .ld-stars label {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.15s;
+    margin: 0;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .ld-stars input:checked ~ label,
+  .ld-stars label:hover,
+  .ld-stars label:hover ~ label {
+    color: var(--gold);
+  }
+
+  .ld-submit-btn {
+    align-self: flex-start;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 28px;
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      transform 0.15s;
+  }
+  .ld-submit-btn:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  /* ── COMMENT CARDS ───────────────────────────── */
+  .ld-comment-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 14px;
+    background: var(--surface-2);
+    transition: border-color 0.2s;
+  }
+  .ld-comment-card:hover {
+    border-color: #c8cce0;
+  }
+
+  .ld-comment-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .ld-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .ld-comment-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ld-username {
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+
+  .ld-date {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .ld-star-display {
+    display: flex;
+    gap: 1px;
+  }
+  .ld-star-on {
+    color: var(--gold);
+    font-size: 1rem;
+  }
+  .ld-star-off {
+    color: #e0e0e0;
+    font-size: 1rem;
+  }
+
+  .ld-comment-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #2d2d4e;
+    margin: 0 0 12px;
+  }
+
+  .ld-comment-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .ld-edit-btn {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--primary);
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 5px 14px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .ld-edit-btn:hover {
+    background: var(--border);
+  }
+
+  .ld-delete-btn {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: none;
+    border: 1.5px solid #fecdd3;
+    border-radius: 7px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .ld-delete-btn:hover {
+    background: #fff1f2;
+  }
+
+  /* ── NO COMMENTS ─────────────────────────────── */
+  .ld-no-comments {
+    text-align: center;
+    padding: 36px 20px;
+    color: var(--text-muted);
+  }
+  .ld-no-comments span {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .ld-no-comments p {
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  /* ── MOBILE ──────────────────────────────────── */
+  @media (max-width: 560px) {
+    .ld-video-card {
+      flex-direction: column;
+      text-align: center;
+    }
+    .ld-watch-btn {
+      width: 100%;
+      justify-content: center;
+    }
+    .ld-hero {
+      padding: 28px 24px 36px;
+    }
+  }
+</style>
+
+<div class="ld-page">
+  <div class="ld-hero">
+    <a href="{% url 'lessons_by_language' language_code %}" class="ld-back">
+      ← Back to Lessons
     </a>
-
-  
-
-<form method="post" action="{% url 'complete_lesson' language_code lesson.id %}">
-    {% csrf_token %}
-    <button type="submit"class="complete-button">✅ Lesson Complete</button>
-</form>
-
-
-<h3>Leave a Comment & Rating</h3>
-<form method="post">
-  {% csrf_token %}
-  <label for="rating">Rating:</label>
-<select name="rating" id="rating" required>
-  <option value="" disabled selected>Select a rating</option>
-  {% for i in "12345" %}
-    <option value="{{ i }}">{{ i }}★</option>
-  {% endfor %}
-</select>
-
-  
-  <label>Comment:</label><br>
-  <textarea name="comment" rows="3" style="width:100%;"></textarea><br>
-  <button type="submit" name="submit_comment">Submit</button>
-</form>
-
-<hr>
-
-<h3>Comments</h3>
-{% for c in comments %}
-  <div style="margin-bottom: 12px;">
-    <strong>{{ c.user.username }}</strong> - {{ c.rating }}★<br>
-    <em>{{ c.comment }}</em><br>
-    <small>{{ c.created_at|date:"Y-m-d H:i" }}</small>
+    <div class="ld-badge">{{ lesson.get_lesson_type_display }}</div>
+    <h1 class="ld-title">{{ lesson.label }}</h1>
   </div>
-  
-  {% if c.user == request.user %}
-    <form method="get" action="{% url 'edit_comment' language_code lesson.id c.id %}">
-      <button type="submit">Edit</button>
-    </form>
 
-  
-    <form method="post" action="{% url 'delete_comment' language_code lesson.id c.id %}">
-      {% csrf_token %}
-      <button type="submit" style="color: red;">Delete</button>
-    </form>
-  {% endif %}
-{% empty %}
-  <p>No comments yet.</p>
-{% endfor %}
+  <div class="ld-body">
+    <!-- VIDEO CARD -->
+    <div class="ld-video-card">
+      <div class="ld-video-icon">🎬</div>
+      <div class="ld-video-info">
+        <p class="ld-video-label">Video Lesson</p>
+        <p class="ld-video-sub">
+          Watch this lesson on YouTube to learn the sign
+        </p>
+      </div>
+      <a href="{{ lesson.video_url }}" target="_blank" class="ld-watch-btn">
+        ▶ Watch on YouTube
+      </a>
 
-{% if message %}
-  <div style="color: green;">{{ message }}</div>
-{% endif %}
+      <form
+        method="post"
+        action="{% url 'complete_lesson' language_code lesson.id %}"
+      >
+        {% csrf_token %}
+        <button type="submit" class="ld-complete-btn">
+          <span class="ld-complete-icon">✅</span>
+          Mark Lesson as Complete
+        </button>
+      </form>
+    </div>
+
+    <!-- COMPLETE BUTTON -->
+
+    {% for message in messages %}
+    <div class="ld-success-msg">🎉 {{ message }}</div>
+    {% endfor %}
+
+    <!-- COMMENT FORM -->
+    <div class="ld-section">
+      <h2 class="ld-section-title">Leave a Review</h2>
+      <form method="post" class="ld-comment-form">
+        {% csrf_token %}
+
+        <div class="ld-rating-group">
+          <label class="ld-label">Your Rating</label>
+          <div class="ld-stars">
+            {% for i in "54321" %}
+            <input
+              type="radio"
+              name="rating"
+              id="star{{ i }}"
+              value="{{ i }}"
+              required
+            />
+            <label for="star{{ i }}" title="{{ i }} stars">★</label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="ld-field">
+          <label class="ld-label" for="comment">Your Comment</label>
+          <textarea
+            id="comment"
+            name="comment"
+            rows="4"
+            placeholder="What did you think of this lesson?"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" name="submit_comment" class="ld-submit-btn">
+          Submit Review
+        </button>
+      </form>
+    </div>
+
+    <!-- COMMENTS LIST -->
+    <div class="ld-section">
+      <h2 class="ld-section-title">
+        Reviews
+        <span class="ld-count">{{ comments|length }}</span>
+      </h2>
+
+      {% for c in comments %}
+      <div class="ld-comment-card">
+        <div class="ld-comment-header">
+          <div class="ld-avatar">{{ c.user.username|first|upper }}</div>
+          <div class="ld-comment-meta">
+            <span class="ld-username">{{ c.user.username }}</span>
+            <span class="ld-date">{{ c.created_at|date:"M d, Y" }}</span>
+          </div>
+          <div class="ld-star-display">
+            {% for i in "12345" %}
+            <span
+              class="{% if forloop.counter <= c.rating %}ld-star-on{% else %}ld-star-off{% endif %}"
+              >★</span
+            >
+            {% endfor %}
+          </div>
+        </div>
+        <p class="ld-comment-text">{{ c.comment }}</p>
+
+        {% if c.user == request.user %}
+        <div class="ld-comment-actions">
+          <a
+            href="{% url 'edit_comment' language_code lesson.id c.id %}"
+            class="ld-edit-btn"
+            >Edit</a
+          >
+          <form
+            method="post"
+            action="{% url 'delete_comment' language_code lesson.id c.id %}"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <button type="submit" class="ld-delete-btn">Delete</button>
+          </form>
+        </div>
+        {% endif %}
+      </div>
+      {% empty %}
+      <div class="ld-no-comments">
+        <span>💬</span>
+        <p>No reviews yet. Be the first to leave one!</p>
+      </div>
+      {% endfor %}
+    </div>
   </div>
 </div>
+
 {% endblock %}

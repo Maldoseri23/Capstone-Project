@@ -1,24 +1,21 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <!-- Inline CSS: guaranteed to load -->
 <style>
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
+  #landing {
+    background: url("{% static 'images/Home.png' %}") center center / cover
+      no-repeat fixed;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-#landing {
-  background: url("{% static 'images/Home.png' %}") center center / cover no-repeat fixed;
-  min-height: 100vh;
-}
 
   /* Overlay covers everything, including nav/footer */
   #splash {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     z-index: 999999;
     background: #fff; /* or any color you want behind the GIF */
@@ -29,17 +26,11 @@
 
   /* GIF fills and centers in the overlay */
   #splash img {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     object-fit: cover; /* Ensures the GIF covers the whole area, like background-size: cover */
     display: block;
   }
-
-  /* Optional: prevent body scroll when splash is active
-body.splash-active {
-overflow: hidden;
-height: 100vh;
-} */
 
   .hero {
     background: linear-gradient(120deg, #fffdee 0%, #f9f6eb 100%);
@@ -120,10 +111,6 @@ height: 100vh;
   }
 </style>
 
-<div id="splash">
-  <img src="{% static 'images/l.gif' %}" alt="Loading..." />
-</div>
-
 <div id="landing">
   <section class="hero">
     <div class="hero-image">
@@ -147,9 +134,9 @@ height: 100vh;
   </section>
 </div>
 
-<script>
+<!-- <script>
   //  hide home for 5 sec then show content immediately
-  document.addEventListener('DOMContentLoaded',  () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const landing = document.getElementById('landing')
     const splash = document.getElementById('splash')
     // Ensure landing is hidden
@@ -172,5 +159,5 @@ height: 100vh;
       document.body.classList.remove('splash-active')
     }, 5000)
   })
-</script>
+</script> -->
 {% endblock %}

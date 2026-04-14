@@ -10,7 +10,7 @@ from .garden_views import award_garden_item
 
 @login_required
 def game_home(request):
-    profile= Profile.objects.get_or_create(user=request.user)
+    profile, _= Profile.objects.get_or_create(user=request.user)
     return render(request, 'guessgame/guessgame.html', {
         'highscore': profile.highscore,
         'score': request.session.get('score', 0)

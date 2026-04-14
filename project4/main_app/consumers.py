@@ -15,25 +15,24 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
             await self.close()
             return
         
-        # Join room group
+
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
         
-        # Add user to room participants
+
         await self.add_participant()
         
         await self.accept()
-        
-        # Send current participants to new user
+
         participants = await self.get_room_participants()
         await self.send(text_data=json.dumps({
             'type': 'users_in_room',
             'users': [p['user_id'] for p in participants]
     }))
     
-        # Notify others that user joined
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -44,10 +43,10 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
         )
 
     async def disconnect(self, close_code):
-        # Remove user from room participants
+
         await self.remove_participant()
         
-        # Notify others that user left
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -57,7 +56,7 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
             }
         )
         
-        # Leave room group
+
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -98,7 +97,7 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
                 }
             )
         elif message_type == 'chat_message':
-            # Handle chat messages
+
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -115,9 +114,9 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
                 'participants': participants
             }))
 
-    # Chat message handler
+
     async def chat_message(self, event):
-        # Send chat message to all users in the room
+
         await self.send(text_data=json.dumps({
             'type': 'chat_message',
             'message': event['message'],
@@ -125,9 +124,8 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
             'user_id': event['user_id'],
         }))
 
-    # WebRTC signaling message handlers
     async def webrtc_offer(self, event):
-        # Send offer to specific user or broadcast if no target
+
         if event.get('target_id') and event['target_id'] != self.user.id:
             await self.send(text_data=json.dumps({
                 'type': 'offer',

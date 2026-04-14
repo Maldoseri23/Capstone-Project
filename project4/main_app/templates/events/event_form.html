@@ -1,16 +1,7 @@
-{% extends 'base.html' %}
-{% block content %}
-<style>
-  body {
-    font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
-    background-color: #fffdf7;
-    color: #2e5d36;
-    padding: 2rem;
-    text-align: center;
-  }
-
+{% extends 'base.html' %} {% block content %}
+<!-- <style>
   .page-wrapper {
-    background: #fff8ee; 
+    background: #fff8ee;
     border: 3px solid #ffd280;
     border-radius: 16px;
     padding: 2.5rem;
@@ -42,11 +33,11 @@
     color: #2e5d36;
   }
 
-  input[type="text"],
-  input[type="url"],
-  input[type="email"],
-  input[type="datetime-local"],
-  input[type="file"],
+  input[type='text'],
+  input[type='url'],
+  input[type='email'],
+  input[type='datetime-local'],
+  input[type='file'],
   select,
   textarea {
     width: 100%;
@@ -57,11 +48,13 @@
     background-color: #fffef6;
     color: #2e5d36;
     box-shadow: 0 2px 8px rgba(255, 204, 0, 0.1);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
     box-sizing: border-box;
   }
 
-  input[type="url"] {
+  input[type='url'] {
     background-image: url('https://img.icons8.com/ios/20/link--v1.png');
     background-repeat: no-repeat;
     background-position: 10px center;
@@ -78,7 +71,7 @@
 
   .btn {
     display: block;
-    width: 160px; 
+    width: 160px;
     background: linear-gradient(135deg, #ffd54f, #fbc02d);
     color: #2e5d36;
     font-weight: bold;
@@ -110,19 +103,18 @@
       font-size: 1rem;
     }
   }
-</style>
+</style> -->
 
 <div class="page-wrapper">
   {% if object %}
-    <h1>Edit <span class="teal-text">{{ event.name }}</span></h1>
+  <h1>Edit <span class="teal-text">{{ event.name }}</span></h1>
   {% else %}
-    <h1>Add Event</h1>
+  <h1>Add Event</h1>
   {% endif %}
 
   <form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" class="btn">
+    {% csrf_token %} {{ form.as_p }}
+    <input type="submit" value="Submit" class="btn" />
   </form>
 </div>
 {% endblock %}

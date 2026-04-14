@@ -7,4 +7,5 @@ urlpatterns = [
     path('lessons/<str:language_code>/<int:pk>/complete/', views.complete_lesson, name='complete_lesson'),
     path('lessons/<str:language_code>/<int:pk>/comment/<int:comment_id>/edit/', views.edit_comment , name='edit_comment'),
     path('lessons/<str:language_code>/<int:pk>/comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
+    
 ]

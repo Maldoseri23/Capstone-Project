@@ -16,19 +16,15 @@ def event_list_calender(request):
         })
     return JsonResponse(data, safe=False)
 
-def event_list(request):
-    events = Event.objects.all()
-    return render(request, 'events/event_list.html', {'events': events})
 
 
 
-# display event details 
 def event_detail(request , pk):
     event = Event.objects.get(id= pk)
     return render(request , 'events/event_detail.html' , {'event' : event})
 
 
-# Create Event 
+
 class EventCreate(CreateView):
     model = Event 
     fields = ['title' , 'description' , 'date' , 'location' , 'is_virtual' , 'link' , 'created_by']
@@ -48,7 +44,7 @@ class EventCreate(CreateView):
         return form
 
 
-# Edit Event 
+
 class EventEdit(UpdateView):
     model = Event
     fields = ['description' , 'date' , 'location' , 'is_virtual' , 'link' ]
@@ -66,7 +62,7 @@ class EventEdit(UpdateView):
         return form
 
 
-# Delete Event 
+
 class EventDelete(DeleteView):
     model = Event
     success_url='/calendar/'

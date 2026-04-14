@@ -5,22 +5,20 @@ from ..models import CallRoom, CallParticipant
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-# Create your views here.
 
-# help from: https://www.videosdk.live/developer-hub/webrtc/django-webrtc
 
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)  # Define form inside POST block
+        form = UserCreationForm(request.POST) 
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('home')
         else:
             error_message = 'Invalid sign up - try again'
-    else:  # Handle GET requests separately
-        form = UserCreationForm()  # Define form for non-POST requests
+    else:
+        form = UserCreationForm()
     
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
@@ -47,7 +45,7 @@ def create_room(request):
 def join_room(request, room_id):
     room = get_object_or_404(CallRoom, room_id=room_id, is_active=True)
     
-    # Check if room is full
+
     current_participants = CallParticipant.objects.filter(
         room=room, 
         is_online=True
@@ -63,7 +61,7 @@ def join_room(request, room_id):
 def call_room(request, room_id):
     room = get_object_or_404(CallRoom, room_id=room_id, is_active=True)
     
-    # Ensure the user is added as a participant
+
     participant, created = CallParticipant.objects.get_or_create(
         room=room,
         user=request.user,
@@ -73,7 +71,7 @@ def call_room(request, room_id):
         participant.is_online = True
         participant.save()
     
-    # Get current participants
+
     participants = CallParticipant.objects.filter(
         room=room, 
         is_online=True
@@ -85,7 +83,7 @@ def call_room(request, room_id):
         'room_id_str': str(room.room_id),
         'user_id': request.user.id,
         'username': request.user.username,
-        'user': request.user,  # for template comparison
+        'user': request.user,  
     }
     
     return render(request, 'main_app/call_room.html', context)
@@ -95,7 +93,7 @@ def call_room(request, room_id):
 def list_rooms(request):
     active_rooms = CallRoom.objects.filter(is_active=True).order_by('-created_at')
     
-    # Add participant count to each room
+
     for room in active_rooms:
         room.current_participants = CallParticipant.objects.filter(
             room=room, 
@@ -111,7 +109,7 @@ def list_rooms(request):
 @login_required
 def deactivate_room(request, room_id):
     room = get_object_or_404(CallRoom, room_id=room_id)
-    if request.user == room.created_by:  # Only creator can deactivate
+    if request.user == room.created_by: 
         room.is_active = False
         room.save()
         messages.success(request, "Room has been deactivated.")
