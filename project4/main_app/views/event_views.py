@@ -21,14 +21,14 @@ def event_list_calender(request):
 
 def event_detail(request , pk):
     event = Event.objects.get(id= pk)
-    return render(request , 'events/event_detail.html' , {'event' : event})
+    return render(request , 'calender/event_detail.html' , {'event' : event})
 
 
 
 class EventCreate(CreateView):
     model = Event 
     fields = ['title' , 'description' , 'date' , 'location' , 'is_virtual' , 'link' , 'created_by']
-    template_name = 'events/event_form.html' 
+    template_name = 'calender/event_form.html' 
     success_url='/calendar/'
 
     def form_valid(self, form):
@@ -48,7 +48,7 @@ class EventCreate(CreateView):
 class EventEdit(UpdateView):
     model = Event
     fields = ['description' , 'date' , 'location' , 'is_virtual' , 'link' ]
-    template_name = 'events/event_form.html' 
+    template_name = 'calender/event_form.html' 
     
     def get_success_url(self):
         return reverse('event_detail', args=[self.object.pk])
@@ -66,4 +66,7 @@ class EventEdit(UpdateView):
 class EventDelete(DeleteView):
     model = Event
     success_url='/calendar/'
-    template_name = 'events/event_confirm_delete.html' 
+    template_name = 'calender/event_confirm_delete.html' 
+
+def calendar(request):
+    return render(request, 'calender/calendar.html')

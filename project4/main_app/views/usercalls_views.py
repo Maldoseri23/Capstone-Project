@@ -39,7 +39,7 @@ def create_room(request):
         messages.success(request, f'Room "{room_name}" created successfully!')
         return redirect('call_room', room_id=room.room_id)
     
-    return render(request, 'main_app/create_room.html')
+    return render(request, 'rooms/create_room.html')
 
 @login_required
 def join_room(request, room_id):
@@ -86,7 +86,7 @@ def call_room(request, room_id):
         'user': request.user,  
     }
     
-    return render(request, 'main_app/call_room.html', context)
+    return render(request, 'rooms/call_room.html', context)
 
 
 @login_required
@@ -104,7 +104,7 @@ def list_rooms(request):
         'rooms': active_rooms
     }
     
-    return render(request, 'main_app/list_rooms.html', context)
+    return render(request, 'rooms/list_rooms.html', context)
 
 @login_required
 def deactivate_room(request, room_id):

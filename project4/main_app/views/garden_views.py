@@ -15,7 +15,7 @@ def my_garden(request):
     profile = Profile.objects.get(user=request.user)
     flower_imgs = [{'left': i * 30} for i in range(profile.flowers)]
     fruit_imgs = [{'left': i * 50} for i in range(profile.fruits)]
-    return render(request, 'garden/my_garden.html', {
+    return render(request, 'profile/my_garden.html', {
         'profile': profile,
         'flower_imgs': flower_imgs,
         'fruit_imgs': fruit_imgs,

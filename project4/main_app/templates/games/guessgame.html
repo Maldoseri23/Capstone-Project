@@ -1,0 +1,167 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<style>
+  body {
+    background-image: url("{% static 'images/game-bacground.png' %}");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+</style>
+
+<div class="game-container">
+  <h2 class="game-title">Sign Language Guessing Game</h2>
+
+  <!-- Score -->
+  <div class="score-board">
+    <div class="score-flex">
+      <div>Score: <span id="score" class="score">{{ score }}</span></div>
+      <div>
+        High Score:
+        <span id="highscore" class="highscore">{{ highscore }}</span>
+      </div>
+      <div>Streak: <span id="streak" class="score">0</span></div>
+    </div>
+
+    <div class="score-actions">
+      <a href="{% url 'leaderboard' %}" class="btn btn-info">Leaderboard</a>
+      <a href="{% url 'reset_score' %}" class="btn btn-warning">Reset Score</a>
+    </div>
+    <div class="language-selector">
+      <button class="btn" onclick="setLanguage('en')">🇬🇧 English</button>
+      <button class="btn" onclick="setLanguage('ar')">🇸🇦 Arabic</button>
+    </div>
+  </div>
+
+  <!-- Game Area -->
+  <div class="game-area">
+    <div id="image-row" class="image-row">
+      <p class="placeholder">Click "New Word" to start playing!</p>
+    </div>
+
+    <div class="input-section">
+      <input
+        type="text"
+        id="guess-input"
+        placeholder="Type your guess here..."
+      />
+      <button id="submit-guess" class="btn btn-primary">Submit</button>
+    </div>
+
+    <div class="action-buttons">
+      <button id="next-word" class="btn btn-success">New Word</button>
+      <button id="show-answer" class="btn btn-secondary">Show Answer</button>
+    </div>
+
+    <div id="message" class="message"></div>
+  </div>
+</div>
+
+<script>
+  let currentWordId = null
+  let selectedLanguage = 'en'
+
+  const loadWord = () => {
+    fetch("{% url 'get_random_word' %}?lang=" + selectedLanguage)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          document.getElementById('image-row').innerHTML =
+            `<p style="color: red;">${data.error}</p>`
+          return
+        }
+
+        currentWordId = data.word_id
+
+        let imageHtml = ''
+        data.images.forEach((img, index) => {
+          if (selectedLanguage === 'en') {
+            imageHtml += `<img src="{% static 'images/English-letters/' %}${img}"
+              style="width: 90px; height: 90px; margin: 6px; object-fit: cover; box-shadow: 0 0 8px rgba(251, 192, 7, 0.5);"
+              alt="Letter ${index + 1}">`
+          } else if (selectedLanguage === 'ar') {
+            imageHtml += `<img src="{% static 'images/Arabic-letters/' %}${img}"
+              style="width: 90px; height: 90px; margin: 6px; object-fit: cover; box-shadow: 0 0 8px rgba(251, 192, 7, 0.5);"
+              alt="Letter ${index + 1}">`
+          }
+        })
+
+        document.getElementById('image-row').innerHTML = imageHtml
+        document.getElementById('guess-input').value = ''
+        document.getElementById('message').innerHTML = ''
+        document.getElementById('guess-input').focus()
+      })
+  }
+
+  const setLanguage = (lang) => {
+    selectedLanguage = lang
+    loadWord()
+  }
+
+  const checkGuess = () => {
+    const guess = document.getElementById('guess-input').value.trim()
+
+    if (!guess) {
+      document.getElementById('message').innerHTML =
+        '<span style="color: #fbc02d;">Please enter a guess!</span>'
+      return
+    }
+    if (!currentWordId) {
+      document.getElementById('message').innerHTML =
+        '<span style="color: #fbc02d;">Please load a word first!</span>'
+      return
+    }
+
+    fetch("{% url 'check_guess' %}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({ word_id: currentWordId, guess })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.correct) {
+          document.getElementById('message').innerHTML =
+            '<span style="color: #388e3c; font-size: 24px;">🎉 Correct! 🎉</span>'
+          document.getElementById('score').textContent = data.score
+          document.getElementById('highscore').textContent = data.highscore
+          document.getElementById('streak').textContent = data.streak
+        } else {
+          document.getElementById('message').innerHTML =
+            '<span style="color: #d32f2f;">❌ Try again!</span>'
+          document.getElementById('streak').textContent = data.streak
+        }
+      })
+  }
+
+  const showAnswer = () => {
+    if (!currentWordId) {
+      document.getElementById('message').innerHTML =
+        '<span style="color: #fbc02d;">Please load a word first!</span>'
+      return
+    }
+
+    fetch(`{% url 'show_answer' %}?word_id=${currentWordId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById('message').innerHTML =
+          `<span style="color: #1565c0;">💡 Answer: <strong>${data.answer.toUpperCase()}</strong></span>`
+      })
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document
+      .getElementById('submit-guess')
+      .addEventListener('click', checkGuess)
+    document.getElementById('next-word').addEventListener('click', loadWord)
+    document.getElementById('show-answer').addEventListener('click', showAnswer)
+
+    document.getElementById('guess-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') checkGuess()
+    })
+
+    loadWord()
+  })
+</script>
+{% endblock %}

@@ -1,0 +1,123 @@
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from ..models import GameWord, Profile
+import random
+import json
+from .garden_views import award_garden_item
+
+def games(request):
+    return render(request, 'games/games.html')
+
+@login_required
+def game_home(request):
+    profile, _= Profile.objects.get_or_create(user=request.user)
+    return render(request, 'games/guessgame.html', {
+        'highscore': profile.highscore,
+        'score': request.session.get('score', 0)
+    })
+
+@login_required
+def get_random_word(request):
+    lang = request.GET.get('lang', 'en')  # default English
+    
+    words = list(GameWord.objects.filter(language=lang))
+    
+    if not words:
+        return JsonResponse({'error': f'No {lang} words available'}, status=404)
+    
+    word = random.choice(words)
+    request.session['current_word_id'] = word.id
+    
+    return JsonResponse({
+        'word_id': word.id,
+        'images': word.images,
+        'length': len(word.word)
+    })
+
+@csrf_exempt
+@login_required
+def check_guess(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=400)
+    
+    try:
+        data = json.loads(request.body)
+        word_id = data.get('word_id')
+        guess = data.get('guess', '').strip().lower()
+    except:
+        
+        word_id = request.POST.get('word_id')
+        guess = request.POST.get('guess', '').strip().lower()
+    
+    if not word_id or not guess:
+        return JsonResponse({'error': 'Missing word_id or guess'}, status=400)
+    
+    word = get_object_or_404(GameWord, id=word_id)
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    score = request.session.get('score', 0)
+    
+    if guess == word.word.lower():
+        score += 1
+        request.session['score'] = score
+        
+        
+        profile.streak_count += 1
+        
+        
+        if score > profile.highscore:
+            profile.highscore = score
+        
+        profile.save()
+
+        
+        if score % 2 == 0:
+            award_garden_item(profile, 'fruit')
+        else:
+            award_garden_item(profile, 'flower')
+
+        return JsonResponse({
+            'correct': True, 
+            'score': score, 
+            'highscore': profile.highscore,
+            'streak': profile.streak_count
+        })
+    else:
+        profile.streak_count = 0
+        profile.save()
+        
+        return JsonResponse({
+            'correct': False, 
+            'score': score, 
+            'highscore': profile.highscore,
+            'streak': profile.streak_count
+        })
+
+
+@login_required
+def show_answer(request):
+    word_id = request.GET.get('word_id')
+    if not word_id:
+        return JsonResponse({'error': 'Missing word_id'}, status=400)
+    
+    word = get_object_or_404(GameWord, id=word_id)
+    return JsonResponse({'answer': word.word})
+
+@login_required
+def reset_score(request):
+    request.session['score'] = 0
+    return redirect('game_home')
+
+def leaderboard(request):
+    top_profiles = Profile.objects.select_related('user').order_by('-highscore')[:10]
+    return render(request, 'games/leaderboard.html', {
+        'top_profiles': top_profiles
+    })
+
+
+
+def name_game_view(request):
+    return render(request, 'games/NameGame.html')

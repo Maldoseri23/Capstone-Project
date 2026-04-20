@@ -129,6 +129,13 @@ class GameWord(models.Model):
     word = models.CharField(max_length=20, unique=True)
     images = models.JSONField()
 
+    LANGUAGE_CHOICES = [
+        ('en', 'English'),
+        ('ar', 'Arabic'),
+    ]
+    
+    language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES)
+
 
 
 
