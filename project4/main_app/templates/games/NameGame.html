@@ -1,19 +1,21 @@
 {% extends 'base.html' %} {% block content %}
 
 <div class="name-game-bg">
-  <div style="margin-bottom: 20px">
-    <button onclick="setLanguage('arabic')">Arabic</button>
-    <button onclick="setLanguage('english')">English</button>
-  </div>
-  <div class="input-group">
-    <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
-    <button onclick="showSigns()">عرض</button>
-  </div>
+  <div class="game-container">
+    <div style="margin-bottom: 20px">
+      <button onclick="setLanguage('arabic')">Arabic</button>
+      <button onclick="setLanguage('english')">English</button>
+    </div>
+    <div class="input-group">
+      <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
+      <button onclick="showSigns()" class="click">عرض</button>
+    </div>
 
-  <div id="lettersContainer"></div>
+    <div id="lettersContainer"></div>
 
-  <div style="margin-top: 50px">
-    <a href="{% url 'games' %}" class="home-button">🎮 Back to Game</a>
+    <div style="margin-top: 50px">
+      <a href="{% url 'games' %}" class="home-button">🎮 Back to Game</a>
+    </div>
   </div>
 </div>
 

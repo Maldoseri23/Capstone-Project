@@ -89,6 +89,7 @@ class CallParticipant(models.Model):
     joined_at = models.DateTimeField(auto_now_add=True)
     left_at = models.DateTimeField(null=True, blank=True)
     is_online = models.BooleanField(default=True)
+    channel_name = models.CharField(max_length=255, null=True, blank=True)
     
     class Meta:
         unique_together = ['room', 'user']
