@@ -1,39 +1,37 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from django.contrib.auth.models import User
 from .models import CallRoom, CallParticipant
 
+
 class VideoCallConsumer(AsyncWebsocketConsumer):
+
     async def connect(self):
         print("WebSocket connect called!")
+
         self.room_id = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = f'call_{self.room_id}'
         self.user = self.scope['user']
-        
+
         if self.user.is_anonymous:
             await self.close()
             return
-        
-        # Join room group
+
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
-        
-        # Add user to room participants
+
         await self.add_participant()
-        
         await self.accept()
-        
-        # Send current participants to new user
+
         participants = await self.get_room_participants()
+
         await self.send(text_data=json.dumps({
             'type': 'users_in_room',
             'users': [p['user_id'] for p in participants]
-    }))
-    
-        # Notify others that user joined
+        }))
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -44,10 +42,8 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
         )
 
     async def disconnect(self, close_code):
-        # Remove user from room participants
         await self.remove_participant()
-        
-        # Notify others that user left
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -56,8 +52,7 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
                 'username': self.user.username
             }
         )
-        
-        # Leave room group
+
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -66,7 +61,10 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         message_type = data.get('type')
-        
+
+        # ======================
+        # 🎥 WEBRTC SIGNALING
+        # ======================
         if message_type == 'offer':
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -77,6 +75,7 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
                     'target_id': data.get('target_id')
                 }
             )
+
         elif message_type == 'answer':
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -87,6 +86,7 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
                     'target_id': data.get('target_id')
                 }
             )
+
         elif message_type == 'ice_candidate':
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -97,27 +97,65 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
                     'target_id': data.get('target_id')
                 }
             )
+
+        # ======================
+        # 💬 CHAT (GROUP + PRIVATE)
+        # ======================
         elif message_type == 'chat_message':
-            # Handle chat messages
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
+            target = data.get('target')
+
+            # 🔹 GROUP CHAT
+            if target == 'all':
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'chat_message',
+                        'message': data['message'],
+                        'username': data['username'],
+                        'user_id': self.user.id,
+                    }
+                )
+
+            # 🔹 PRIVATE CHAT
+            else:
+                participants = await self.get_room_participants()
+
+                for p in participants:
+                    if str(p['user_id']) == str(target) and p.get('channel_name'):
+                        await self.channel_layer.send(
+                            p['channel_name'],
+                            {
+                                'type': 'chat_message',
+                                'message': data['message'],
+                                'username': data['username'],
+                                'user_id': self.user.id,
+                            }
+                        )
+
+                # send back to sender so they see it
+                await self.send(text_data=json.dumps({
                     'type': 'chat_message',
                     'message': data['message'],
                     'username': data['username'],
                     'user_id': self.user.id,
-                }
-            )
+                }))
+
+        # ======================
+        # 👥 PARTICIPANTS LIST
+        # ======================
         elif message_type == 'get_participants':
             participants = await self.get_room_participants()
+
             await self.send(text_data=json.dumps({
                 'type': 'participants_list',
                 'participants': participants
             }))
 
-    # Chat message handler
+    # ======================
+    # 🔁 EVENTS TO CLIENT
+    # ======================
+
     async def chat_message(self, event):
-        # Send chat message to all users in the room
         await self.send(text_data=json.dumps({
             'type': 'chat_message',
             'message': event['message'],
@@ -125,16 +163,16 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
             'user_id': event['user_id'],
         }))
 
-    # WebRTC signaling message handlers
     async def webrtc_offer(self, event):
-        # Send offer to specific user or broadcast if no target
         if event.get('target_id') and event['target_id'] != self.user.id:
-            await self.send(text_data=json.dumps({
-                'type': 'offer',
-                'offer': event['offer'],
-                'sender_id': event['sender_id']
-            }))
-        elif not event.get('target_id') and event['sender_id'] != self.user.id:
+            return 
+        await self.send(text_data=json.dumps({
+        'type': 'offer',
+        'offer': event['offer'],
+        'sender_id': event['sender_id']
+    }))
+
+        if event['sender_id'] != self.user.id:
             await self.send(text_data=json.dumps({
                 'type': 'offer',
                 'offer': event['offer'],
@@ -173,18 +211,24 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
                 'username': event['username']
             }))
 
+    # ======================
+    # 🗄 DATABASE
+    # ======================
+
     @database_sync_to_async
     def add_participant(self):
         try:
             room = CallRoom.objects.get(room_id=self.room_id)
-            participant, created = CallParticipant.objects.get_or_create(
+
+            participant, _ = CallParticipant.objects.get_or_create(
                 room=room,
-                user=self.user,
-                defaults={'is_online': True}
+                user=self.user
             )
-            if not created:
-                participant.is_online = True
-                participant.save()
+
+            participant.is_online = True
+            participant.channel_name = self.channel_name  # 🔥 IMPORTANT
+            participant.save()
+
         except CallRoom.DoesNotExist:
             pass
 
@@ -193,8 +237,10 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
         try:
             room = CallRoom.objects.get(room_id=self.room_id)
             participant = CallParticipant.objects.get(room=room, user=self.user)
+
             participant.is_online = False
             participant.save()
+
         except (CallRoom.DoesNotExist, CallParticipant.DoesNotExist):
             pass
 
@@ -202,16 +248,20 @@ class VideoCallConsumer(AsyncWebsocketConsumer):
     def get_room_participants(self):
         try:
             room = CallRoom.objects.get(room_id=self.room_id)
+
             participants = CallParticipant.objects.filter(
-                room=room, 
+                room=room,
                 is_online=True
             ).select_related('user')
+
             return [
                 {
                     'user_id': p.user.id,
-                    'username': p.user.username
-                } 
+                    'username': p.user.username,
+                    'channel_name': p.channel_name  
+                }
                 for p in participants
             ]
+
         except CallRoom.DoesNotExist:
             return []

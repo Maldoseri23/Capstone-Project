@@ -1,79 +1,137 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
-<div class="lesson-detail-container">
-  <h2 class="lesson-title">
-    {{ lesson.get_lesson_type_display }}: {{ lesson.label }}
-  </h2>
-
-  <div class="video-wrapper">
-    <iframe 
-      src="https://www.youtube.com/embed/{{ lesson.video_id }}"
-      frameborder="0"
-      allowfullscreen
-      class="lesson-video"
-      title="Lesson Video">
-    </iframe>
-  </div>
-
-  <div class="lesson-actions">
-    <a href="{% url 'lessons_by_language' language_code %}" class="back-button">
-      &larr; Back to Lessons
+<div class="ld-page">
+  <div class="ld-hero">
+    <a href="{% url 'lessons_by_language' language_code %}" class="ld-back">
+      ← Back to Lessons
     </a>
-
-  
-
-<form method="post" action="{% url 'complete_lesson' language_code lesson.id %}">
-    {% csrf_token %}
-    <button type="submit"class="complete-button">✅ Lesson Complete</button>
-</form>
-
-
-<h3>Leave a Comment & Rating</h3>
-<form method="post">
-  {% csrf_token %}
-  <label for="rating">Rating:</label>
-<select name="rating" id="rating" required>
-  <option value="" disabled selected>Select a rating</option>
-  {% for i in "12345" %}
-    <option value="{{ i }}">{{ i }}★</option>
-  {% endfor %}
-</select>
-
-  
-  <label>Comment:</label><br>
-  <textarea name="comment" rows="3" style="width:100%;"></textarea><br>
-  <button type="submit" name="submit_comment">Submit</button>
-</form>
-
-<hr>
-
-<h3>Comments</h3>
-{% for c in comments %}
-  <div style="margin-bottom: 12px;">
-    <strong>{{ c.user.username }}</strong> - {{ c.rating }}★<br>
-    <em>{{ c.comment }}</em><br>
-    <small>{{ c.created_at|date:"Y-m-d H:i" }}</small>
+    <div class="ld-badge">{{ lesson.get_lesson_type_display }}</div>
+    <h1 class="ld-title">{{ lesson.label }}</h1>
   </div>
-  
-  {% if c.user == request.user %}
-    <form method="get" action="{% url 'edit_comment' language_code lesson.id c.id %}">
-      <button type="submit">Edit</button>
-    </form>
 
-  
-    <form method="post" action="{% url 'delete_comment' language_code lesson.id c.id %}">
-      {% csrf_token %}
-      <button type="submit" style="color: red;">Delete</button>
-    </form>
-  {% endif %}
-{% empty %}
-  <p>No comments yet.</p>
-{% endfor %}
+  <div class="ld-body">
+    <!-- VIDEO CARD -->
+    <div class="ld-video-card">
+      <div class="ld-video-icon">🎬</div>
+      <div class="ld-video-info">
+        <p class="ld-video-label">Video Lesson</p>
+        <p class="ld-video-sub">
+          Watch this lesson on YouTube to learn the sign
+        </p>
+      </div>
+      <a href="{{ lesson.video_url }}" target="_blank" class="ld-watch-btn">
+        ▶ Watch on YouTube
+      </a>
 
-{% if message %}
-  <div style="color: green;">{{ message }}</div>
-{% endif %}
+      <form
+        method="post"
+        action="{% url 'complete_lesson' language_code lesson.id %}"
+      >
+        {% csrf_token %}
+        <button type="submit" class="ld-complete-btn">
+          <span class="ld-complete-icon">✅</span>
+          Mark Lesson as Complete
+        </button>
+      </form>
+    </div>
+
+    <!-- COMPLETE BUTTON -->
+
+    {% for message in messages %}
+    <div class="ld-success-msg">🎉 {{ message }}</div>
+    {% endfor %}
+
+    <!-- COMMENT FORM -->
+    <div class="ld-section">
+      <h2 class="ld-section-title">Leave a Review</h2>
+      <form method="post" class="ld-comment-form">
+        {% csrf_token %}
+
+        <div class="ld-rating-group">
+          <label class="ld-label">Your Rating</label>
+          <div class="ld-stars">
+            {% for i in "54321" %}
+            <input
+              type="radio"
+              name="rating"
+              id="star{{ i }}"
+              value="{{ i }}"
+              required
+            />
+            <label for="star{{ i }}" title="{{ i }} stars">★</label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="ld-field">
+          <label class="ld-label" for="comment">Your Comment</label>
+          <textarea
+            id="comment"
+            name="comment"
+            rows="4"
+            placeholder="What did you think of this lesson?"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" name="submit_comment" class="ld-submit-btn">
+          Submit Review
+        </button>
+      </form>
+    </div>
+
+    <!-- COMMENTS LIST -->
+    <div class="ld-section">
+      <h2 class="ld-section-title">
+        Reviews
+        <span class="ld-count">{{ comments|length }}</span>
+      </h2>
+
+      {% for c in comments %}
+      <div class="ld-comment-card">
+        <div class="ld-comment-header">
+          <div class="ld-avatar">{{ c.user.username|first|upper }}</div>
+          <div class="ld-comment-meta">
+            <span class="ld-username">{{ c.user.username }}</span>
+            <span class="ld-date">{{ c.created_at|date:"M d, Y" }}</span>
+          </div>
+          <div class="ld-star-display">
+            {% for i in "12345" %}
+            <span
+              class="{% if forloop.counter <= c.rating %}ld-star-on{% else %}ld-star-off{% endif %}"
+              >★</span
+            >
+            {% endfor %}
+          </div>
+        </div>
+        <p class="ld-comment-text">{{ c.comment }}</p>
+
+        {% if c.user == request.user %}
+        <div class="ld-comment-actions">
+          <a
+            href="{% url 'edit_comment' language_code lesson.id c.id %}"
+            class="ld-edit-btn"
+            >Edit</a
+          >
+          <form
+            method="post"
+            action="{% url 'delete_comment' language_code lesson.id c.id %}"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <button type="submit" class="ld-delete-btn">Delete</button>
+          </form>
+        </div>
+        {% endif %}
+      </div>
+      {% empty %}
+      <div class="ld-no-comments">
+        <span>💬</span>
+        <p>No reviews yet. Be the first to leave one!</p>
+      </div>
+      {% endfor %}
+    </div>
   </div>
 </div>
+
 {% endblock %}

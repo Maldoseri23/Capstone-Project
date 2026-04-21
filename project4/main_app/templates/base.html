@@ -2,14 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% comment %} {% block styles %}
-  <link rel="stylesheet" href="{% static 'css/login.css' %}">
-   {% endblock %} {% endcomment %}
-
     <meta charset="UTF-8" />
+    {% block extra_css %}{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}HEAR ME{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1">
+    
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
@@ -23,8 +22,8 @@
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'list_rooms' %}">Rooms</a></li>
                 <li><a href="{% url 'calendar' %}">Calendar</a></li>
-                <li><a href="{% url 'Games' %}">Games</a></li>
-                <li><a href="{% url 'lessons_by_language' 'bsl' %}">BSL Lessons</a></li>
+                <li><a href="{% url 'games' %}">Games</a></li>
+                <li><a href="{% url 'lessons_by_language' 'esl' %}">ESL Lessons</a></li>
                 <li><a href="{% url 'lessons_by_language' 'asl' %}">ASL Lessons</a></li>
                 <li><a href="{% url 'sign_to_text' %}">Sign to Text</a></li>
                 <li><a href="{% url 'profile_page' %}">My Profile</a></li>
@@ -59,22 +58,11 @@
         {% block content %}
         {% endblock %}
     </main>
-    <footer>
-        <div class="footer">
-            
+    <footer class="footer">
             <div class="row">
-                <ul>
-                    <li><a href="#">Contact us</a></li>
-                    <li><a href="#">Our Services</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Career</a></li>
-                </ul>
+                HEAR ME Copyright © 2026 Hear Me - All rights reserved 
             </div>
-            <div class="row">
-                HEAR ME Copyright © 2021 Hear Me - All rights reserved 
-            </div>
-        </div>
+       
     </footer>
     <script>
     

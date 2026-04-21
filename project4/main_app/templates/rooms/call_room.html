@@ -1,0 +1,237 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="call-container">
+  <!-- LEFT: VIDEO -->
+  <div class="video-area">
+    <!-- Main Video -->
+    <div class="main-video">
+      <video id="mainVideo" autoplay playsinline></video>
+    </div>
+
+    <div id="videos" class="video-thumbnails">
+      <video
+        id="localVideo"
+        autoplay
+        muted
+        playsinline
+        class="thumb-video"
+      ></video>
+    </div>
+
+    {% if user == room.created_by %}
+    <form method="post" action="{% url 'deactivate_room' room.room_id %}">
+      {% csrf_token %}
+      <button class="end-btn">End Call</button>
+    </form>
+    {% endif %}
+  </div>
+
+  <!-- RIGHT: CHAT -->
+  <div class="chat-area">
+    <div class="chat-header">
+      <select id="chatTarget">
+        <option value="all">Group Chat</option>
+      </select>
+    </div>
+
+    <div id="chatMessages" class="chat-messages"></div>
+
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Type message..." />
+      <button id="sendChatBtn">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const roomId = '{{ room_id_str }}'
+  const userId = Number('{{ user_id }}')
+  const username = '{{ user.username }}'
+
+  const ws = new WebSocket(
+    (location.protocol === 'https:' ? 'wss://' : 'ws://') +
+      location.host +
+      '/ws/call/' +
+      roomId +
+      '/'
+  )
+
+  let localStream
+  let peers = {}
+  let remoteStreams = {}
+
+  const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
+
+  // 🎥 GET MEDIA
+  navigator.mediaDevices
+    .getUserMedia({ video: true, audio: true })
+    .then((stream) => {
+      localStream = stream
+      document.getElementById('localVideo').srcObject = stream
+      document.getElementById('mainVideo').srcObject = stream
+    })
+
+  // 🎥 ADD VIDEO
+  function addRemoteVideo(id, stream) {
+    let video = document.getElementById('video_' + id)
+
+    if (!video) {
+      video = document.createElement('video')
+      video.id = 'video_' + id
+      video.autoplay = true
+      video.playsInline = true
+      video.className = 'thumb-video'
+
+      video.onclick = () => {
+        document.getElementById('mainVideo').srcObject = stream
+      }
+
+      document.getElementById('videos').appendChild(video)
+    }
+
+    video.srcObject = stream
+  }
+
+  // 🔗 CREATE PEER
+  async function createPeer(id, initiator = false) {
+    const pc = new RTCPeerConnection(config)
+    peers[id] = pc
+
+    localStream.getTracks().forEach((track) => {
+      pc.addTrack(track, localStream)
+    })
+
+    pc.ontrack = (e) => {
+      if (!remoteStreams[id]) {
+        remoteStreams[id] = new MediaStream()
+      }
+
+      remoteStreams[id].addTrack(e.track)
+      addRemoteVideo(id, remoteStreams[id])
+    }
+
+    pc.onicecandidate = (e) => {
+      if (e.candidate) {
+        ws.send(
+          JSON.stringify({
+            type: 'ice_candidate',
+            candidate: e.candidate,
+            target_id: id
+          })
+        )
+      }
+    }
+
+    if (initiator) {
+      const offer = await pc.createOffer()
+      await pc.setLocalDescription(offer)
+
+      ws.send(
+        JSON.stringify({
+          type: 'offer',
+          offer: offer,
+          target_id: id
+        })
+      )
+    }
+
+    return pc
+  }
+
+  // 💬 CHAT
+  function addChatMessage(user, msg, own = false) {
+    const div = document.createElement('div')
+    div.innerHTML = `<b>${own ? 'You' : user}:</b> ${msg}`
+    document.getElementById('chatMessages').appendChild(div)
+  }
+
+  // SEND CHAT
+  document.getElementById('sendChatBtn').onclick = () => {
+    const input = document.getElementById('chatInput')
+    const target = document.getElementById('chatTarget').value
+
+    const msg = input.value.trim()
+    if (!msg) return
+
+    ws.send(
+      JSON.stringify({
+        type: 'chat_message',
+        message: msg,
+        username: username,
+        user_id: userId,
+        target: target
+      })
+    )
+
+    addChatMessage(username, msg, true)
+    input.value = ''
+  }
+
+  // 🌐 WS EVENTS
+  ws.onmessage = async (e) => {
+    const data = JSON.parse(e.data)
+
+    // USERS
+    if (data.type === 'users_in_room') {
+      for (const id of data.users) {
+        if (id !== userId) {
+          await createPeer(id, true)
+          addUserToChat(id, 'User ' + id)
+        }
+      }
+    }
+
+    // OFFER
+    if (data.type === 'offer') {
+      const id = data.sender_id
+
+      const pc = await createPeer(id)
+      await pc.setRemoteDescription(data.offer)
+
+      const answer = await pc.createAnswer()
+      await pc.setLocalDescription(answer)
+
+      ws.send(
+        JSON.stringify({
+          type: 'answer',
+          answer: answer,
+          target_id: id
+        })
+      )
+    }
+
+    // ANSWER
+    if (data.type === 'answer') {
+      const id = data.sender_id
+      await peers[id].setRemoteDescription(data.answer)
+    }
+
+    // ICE
+    if (data.type === 'ice_candidate') {
+      const id = data.sender_id
+      if (peers[id]) {
+        await peers[id].addIceCandidate(data.candidate)
+      }
+    }
+
+    // CHAT
+    if (data.type === 'chat_message') {
+      if (data.user_id !== userId) {
+        addChatMessage(data.username, data.message)
+      }
+    }
+  }
+
+  // 👥 ADD USERS TO CHAT SELECT
+  function addUserToChat(userId, username) {
+    const select = document.getElementById('chatTarget')
+
+    const option = document.createElement('option')
+    option.value = userId
+    option.textContent = username
+
+    select.appendChild(option)
+  }
+</script>
+
+{% endblock %}

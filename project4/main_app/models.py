@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
@@ -13,11 +12,8 @@ class Profile(models.Model):
     garden_level = models.PositiveIntegerField(default=0)
     flowers = models.PositiveIntegerField(default=0)
     fruits = models.PositiveIntegerField(default=0)
-
-    # Foreign Key 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    # model objects
     def __str__(self):
         return self.user.username
 
@@ -28,10 +24,10 @@ class Video(models.Model):
     is_tutorial = models.BooleanField() 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # Foreign Key 
+
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    # model objects
+
     def __str__(self):
         return self.title  
 
@@ -40,11 +36,10 @@ class ForumPost(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField() 
     created_at = models.DateTimeField(auto_now_add=True)
-
-    # Foreign Key 
+ 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    # model objects
+
     def __str__(self):
         return self.title
 
@@ -57,10 +52,10 @@ class Event(models.Model):
     is_virtual = models.BooleanField(default=False)
     link = models.URLField(blank=True, null=True)
 
-    # Foreign Key 
+
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    # model objects
+
     def __str__(self):
         return self.title
 
@@ -70,7 +65,7 @@ class LessonComment(models.Model):
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # Foreign Key 
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lesson = models.ForeignKey('Lesson' , on_delete=models.CASCADE ,  related_name='comments')
 
@@ -94,6 +89,7 @@ class CallParticipant(models.Model):
     joined_at = models.DateTimeField(auto_now_add=True)
     left_at = models.DateTimeField(null=True, blank=True)
     is_online = models.BooleanField(default=True)
+    channel_name = models.CharField(max_length=255, null=True, blank=True)
     
     class Meta:
         unique_together = ['room', 'user']
@@ -119,12 +115,12 @@ class Lesson(models.Model):
         ('word', 'Word'),
     ]
     LANGUAGE_CHOICES = [
-        ('bsl', 'Bahraini Sign Language'),
-        ('asl', 'American Sign Language'),
+        ('esl', 'English Sign Language'),
+        ('asl', 'Arabic Sign Language'),
     ]
     lesson_type = models.CharField(max_length=10, choices=LESSON_TYPE_CHOICES)
-    label = models.CharField(max_length=50)  # The letter or word
-    video_id = models.CharField(max_length=20)
+    label = models.CharField(max_length=50)  
+    video_url = models.CharField(max_length=200)
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
 
     def __str__(self):
@@ -132,12 +128,18 @@ class Lesson(models.Model):
     
 class GameWord(models.Model):
     word = models.CharField(max_length=20, unique=True)
-    # Store image filenames for each letter, e.g. ["a.png", "p.png", "p.png", "l.png", "e.png"]
     images = models.JSONField()
 
+    LANGUAGE_CHOICES = [
+        ('en', 'English'),
+        ('ar', 'Arabic'),
+    ]
+    
+    language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES)
 
 
-#automatically create user profile when user registers 
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="game-page-bg">
+  <div class="game-container">
+    <h1>Games</h1>
+    <h2>Try our games</h2>
+    <h3>Play our games to practice and improve!</h3>
+    <div class="game-card">
+      <a href="{% url 'name_game' %}">
+        <span class="emoji">🧑‍🎓</span> Learn My Name
+      </a>
+    </div>
+    <div class="game-card">
+      <a href="{% url 'game_home' %}">
+        <span class="emoji">🔤</span> Spelling Game
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

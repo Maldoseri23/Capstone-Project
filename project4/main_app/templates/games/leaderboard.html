@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% load static %} {% block styles %}
+<link rel="stylesheet" href="{% static 'css/leaderboard.css' %}" />
+{% endblock %} {% block content %}
+
+<div class="name-game-bg">
+  <div class="leaderboard-container">
+    <div class="leaderboard-box">
+      <h2 class="leaderboard-title">🏆 Leaderboard 🏆</h2>
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th style="text-align: center">Rank</th>
+            <th style="text-align: left">Player</th>
+            <th style="text-align: center">High Score</th>
+            <th style="text-align: center">Profile</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for profile in top_profiles %}
+          <tr class="{% if forloop.counter <= 3 %}top-rank{% endif %}">
+            <td style="text-align: center; font-weight: bold">
+              {% if forloop.counter == 1 %} 🥇 #1 {%elif forloop.counter == 2%}
+              🥈 #2 {%elif forloop.counter == 3%} 🥉 #3 {% else %} #{{
+              forloop.counter }} {% endif %}
+            </td>
+
+            <td>{{ profile.user.username }}</td>
+
+            <td class="score">{{ profile.highscore }}</td>
+
+            <td style="text-align: center">
+              {% if profile.profile_image %}
+              <img src="{{ profile.profile_image.url }}" class="profile-img" />
+              {% else %}
+              <div class="profile-placeholder">
+                {{ profile.user.username|first|upper }}
+              </div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px">
+      <a href="{% url 'game_home' %}" class="btn btn-primary back-btn">
+        🎮 Back to Game
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

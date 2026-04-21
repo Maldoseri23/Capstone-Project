@@ -1,0 +1,155 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="name-game-bg">
+  <div class="game-container">
+    <div style="margin-bottom: 20px">
+      <button onclick="setLanguage('arabic')">Arabic</button>
+      <button onclick="setLanguage('english')">English</button>
+    </div>
+    <div class="input-group">
+      <input id="nameInput" type="text" placeholder="اكتب اسمك هنا بالعربي" />
+      <button onclick="showSigns()" class="click">عرض</button>
+    </div>
+
+    <div id="lettersContainer"></div>
+
+    <div style="margin-top: 50px">
+      <a href="{% url 'games' %}" class="home-button">🎮 Back to Game</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const arabicSigns = {
+    ء: '/static/images/Arabic-letters/ء.png',
+    ا: '/static/images/Arabic-letters/ا.png',
+    أ: '/static/images/Arabic-letters/أ.png',
+    ؤ: '/static/images/Arabic-letters/ؤ.png',
+    إ: '/static/images/Arabic-letters/إ.png',
+    ئ: '/static/images/Arabic-letters/ئ.png',
+    ال: '/static/images/Arabic-letters/ال.png',
+    لا: '/static/images/Arabic-letters/لا.png',
+    ب: '/static/images/Arabic-letters/ب.png',
+    ت: '/static/images/Arabic-letters/ت.png',
+    ث: '/static/images/Arabic-letters/ث.png',
+    ج: '/static/images/Arabic-letters/ج.png',
+    ح: '/static/images/Arabic-letters/ح.png',
+    خ: '/static/images/Arabic-letters/خ.png',
+    د: '/static/images/Arabic-letters/د.png',
+    ذ: '/static/images/Arabic-letters/ذ.png',
+    ر: '/static/images/Arabic-letters/ر.png',
+    ز: '/static/images/Arabic-letters/ز.png',
+    س: '/static/images/Arabic-letters/س.png',
+    ش: '/static/images/Arabic-letters/ش.png',
+    ص: '/static/images/Arabic-letters/ص.png',
+    ض: '/static/images/Arabic-letters/ض.png',
+    ط: '/static/images/Arabic-letters/ط.png',
+    ظ: '/static/images/Arabic-letters/ظ.png',
+    ع: '/static/images/Arabic-letters/ع.png',
+    غ: '/static/images/Arabic-letters/غ.png',
+    ف: '/static/images/Arabic-letters/ف.png',
+    ق: '/static/images/Arabic-letters/ق.png',
+    ك: '/static/images/Arabic-letters/ك.png',
+    ل: '/static/images/Arabic-letters/ل.png',
+    م: '/static/images/Arabic-letters/م.png',
+    ن: '/static/images/Arabic-letters/ن.png',
+    ه: '/static/images/Arabic-letters/ه.png',
+    و: '/static/images/Arabic-letters/و.png',
+    ي: '/static/images/Arabic-letters/ي.png',
+    ى: '/static/images/Arabic-letters/ى.png',
+    ة: '/static/images/Arabic-letters/ة.png'
+  }
+
+  const englishSigns = {
+    a: '/static/images/English-letters/a.png',
+    A: '/static/images/English-letters/a.png',
+    b: '/static/images/English-letters/b.png',
+    B: '/static/images/English-letters/b.png',
+    c: '/static/images/English-letters/c.png',
+    C: '/static/images/English-letters/c.png',
+    d: '/static/images/English-letters/d.png',
+    D: '/static/images/English-letters/d.png',
+    e: '/static/images/English-letters/e.png',
+    E: '/static/images/English-letters/e.png',
+    f: '/static/images/English-letters/f.png',
+    F: '/static/images/English-letters/f.png',
+    g: '/static/images/English-letters/g.png',
+    G: '/static/images/English-letters/g.png',
+    h: '/static/images/English-letters/h.png',
+    H: '/static/images/English-letters/h.png',
+    i: '/static/images/English-letters/i.png',
+    I: '/static/images/English-letters/i.png',
+    j: '/static/images/English-letters/j.png',
+    J: '/static/images/English-letters/j.png',
+    k: '/static/images/English-letters/k.png',
+    K: '/static/images/English-letters/k.png',
+    l: '/static/images/English-letters/l.png',
+    L: '/static/images/English-letters/l.png',
+    m: '/static/images/English-letters/m.png',
+    M: '/static/images/English-letters/m.png',
+    n: '/static/images/English-letters/n.png',
+    N: '/static/images/English-letters/n.png',
+    o: '/static/images/English-letters/o.png',
+    O: '/static/images/English-letters/o.png',
+    p: '/static/images/English-letters/p.png',
+    P: '/static/images/English-letters/p.png',
+    q: '/static/images/English-letters/q.png',
+    Q: '/static/images/English-letters/q.png',
+    r: '/static/images/English-letters/r.png',
+    R: '/static/images/English-letters/r.png',
+    s: '/static/images/English-letters/s.png',
+    S: '/static/images/English-letters/s.png',
+    t: '/static/images/English-letters/t.png',
+    T: '/static/images/English-letters/t.png',
+    u: '/static/images/English-letters/u.png',
+    U: '/static/images/English-letters/u.png',
+    v: '/static/images/English-letters/v.png',
+    V: '/static/images/English-letters/v.png',
+    w: '/static/images/English-letters/w.png',
+    W: '/static/images/English-letters/w.png',
+    x: '/static/images/English-letters/x.png',
+    X: '/static/images/English-letters/x.png',
+    y: '/static/images/English-letters/y.png',
+    Y: '/static/images/English-letters/y.png',
+    z: '/static/images/English-letters/z.png',
+    z: '/static/images/English-letters/z.png'
+  }
+  let selectedLanguage = 'arabic' // default
+
+  const setLanguage = (lang) => {
+    selectedLanguage = lang
+
+    const input = document.getElementById('nameInput')
+    if (lang === 'arabic') {
+      input.placeholder = 'اكتب اسمك هنا بالعربي'
+      document.querySelector('.name-game-bg').style.direction = 'rtl'
+    } else {
+      input.placeholder = 'Type your name in English'
+      document.querySelector('.name-game-bg').style.direction = 'ltr'
+    }
+  }
+
+  const showSigns = () => {
+    const input = document.getElementById('nameInput').value.trim()
+    const container = document.getElementById('lettersContainer')
+    container.innerHTML = ''
+
+    const signs = selectedLanguage === 'arabic' ? arabicSigns : englishSigns
+
+    for (const char of input) {
+      if (signs[char]) {
+        const img = document.createElement('img')
+        img.src = signs[char]
+        img.alt = char
+        container.appendChild(img)
+      } else if (char.trim() === '') {
+        // ignore space
+      } else {
+        const span = document.createElement('span')
+        span.textContent = '?'
+        container.appendChild(span)
+      }
+    }
+  }
+</script>
+{% endblock %}
