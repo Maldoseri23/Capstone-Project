@@ -12,7 +12,7 @@
 ##  UI Preview
 
 ### Landing Page  
-![Landing](../project4/screenshots/landing%page.png)
+![Landing](./project4/screenshots/landing%page.png)
 
 ### Landing Page Sign-In
 ![LandingSignIn](../screenshots/landing%page(sign%In).png)
