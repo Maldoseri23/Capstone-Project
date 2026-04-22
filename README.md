@@ -1,49 +1,137 @@
-# HearME
+# 🤟 HearMe  
+### A Smart Sign Language Communication Platform
 
-**HearMe** is a web-based application created to enhance communication through sign language. It assists deaf individuals in navigating everyday communication challenges, while also equipping hearing users with resources to learn and comprehend sign language
+![Python](https://img.shields.io/badge/Python-Backend-blue)
+![Django](https://img.shields.io/badge/Django-Framework-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![WebRTC](https://img.shields.io/badge/WebRTC-Realtime-orange)
+![Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
 
 ---
 
-## Features
+##  UI Preview
 
-- **Sign Language Recognition and Translation**  
-  Converts sign gestures into text or speech for easier communication.
+### Landing Page  
+![Landing](./screenshots/landing%page.png)
 
-- **Emergency Call Feature**  
-  Allows users to quickly send alerts in emergency situations.
+### Landing Page Sign-In
+![Landing](./screenshots/landing%page(sign%In).png)
 
-- **Learning Modules for Hearing Users**  
-  Step-by-step lessons to help hearing individuals learn sign language.
+### Calander
+![Landing](./screenshots/Calender.png)
 
-- **Inclusive Communication Tools**  
-  Bridges communication between deaf and hearing users through accessible interfaces.
+### Event
+![Landing](./screenshots/Event.png)
 
-- **Clean and Responsive UI**  
-  Designed with accessibility and mobile responsiveness in mind.
+### games
+![Landing](./screenshots/games.png)
 
-- **Event Calendar**  
-  Keeps users updated with community events, learning schedules, or health appointments.
+### name game
+![Landing](./screenshots/name-game.png)
+
+### guess game
+![Landing](./screenshots/guess%game.png)
+
+### Live Video Call  
+![Call](./screenshots/Rooms%call.png)
+
+### Sign Language Lessons  
+![Lessons](./screenshots/ESL%Lessons.png)
+
+### Sign Language Lessons Details  
+![Lessons](./screenshots/lesson%details.png)
+
+### Recognition  
+![Lessons](./screenshots/Recognition.png)
+
+### Profile
+![Lessons](./screenshots/profile.png)
+
+---
+
+## Project Overview
+
+**HearMe** is a full-stack web application designed to bridge communication between deaf and hearing individuals using sign language technology.
+
+The platform focuses on:
+- Real-time communication  
+- Accessibility and inclusivity  
+- AI-powered gesture recognition  
+- Interactive learning experience  
+
+---
+
+##  Live Demo
+
+
+
+---
+
+### Current Features
+
+- Real-time video calling using WebRTC  
+- Live chat inside call rooms  
+- User authentication (Sign up / Login / Logout)  
+- Sign language learning modules  
+- Responsive and accessible UI  
+- Room-based communication system  
+
+---
+
+## System Design
+
+### Entities
+
+**Users**
+- ID  
+- Name  
+- Email  
+- Password  
+
+**Rooms**
+- RoomID  
+- Name  
+- Max Participants  
+
+**Messages**
+- MessageID  
+- Content  
+- Timestamp  
+- UserID (Reference)  
+- RoomID (Reference)  
+
+**Lessons**
+- LessonID  
+- Title  
+- Video  
+- Language  
 
 ---
 
 ## Built With
 
-- **Backend**: Python (Django / Flask)
-- **Frontend**: HTML, CSS, JavaScript
-- **DataBase**: PostgreSQL
-- **Libraries / Tools**:
-  - **OpenCV** – For webcam access and video frame capture
-  - **TensorFlow** or **PyTorch** – For machine learning models that recognize sign language
-  - **gTTS** or **pyttsx3** – For converting text to speech
-  - **WebRTC** – For real-time video/audio communication
-  - **Django Channels** – For handling WebSocket connections and enabling live calls
-  - **Google Cloud Console** – For integrating video tutorials via YouTube API
+### Backend
+- Python (Django)  
+- Django Channels (WebSockets)  
+
+### Frontend
+- HTML, CSS, JavaScript  
+
+### Database
+- PostgreSQL  
+
+### Libraries / Tools
+- OpenCV – gesture detection  
+- TensorFlow / PyTorch – ML models  
+- WebRTC – real-time video/audio  
+- gTTS / pyttsx3 – text-to-speech  
+- YouTube API – lesson videos  
 
 ---
 
-### **_Getting Started_**
+## Getting Started
 
-used [Trello](https://trello.com/invite/b/685d80c8b14ad784410eef3d/ATTI1e444a2ebbe762f690917fad06b1a504F8598AD9/project-4) to design our User Stories,
-and [draw io](https://drive.google.com/file/d/1vKpb6r9m6vA8nh_nWRybiDL-Uy4-GcJi/view?usp=sharing) to plan our ERD's and Schemas.
-
----
+### 1. Clone the repo
+```bash
+git clone https://github.com/your-username/hearme.git
+cd hearme
