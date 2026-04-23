@@ -9,42 +9,42 @@
 
 ---
 
-##  UI Preview
+## 🎥 UI Preview
 
 ### Landing Page  
 ![Landing](./project4/screenshots/landing-page.png)
 
-### Landing Page Sign-In
-![LandingSignIn](./project4/screenshots/Landing-page-signIn.png)
+### Landing Page Sign-In  
+![LandingSignIn](./project4/screenshots/landing-page-signin.png)
 
-### Calander
-![Calander](./project4/screenshots/Calender.png)
+### Calendar  
+![Calendar](./project4/screenshots/calendar.png)
 
-### Event
-![Event](./project4/screenshots/Event.png)
+### Event  
+![Event](./project4/screenshots/event.png)
 
-### games
-![games](./project4/screenshots/games.png)
+### Games  
+![Games](./project4/screenshots/games.png)
 
-### name game
-![nameGame](./project4/screenshots/name-game.png)
+### Name Game  
+![NameGame](./project4/screenshots/name-game.png)
 
-### guess game
-![guessGame](./project4/screenshots/guess-game.png)
+### Guess Game  
+![GuessGame](./project4/screenshots/guess-game.png)
 
 ### Live Video Call  
-![Call](./project4/screenshots/Rooms-call.png)
+![Call](./project4/screenshots/rooms-call.png)
 
 ### Sign Language Lessons  
-![Lessons](./project4/screenshots/ESL-Lessons.png)
+![Lessons](./project4/screenshots/esl-lessons.png)
 
-### Sign Language Lessons Details  
-![LessonsDetails](./project4/screenshots/lesson-details.png)
+### Lesson Details  
+![LessonDetails](./project4/screenshots/lesson-details.png)
 
 ### Recognition  
-![Recognition](./project4/screenshots/Recognition.png)
+![Recognition](./project4/screenshots/recognition.png)
 
-### Profile
+### Profile  
 ![Profile](./project4/screenshots/profile.png)
 
 ---
@@ -61,20 +61,33 @@ The platform focuses on:
 
 ---
 
-##  Live Demo
+## Features
 
+- **Authentication System**
+  - Sign Up, Sign In, and Sign Out
 
+- **Real-Time Communication**
+  - Join rooms for video, voice, and chat using WebRTC  
+  - Live messaging inside call rooms  
 
----
+- *Interactive Learning Games**
+  - **Guess Game**: Improve spelling by guessing random words and earning points - Languages Available: (Arabic, English) 
+  - **Name Game**: Enter any word and get its letters to help with spelling practice - Languages Available: (Arabic, English)
 
-### Current Features
+- **Events & Community**
+  - View sign language events and festivals in a calendar  
+  - Users can add, edit, and delete events  
 
-- Real-time video calling using WebRTC  
-- Live chat inside call rooms  
-- User authentication (Sign up / Login / Logout)  
-- Sign language learning modules  
-- Responsive and accessible UI  
-- Room-based communication system  
+-  **Sign Language Lessons**
+  - Lessons are integrated from YouTube to save time searching - Languages Available: (Arabic, English)
+  - Mark lessons as completed to track progress and score  
+
+- **Hand Gesture Recognition**
+  - Convert sign language images into text using AI  
+
+- **User Profile & Progress**
+  - Track learning level  
+  - View points, streaks, and completed lessons  
 
 ---
 
@@ -86,26 +99,44 @@ The platform focuses on:
 - ID  
 - Name  
 - Email  
-- Password  
+- Password
+- streak count
+- highscore
+- garden level  
 
-**Rooms**
-- RoomID  
-- Name  
-- Max Participants  
+**CallRoom**
+- room id  
+- created_by  
+- created at
+- is active
+- max participants
 
-**Messages**
-- MessageID  
-- Content  
-- Timestamp  
-- UserID (Reference)  
-- RoomID (Reference)  
+**GameWord**
+- word
+- images  
+- Language
 
 **Lessons**
 - LessonID  
-- Title  
-- Video  
-- Language  
+- Lesson Type
+- Label
+- video_url
+- Language
 
+**LessonComment**
+- Rating  
+- Comment  
+- User  
+- Lesson
+
+**Event**
+- Title  
+- Description  
+- Date  
+- Location
+- Is virtual
+- Link
+- Created by
 ---
 
 ## Built With
@@ -125,7 +156,7 @@ The platform focuses on:
 - TensorFlow / PyTorch – ML models  
 - WebRTC – real-time video/audio  
 - gTTS / pyttsx3 – text-to-speech  
-- YouTube API – lesson videos  
+- YouTube URL – lesson videos  
 
 ---
 
@@ -133,5 +164,5 @@ The platform focuses on:
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/your-username/hearme.git
+git clone https://github.com/your-username/Capstone-Project.git
 cd hearme
