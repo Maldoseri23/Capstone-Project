@@ -21,7 +21,7 @@
 ![Calander](./screenshots/Calender.png)
 
 ### Event
-![Event](../screenshots/Event.png)
+![Event](./screenshots/Event.png)
 
 ### games
 ![games](../screenshots/games.png)
