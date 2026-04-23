@@ -15,7 +15,7 @@
 ![Landing](./project4/screenshots/landing-page.png)
 
 ### Landing Page Sign-In
-![LandingSignIn](./project4/screenshots/landing-page-signIn.png)
+![LandingSignIn](./project4/screenshots/Landing-page-signIn.png)
 
 ### Calander
 ![Calander](./project4/screenshots/Calender.png)
