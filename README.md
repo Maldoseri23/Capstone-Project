@@ -12,40 +12,40 @@
 ##  UI Preview
 
 ### Landing Page  
-![Landing](./screenshots/landing%page.png)
+![Landing](./project4/screenshots/landing-page.png)
 
 ### Landing Page Sign-In
-![Landing](./screenshots/landing%page(sign%In).png)
+![LandingSignIn](./project4/screenshots/landing-page-signIn.png)
 
 ### Calander
-![Landing](./screenshots/Calender.png)
+![Calander](./project4/screenshots/Calender.png)
 
 ### Event
-![Landing](./screenshots/Event.png)
+![Event](./project4/screenshots/Event.png)
 
 ### games
-![Landing](./screenshots/games.png)
+![games](./project4/screenshots/games.png)
 
 ### name game
-![Landing](./screenshots/name-game.png)
+![nameGame](./project4/screenshots/name-game.png)
 
 ### guess game
-![Landing](./screenshots/guess%game.png)
+![guessGame](./project4/screenshots/guess-game.png)
 
 ### Live Video Call  
-![Call](./screenshots/Rooms%call.png)
+![Call](./project4/screenshots/Rooms-call.png)
 
 ### Sign Language Lessons  
-![Lessons](./screenshots/ESL%Lessons.png)
+![Lessons](./project4/screenshots/ESL-Lessons.png)
 
 ### Sign Language Lessons Details  
-![Lessons](./screenshots/lesson%details.png)
+![LessonsDetails](./project4/screenshots/lesson-details.png)
 
 ### Recognition  
-![Lessons](./screenshots/Recognition.png)
+![Recognition](./project4/screenshots/Recognition.png)
 
 ### Profile
-![Lessons](./screenshots/profile.png)
+![Profile](./project4/screenshots/profile.png)
 
 ---
 
