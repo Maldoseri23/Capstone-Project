@@ -15,37 +15,37 @@
 ![Landing](./project4/screenshots/landing%page.png)
 
 ### Landing Page Sign-In
-![LandingSignIn](../screenshots/landing%page(sign%In).png)
+![LandingSignIn](./project4/screenshots/landing%page(sign%In).png)
 
 ### Calander
 ![Calander](./project4/screenshots/Calender.png)
 
 ### Event
-![Event](./screenshots/Event.png)
+![Event](./project4/screenshots/Event.png)
 
 ### games
-![games](../screenshots/games.png)
+![games](./project4/screenshots/games.png)
 
 ### name game
-![nameGame](../screenshots/name-game.png)
+![nameGame](./project4/screenshots/name-game.png)
 
 ### guess game
-![guessGame](../screenshots/guess%game.png)
+![guessGame](./project4/screenshots/guess%game.png)
 
 ### Live Video Call  
-![Call](../screenshots/Rooms%call.png)
+![Call](./project4/screenshots/Rooms%call.png)
 
 ### Sign Language Lessons  
-![Lessons](../screenshots/ESL%Lessons.png)
+![Lessons](./project4/screenshots/ESL%Lessons.png)
 
 ### Sign Language Lessons Details  
-![LessonsDetails](../screenshots/lesson%details.png)
+![LessonsDetails](./project4/screenshots/lesson%details.png)
 
 ### Recognition  
-![Recognition](../screenshots/Recognition.png)
+![Recognition](./project4/screenshots/Recognition.png)
 
 ### Profile
-![Profile](../screenshots/profile.png)
+![Profile](./project4/screenshots/profile.png)
 
 ---
 
