@@ -18,7 +18,7 @@
 ![LandingSignIn](../screenshots/landing%page(sign%In).png)
 
 ### Calander
-![Calander](../screenshots/Calender.png)
+![Calander](./screenshots/Calender.png)
 
 ### Event
 ![Event](../screenshots/Event.png)
