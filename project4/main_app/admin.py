@@ -1,12 +1,8 @@
 from django.contrib import admin
-from .models import Profile , Video , ForumPost , Event , Lesson, GameWord ,LessonComment
+from .models import Profile , Event , Lesson, GameWord ,LessonComment
 
 
 admin.site.register(Profile)
-
-admin.site.register(Video)
-
-admin.site.register(ForumPost)
 
 admin.site.register(Event)
 

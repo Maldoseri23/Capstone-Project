@@ -57,7 +57,7 @@ python-decouple==3.8
 python-dotenv==1.1.1
 requests==2.32.4
 rich==14.0.0
-scipy==1.15.3
+scipy==1.11.4
 sentencepiece==0.2.0
 service-identity==24.2.0
 six==1.17.0
