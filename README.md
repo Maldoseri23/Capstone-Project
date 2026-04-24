@@ -9,19 +9,19 @@
 
 ---
 
-## 🎥 UI Preview
+## UI Preview
 
 ### Landing Page  
 ![Landing](./project4/screenshots/landing-page.png)
 
 ### Landing Page Sign-In  
-![LandingSignIn](./project4/screenshots/landing-page-signin.png)
+![LandingSignIn](./project4/screenshots/Landing-page-signIn.png)
 
 ### Calendar  
-![Calendar](./project4/screenshots/calendar.png)
+![Calendar](./project4/screenshots/Calender.png)
 
 ### Event  
-![Event](./project4/screenshots/event.png)
+![Event](./project4/screenshots/Event.png)
 
 ### Games  
 ![Games](./project4/screenshots/games.png)
@@ -33,16 +33,16 @@
 ![GuessGame](./project4/screenshots/guess-game.png)
 
 ### Live Video Call  
-![Call](./project4/screenshots/rooms-call.png)
+![Call](./project4/screenshots/Rooms-call.png)
 
 ### Sign Language Lessons  
-![Lessons](./project4/screenshots/esl-lessons.png)
+![Lessons](./project4/screenshots/ESL-Lessons.png)
 
 ### Lesson Details  
 ![LessonDetails](./project4/screenshots/lesson-details.png)
 
 ### Recognition  
-![Recognition](./project4/screenshots/recognition.png)
+![Recognition](./project4/screenshots/Recognition.png)
 
 ### Profile  
 ![Profile](./project4/screenshots/profile.png)
